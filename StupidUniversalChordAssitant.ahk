@@ -4,12 +4,9 @@ SetWorkingDir(A_ScriptDir)  ; Ensures a consistent starting directory.
 Persistent  ; Keep the script running until the user exits it.
 #SingleInstance force
 
-; Autoreload on saving trick
-#HotIf WinActive("Visual Studio Code")
-~^s:: Reload
-#HotIf
 
-AppName := "The Stupid Chord Generator by Centomila"
+
+AppName := "Centomila's Stupid Universal Chord Generator"
 
 try {
     IniRead("Settings.ini", "Settings", "ToolTipDuration")
@@ -79,7 +76,8 @@ Tray.Add("About", MenuAbout)  ; Creates a new menu item.
 Tray.Add() ; Creates a separator line.
 Tray.Add("Quit", ExitApp)  ; Creates a new menu item.
 ; Tray default the first item in the menu programmaticaly
-Tray.Default := AppName
+; Tray.Default := AppName
+Tray.Default := "About"
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
@@ -95,21 +93,61 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 MenuAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 {
-    Result := MsgBox("
-    (
-Thank you for using this utility!
-    
-If you find it useful, please consider listening to and sharing my music. Your support means a lot to me!
-    
-Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!
-    
-  )", , "YesNo")
-    if Result = "Yes"
-        Run("https://centomila.com/")
-    else
-        return
-
+    myGui := About()
+    myGui.Show()
 }
+About()
+{	
+    myGui := Gui()
+    myGui.BackColor := "0x111111"    
+
+    ; Set the font for the application title
+    myGui.SetFont("c0xf4f4f4 s20 bold")
+    appTitleAboutText := myGui.Add(
+        "Text",
+        "x20 y20 w460 h100 +Center",  ; Increased height to accommodate longer title
+        StrUpper(AppName)
+    )
+
+    ; Set the font for the about text
+    myGui.SetFont("c0xf4f4f4 s12")
+    aboutText := myGui.Add(
+        "Text",
+        "x20 y170 w460 h360 +Center",  ; Moved down to y100
+        "Thank you for using this application.`n`n" .
+        "I hope you enjoy it!`n`n" .
+        "I don't want money, but if you find it useful, please consider listening or sharing my music. " .
+        "Your support means a lot to me!`n`n" .
+        "Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!"
+    )
+
+    ; Add the button to the website
+    aboutButton := myGui.Add(
+        "Button",
+        "x150 y440 w200 h30 +Center",  ; Moved down to y280
+        "CENTOMILA.COM"
+    )
+    aboutButton.OnEvent("Click", (*) => OpenWebsite())
+    aboutButton.BackColor := "0x333333"  ; Dark button background
+    aboutButton.SetFont("c0xf4f4f4")     ; Light button text
+
+    ; Event handler for closing the GUI
+    myGui.OnEvent('Close', (*) => myGui.Destroy())
+    myGui.Title := AppName
+    
+    ; Show the GUI
+    myGui.Show("w500 h500 Center")  ; Set the window to be square
+    
+    return myGui
+}
+
+; Function to open the website
+OpenWebsite()
+{
+    Run("https://centomila.com")
+}
+
+
 
 NoAction(*) {
     ; Do nothing.
@@ -126,10 +164,12 @@ try {
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
     CurrentDaw := IniRead("Settings.ini", "Settings", "DAW")
     DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
+
 } catch {
     IniWrite("Bitwig Studio", "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
     DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
+
 }
 
 
@@ -293,4 +333,9 @@ PgUp:: {
     SendEvent("((^a)(+{Up}))")
     ToolTipChord("Octave UP")
 }
+#HotIf
+
+; Autoreload on saving trick
+#HotIf WinActive("Visual Studio Code")
+~^s:: Reload
 #HotIf
