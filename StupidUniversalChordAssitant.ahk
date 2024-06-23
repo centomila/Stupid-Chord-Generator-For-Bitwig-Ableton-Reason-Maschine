@@ -15,14 +15,14 @@ try {
 }
 
 ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
-DawList := ["Bitwig Studio", "Ableton Live", "Reason", "Cockos Reaper", "FL Studio", "NI Maschine 2", "Steinberg Cubase"]
+DawList := ["Bitwig Studio", "Ableton Live", "Reason", "FL Studio", "NI Maschine 2", "Steinberg Cubase"]
 CurrentDaw := ""
 
 MapHotFixStrings := Map(
     "Bitwig Studio", "ahk_class bitwig",
     "Ableton Live", "ahk_class Ableton Live Window Class",
     "Reason", "ahk_exe Reason.exe",
-    "Cockos Reaper", "ahk_class Reaper",
+    ; "Cockos Reaper", "ahk_class REAPERmidieditorwnd",
     "FL Studio", "ahk_class FL Studio",
     "NI Maschine 2", "ahk_exe Maschine 2.exe",
     "Steinberg Cubase", "ahk_class Cubase")
@@ -196,6 +196,10 @@ GenerateChord(NotesToAdd) {
                 SendEvent("!{Left}")
                 SendEvent("^{Up " . semitones . "}")
                 SendEvent("^v")
+            case "Cockos Reaper":
+                SendEvent("+{Up " . semitones . "}")
+                SendEvent("+i")
+                SendEvent("+{Down " . semitones . "}")
             case "NI Maschine 2":
                 SendEvent("^c")
                 SendEvent("!{Up " . semitones . "}")
