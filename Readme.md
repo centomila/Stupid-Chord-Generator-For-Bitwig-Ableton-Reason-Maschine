@@ -2,7 +2,7 @@
 <!-- vscode-markdown-toc -->
 * 1. [What is Centomila's Stupid Universal Chord Generator?](#WhatisCentomilasStupidUniversalChordGenerator)
 	* 1.1. [Why is stupid?](#Whyisstupid)
-* 2. [This repository contains](#Thisrepositorycontains:)
+* 2. [This repository contains](#Thisrepositorycontains)
 * 3. [Install and Usage](#InstallandUsage)
 	* 3.1. [Run from source](#Runfromsource)
 	* 3.2. [Run from build](#Runfrombuild)
@@ -48,7 +48,7 @@ It will never do anything outside the selected DAW, even if CAPS LOCK is enabled
 ##  2. <a name='Thisrepositorycontains'></a>This repository contains
 1. [This Readme](Readme.md)
 2. [The application in Autohotkey v2 (AHK) format](<src/StupidUniversalChordGenerator.ahk>) to automate the chord generation.
-3. [The systray icon](<src/FChordsGen.ico) to make it look pretty.
+3. [The systray icon](<src/FChordsGen.ico>) to make it look pretty.
 4. [Settings.ini file](Settings.ini) to save preferences (if deleted, will be recreated on next launch with _Bitwig Studio_ as the default DAW).
 
 ##  3. <a name='InstallandUsage'></a>Install and Usage
