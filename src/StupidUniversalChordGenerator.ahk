@@ -33,7 +33,14 @@ loop DawList.Length {
 }
 
 ; Tray icon
-TraySetIcon("FChordsGen.ico")
+if (A_IsCompiled) {
+    ; Compiled version, use icon from the .exe file
+    TraySetIcon(A_ScriptName)
+} else {
+    ; Source version, use the custom icon
+    TraySetIcon("FChordsGen.ico")
+}
+
 Tray := A_TrayMenu
 Tray.Delete()
 
