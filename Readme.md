@@ -25,7 +25,13 @@
 
 ##  1. <a name='WhatisCentomilasStupidUniversalChordGenerator'></a>What is Centomila's Stupid Universal Chord Generator?
 
-Writing chords in a DAW's piano roll is a repetitive task, and repetitive tasks are for machines. This script automates the process of generating chords from a single note. It is designed to be used with Bitwig Studio, Ableton Live, Reason Studio, and NI Maschine.
+Writing chords in a DAW's piano roll is a repetitive task, and repetitive tasks are for machines 🤖.
+
+This script automates the process of copy pasting notes and **generate chords from a selected note**.
+
+It is designed to be used with **Bitwig Studio, Ableton Live, Reason Studio, and NI Maschine**.
+
+The script is enabled only when CAPS LOCK is active, leaving your original F1-F12 shortcuts untouched 😊.
 
 Tested with:
 - Bitwig Studio 5.1.9 / Bitwig Studio 5.2 Beta 8
@@ -34,11 +40,15 @@ Tested with:
   - The loop handles LR will be moved at the start and end of the selected notes.
 - Native Instruments Maschine 2
 
+### Why is stupid?
+The script don't know in which part of the DAW you are working. If you are not in the piano roll with a note selected, it will start copy/pasting wathever it can.
+It will never do anything outside the selected DAW, even if CAPS LOCK is enabled.
+
 ##  2. <a name='Thisrepositorycontains:'></a>This repository contains:
 1. [This Readme](Readme.md)
-2. [The Chord Generator script](ChordGenerator.ahk) to automate the chord generation.
-3. [The Icon for the BitwigChordsGenerator](FChordsGen.ico) to make it look pretty.
-4. [Settings.ini file](Settings.ini) to save preferences (if deleted, will be recreated on next launch with Bitwig Studio as the default DAW).
+2. [The application in Autohotkey v2 (AHK) format](<src/StupidUniversalChordGenerator.ahk>) to automate the chord generation.
+3. [The systray icon](<src/FChordsGen.ico) to make it look pretty.
+4. [Settings.ini file](Settings.ini) to save preferences (if deleted, will be recreated on next launch with _Bitwig Studio_ as the default DAW).
 
 ##  3. <a name='InstallandUsage'></a>Install and Usage
 
