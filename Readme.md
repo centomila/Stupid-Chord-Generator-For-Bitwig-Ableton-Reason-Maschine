@@ -1,6 +1,7 @@
 # Centomila's Stupid Universal Chord Generator
 <!-- vscode-markdown-toc -->
 * 1. [What is Centomila's Stupid Universal Chord Generator?](#WhatisCentomilasStupidUniversalChordGenerator)
+	* 1.1. [Why is stupid?](#Whyisstupid)
 * 2. [This repository contains:](#Thisrepositorycontains:)
 * 3. [Install and Usage](#InstallandUsage)
 	* 3.1. [Run from source](#Runfromsource)
@@ -40,7 +41,7 @@ Tested with:
   - The loop handles LR will be moved at the start and end of the selected notes.
 - Native Instruments Maschine 2
 
-### Why is stupid?
+###  1.1. <a name='Whyisstupid'></a>Why is stupid?
 The script don't know in which part of the DAW you are working. If you are not in the piano roll with a note selected, it will start copy/pasting wathever it can.
 It will never do anything outside the selected DAW, even if CAPS LOCK is enabled.
 
