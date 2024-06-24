@@ -4,9 +4,8 @@ SetWorkingDir(A_ScriptDir)  ; Ensures a consistent starting directory.
 Persistent  ; Keep the script running until the user exits it.
 #SingleInstance force
 
-
-
 AppName := "Centomila's Stupid Universal Chord Generator"
+AppVersion := "1.0.0"
 
 try {
     IniRead("Settings.ini", "Settings", "ToolTipDuration")
@@ -15,17 +14,14 @@ try {
 }
 
 ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
-DawList := ["Bitwig Studio", "Ableton Live", "Reason", "FL Studio", "NI Maschine 2", "Steinberg Cubase"]
+DawList := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
 CurrentDaw := ""
 
 MapHotFixStrings := Map(
     "Bitwig Studio", "ahk_class bitwig",
     "Ableton Live", "ahk_class Ableton Live Window Class",
     "Reason", "ahk_exe Reason.exe",
-    ; "Cockos Reaper", "ahk_class REAPERmidieditorwnd",
-    "FL Studio", "ahk_class FL Studio",
-    "NI Maschine 2", "ahk_exe Maschine 2.exe",
-    "Steinberg Cubase", "ahk_class Cubase")
+    "NI Maschine 2", "ahk_exe Maschine 2.exe")
 
 DawHotFixString := "" ; Empty until the script has loaded the correct DAW
 
@@ -59,10 +55,6 @@ Tray.Add("F9 - Major 9th Chords - 0-4-7-11-14", NoAction)
 Tray.Add("F10 - Minor 9th Chords - 0-3-7-10-13", NoAction)
 Tray.Add("F11 - Augmented 9th Chords - 0-4-8-11-14", NoAction)
 Tray.Add("F12 - Diminished 9th Chords - 0-3-6-9-12", NoAction)
-; CTRL+F1 - Sus2 Chords - 0-2-7
-; CTRL+F2 - Sus4 Chords - 0-5-7
-; CTRL+F3 - DOMINANT 7th Chords 0-4-7-10
-; CTRL+F4 - Half-Diminished Chords (m7b5)
 Tray.Add("CTRL+F1 - Sus2 Chords - 0-2-7", NoAction)
 Tray.Add("CTRL+F2 - Sus4 Chords - 0-5-7", NoAction)
 Tray.Add("CTRL+F3 - DOMINANT 7th Chords - 0-4-7-10", NoAction)
@@ -148,7 +140,6 @@ OpenWebsite()
 }
 
 
-
 NoAction(*) {
     ; Do nothing.
 }
@@ -169,9 +160,7 @@ try {
     IniWrite("Bitwig Studio", "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
     DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
-
 }
-
 
 ; Main function to convert note intervals to shortcut commands
 ToolTipChord(ChordTypeName) {
@@ -196,10 +185,6 @@ GenerateChord(NotesToAdd) {
                 SendEvent("!{Left}")
                 SendEvent("^{Up " . semitones . "}")
                 SendEvent("^v")
-            case "Cockos Reaper":
-                SendEvent("+{Up " . semitones . "}")
-                SendEvent("+i")
-                SendEvent("+{Down " . semitones . "}")
             case "NI Maschine 2":
                 SendEvent("^c")
                 SendEvent("!{Up " . semitones . "}")
@@ -210,7 +195,6 @@ GenerateChord(NotesToAdd) {
                 SendEvent("{Up " . semitones . "}")
                 SendEvent("^v")
         }
-
     }
 }
 

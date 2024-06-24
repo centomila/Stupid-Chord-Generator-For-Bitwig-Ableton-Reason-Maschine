@@ -1,121 +1,120 @@
-# Autohotkey Chord Generator
+# Centomila's Stupid Universal Chord Generator
+<!-- vscode-markdown-toc -->
+* 1. [What is Centomila's Stupid Universal Chord Generator?](#WhatisCentomilasStupidUniversalChordGenerator)
+* 2. [This repository contains:](#Thisrepositorycontains:)
+* 3. [Dependencies](#Dependencies)
+* 4. [Install](#Install)
+* 5. [Usage](#Usage)
+	* 5.1. [Generator](#Generator)
+		* 5.1.1. [Triads](#Triads)
+		* 5.1.2. [Seventh (7th) Chords](#Seventh7thChords)
+		* 5.1.3. [Ninth (9th) Chords](#Ninth9thChords)
+		* 5.1.4. [Suspended Chords](#SuspendedChords)
+	* 5.2. [Limitations](#Limitations)
+	* 5.3. [Before you contribute](#Beforeyoucontribute)
+	* 5.4. [TODO](#TODO)
+* 6. [Contributing](#Contributing)
+* 7. [License](#License)
+* 8. [Support this project](#Supportthisproject)
 
-Writing chords in a DAW's piano roll is a repetetive task and repetetive tasks are for machines. This script automates the process of generating chords from a single note. It is designed to be used with Bitwig Studio, but works well also in Ableton Live and can be adapted to be used with any DAW that allows for keyboard shortcuts.
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
-Feel free to contribute to this repository to make it work with other DAWs ☺️
+##  1. <a name='WhatisCentomilasStupidUniversalChordGenerator'></a>What is Centomila's Stupid Universal Chord Generator?
+Writing chords in a DAW's piano roll is a repetetive task and repetetive tasks are for machines. This script automates the process of generating chords from a single note. It is designed to be used with Bitwig Studio, Ableton Live, Reason Studio and NI Maschine.
 
-- Bitwig Studio 4.4
-- Ableton Live 10
+Tested with:
+- Bitwig Studio 5.1.9
+- Ableton Live 12 Lite
+- Reason Studio 12
+-- The loop handles LR will be moved at start and end of the selected notes.
+- Native Instruments Maschine 2
 
-## This repository contains:
+##  2. <a name='Thisrepositorycontains:'></a>This repository contains:
 
 1. [This Readme](Readme.md) you are reading right now.
 2. [The Chord Generator script](ChordGenerator.ahk) to automate the chord generation.
 3. [The Icon for the BitwigChordsGenerator](FChordsGen.ico) to make it look pretty.
+4. [Settings.ini file](Settings.ini) to save the preferences (if deleted will be recreated on next launch with Bitwig Studio as default DAW).
 
-## Table of Contents
-<!-- TOC -->
+##  3. <a name='Dependencies'></a>Dependencies
+### Run from source
+The script has been written with AutoHotKey (https://www.autohotkey.com/) 2.0.
 
-- [Autohotkey Chord Generator](#autohotkey-chord-generator)
-    - [This repository contains:](#this-repository-contains)
-    - [Table of Contents](#table-of-contents)
-    - [Background](#background)
-    - [Dependencies](#dependencies)
-    - [Install](#install)
-    - [Usage](#usage)
-        - [Generator](#generator)
-            - [Triads](#triads)
-            - [Seventh 7th Chords](#seventh-7th-chords)
-            - [Ninth 9th Chords](#ninth-9th-chords)
-            - [Suspended Chords](#suspended-chords)
-            - [Octave change](#octave-change)
-        - [Limitations](#limitations)
-        - [TODO](#todo)
-    - [Maintainers](#maintainers)
-    - [Contributing](#contributing)
-    - [License](#license)
+### Run from build
+The script has been compiled as an executable and has no dependencies. Any modern Windows machine should be able to run it.
 
-<!-- /TOC -->
-
-
-## Background
-
-
-## Dependencies
-
-To run this script you need to install [Autohotkey](https://www.autohotkey.com/). The script has been tested with Autohotkey version 2.0.0.
-
-## Install
+##  4. <a name='Install'></a>Install
 
 Download the contents of this repository to a folder of your choice.
 
 ---
 
-## Usage
+##  5. <a name='Usage'></a>Usage
 
-Run the `Launch.ahk` to start the scripts. You will see two new icons in the system tray.
+Run the `Stupid-Universal-Chord-Generator.exe` file. The application will be opened in the system tray.
+Right-click on the application icon in the system tray to view the list of shortcuts and change the preferences. The preferences will be automatically saved on change in the `settings.ini` file.
 
-If you don't need the chord generator script, but you like the F13-F24 keys, you can run the `F13-F24-CAPSLOCK.ahk` script and use it for anything else 😊.
-
-### Generator
+###  5.1. <a name='Generator'></a>Generator
 1. Select one ore more notes in the piano roll.
-3. Press a function key from F1 to F4 to transform the note in a chord
-    - F1 TO F4 Triads
-    - CTRL+F1 TO CTRL+F4 (CTRL+F13 TO CTRL+F16) 7ths
-    - ALT+F1 TO ALT+F4 (ALT+F13 TO ALT+F16) 9ths
-    - F11 TO F12 (F23 TO F24) OCTAVE DOWN/UP for **all notes in the clip**
-        - It's a faster alternative to CTRL+A->SHIFT+DOWN / SHIFT+UP
+2. Enable CAPS LOCK. The script work only if the CAPS LOCK is enabled, in this way your original shortcuts F1-12 will not be overwritten.
+3. With CAPS Lock enabled and a note selected, press a function key from F1 to F4 to transform the note into a chord
+####  5.1.1. <a name='Triads'></a>Triads
+- "F1 - Major Chords - 0-4-7"
+- "F2 - Minor Chords - 0-3-7"
+- "F3 - Augmented Chords - 0-4-8"
+- "F4 - Diminished Chords - 0-3-6"
 
-#### Triads
-- **F1** (F13) - MAJOR Chords 1-4-7
-- **F2** (F14) - MINOR Chords 1-3-7
-- **F3** (F15) - AUGMENTED Chords 1-4-8
-- **F4** (F16) - DIMINISHED Chords 1-3-6
-#### Seventh (7th) Chords
-- **CTRL+F1** (CTRL+F13) - MAJOR 7th Chords 1-4-7-11
-- **CTRL+F2** (CTRL+F14) - MINOR 7th Chords 1-3-7-10
-- **CTRL+F3** (CTRL+F15) - AUGMENTED 7th Chords 1-4-8-11
-- **CTRL+F4** (CTRL+F16) - DIMINISHED 7th Chords 1-3-6-9
-#### Ninth (9th) Chords
-- **ALT+F1** (ALT+F13) - MAJOR 9th Chords 1-4-7-11-14
-- **ALT+F2** (ALT+F14) - MINOR 9th Chords 1-3-7-10-13
-- **ALT+F3** (ALT+F15) - AUGMENTED 9th Chords 1-4-8-11-14
-- **ALT+F4** (ALT+F16) - DIMINISHED 9th Chords 1-3-6-9-12
-#### Suspended Chords
-- **F5** (F17) - Sus2 Chords - 1-2-7
-- **F6** (F18) - Sus4 Chords - 1-5-7
-#### Octave change
-- **F11** (F23) Select all notes in the clip and move an octave DOWN
-- **F12** (F24) Select all notes in the clip and move an octave UP
+####  5.1.2. <a name='Seventh7thChords'></a>Seventh (7th) Chords
+- "F5 - Major 7th Chords - 0-4-7-11"
+- "F6 - Minor 7th Chords - 0-3-7-10"
+- "F7 - Augmented 7th Chords - 0-4-8-11"
+- "F8 - Diminished 7th Chords - 0-3-6-9"
+
+####  5.1.3. <a name='Ninth9thChords'></a>Ninth (9th) Chords
+- "F9 - Major 9th Chords - 0-4-7-11-14"
+- "F10 - Minor 9th Chords - 0-3-7-10-13"
+- "F11 - Augmented 9th Chords - 0-4-8-11-14"
+- "F12 - Diminished 9th Chords - 0-3-6-9-12"
+
+####  5.1.4. <a name='SuspendedChords'></a>Suspended Chords
+- "CTRL+F1 - Sus2 Chords - 0-2-7"
+- "CTRL+F2 - Sus4 Chords - 0-5-7"
+- "CTRL+F3 - DOMINANT 7th Chords - 0-4-7-10"
+- "CTRL+F4 - Half-Diminished Chords - 0-3-6-10"
 
 ---
 
-### Limitations
+###  5.2. <a name='Limitations'></a>Limitations
 - The script don't know if you are in the piano roll or in other parts of the DAW. If you try to use it outside the piano roll can cause unexpected results.
 - The script imitate a sequence of keyboard shortcuts. Multiple history entries will be created. If you want to undo the chord generation you need to undo multiple times.
-- If you customize this script, don't use the SHIFT modifier. It is commonly used by the DAWs to move octaves and can cause unexpected results.
+
+###  5.3. <a name='Beforeyoucontribute'></a>Before you contribute
+- If you want to contribute, please follow the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) Code of Conduct.
+- I have already tried to make it work with Cockos Reaper and FL Studio, but the results were not consistent because the way the note cursor works in those DAWs. Moreover, there may be better ways to achieve this using the script engines of the DAWs.
+- I didn't tried to make it work with Steinberg Cubase because it already has a functionality called Chord Assistant.
 
 
-### TODO
-- [ ] Add settings.ini file for customization
-- [ ] Add support for Maschine
-- [ ] Add support for FL Studio
-- [ ] Add support for Reason Studio
-- [ ] Add support for Reaper
+###  5.4. <a name='TODO'></a>TODO
+- [ ] Add settings.ini for tooltip
+- [ ] Customizable chords and shortcuts in external json file
 
 ---
 
-## Contributing
+##  6. <a name='Contributing'></a>Contributing
 
 Feel free to dive in! [Open an issue](https://github.com/centomila/standard-readme/issues/new) or submit PRs.
 
 This project follows the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) Code of Conduct.
 
-## License
+##  7. <a name='License'></a>License
 
 MIT License
 
-Copyright (c) [2022] [Franco Baccarini]
+Copyright (c) [2024] [Franco Baccarini / Centomila]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -135,4 +134,5 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-## Support this project
+##  8. <a name='Supportthisproject'></a>Support this project
+I don't want money. Listen and share my music!
