@@ -3,6 +3,8 @@
 * 1. [What is Centomila's Stupid Universal Chord Generator?](#WhatisCentomilasStupidUniversalChordGenerator)
 * 2. [This repository contains:](#Thisrepositorycontains:)
 * 3. [Dependencies](#Dependencies)
+	* 3.1. [Run from source](#Runfromsource)
+	* 3.2. [Run from build](#Runfrombuild)
 * 4. [Install](#Install)
 * 5. [Usage](#Usage)
 	* 5.1. [Generator](#Generator)
@@ -27,7 +29,7 @@
 Writing chords in a DAW's piano roll is a repetetive task and repetetive tasks are for machines. This script automates the process of generating chords from a single note. It is designed to be used with Bitwig Studio, Ableton Live, Reason Studio and NI Maschine.
 
 Tested with:
-- Bitwig Studio 5.1.9
+- Bitwig Studio 5.1.9 / Bitwig Studio 5.2 Beta 8
 - Ableton Live 12 Lite
 - Reason Studio 12
 -- The loop handles LR will be moved at start and end of the selected notes.
@@ -41,10 +43,10 @@ Tested with:
 4. [Settings.ini file](Settings.ini) to save the preferences (if deleted will be recreated on next launch with Bitwig Studio as default DAW).
 
 ##  3. <a name='Dependencies'></a>Dependencies
-### Run from source
+###  3.1. <a name='Runfromsource'></a>Run from source
 The script has been written with AutoHotKey (https://www.autohotkey.com/) 2.0.
 
-### Run from build
+###  3.2. <a name='Runfrombuild'></a>Run from build
 The script has been compiled as an executable and has no dependencies. Any modern Windows machine should be able to run it.
 
 ##  4. <a name='Install'></a>Install

@@ -79,6 +79,17 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
+    CurrentDaw := A_ThisMenuItem
+
+    switch CurrentDaw {
+        case "NI Maschine 2":
+            MsgBox(
+                "Instructions:`n`n" .
+                "Right Click on the piano roll and select`n`n" .
+                "NUDGE GRID > STEP", CurrentDaw)
+        default:
+            return
+    }
     ; Reload the script
     Reload
 }
@@ -98,7 +109,7 @@ About()
     appTitleAboutText := myGui.Add(
         "Text",
         "x20 y20 w460 h100 +Center",  ; Increased height to accommodate longer title
-        StrUpper(AppName)
+        StrUpper(AppName . " - " . AppVersion)
     )
 
     ; Set the font for the about text
