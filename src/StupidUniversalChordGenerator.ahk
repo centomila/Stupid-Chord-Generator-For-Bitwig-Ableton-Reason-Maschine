@@ -130,6 +130,8 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
         SendInput "{" . ThisHotkey . "}"
         return
     }
+    SendEvent("{Shift Up}{Ctrl Up}{Alt Up}") ; Reset all modifiers
+    
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
     ChordNotes := StrSplit(NotesInterval, "-")
