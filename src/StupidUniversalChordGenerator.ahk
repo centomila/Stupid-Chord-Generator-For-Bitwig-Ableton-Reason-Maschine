@@ -13,6 +13,9 @@ try {
     IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
 }
 
+ChordsIni := StrSplit(IniRead("Chords.ini"), "`n")
+
+
 ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
 DawList := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
 CurrentDaw := ""
@@ -47,25 +50,7 @@ Tray.Delete()
 Tray.Add(AppName, NoAction)  ; Creates a separator line.
 Tray.Add() ; Creates a separator line.
 
-
-; Add a line for every F command like this: F1 - Major Chords 0-4-7 With notation. Just a list.
-
-Tray.Add("F1 - Major Chords - 0-4-7", NoAction)
-Tray.Add("F2 - Minor Chords - 0-3-7", NoAction)
-Tray.Add("F3 - Augmented Chords - 0-4-8", NoAction)
-Tray.Add("F4 - Diminished Chords - 0-3-6", NoAction)
-Tray.Add("F5 - Major 7th Chords - 0-4-7-11", NoAction)
-Tray.Add("F6 - Minor 7th Chords - 0-3-7-10", NoAction)
-Tray.Add("F7 - Augmented 7th Chords - 0-4-8-11", NoAction)
-Tray.Add("F8 - Diminished 7th Chords - 0-3-6-9", NoAction)
-Tray.Add("F9 - Major 9th Chords - 0-4-7-11-14", NoAction)
-Tray.Add("F10 - Minor 9th Chords - 0-3-7-10-13", NoAction)
-Tray.Add("F11 - Augmented 9th Chords - 0-4-8-11-14", NoAction)
-Tray.Add("F12 - Diminished 9th Chords - 0-3-6-9-12", NoAction)
-Tray.Add("CTRL+F1 - Sus2 Chords - 0-2-7", NoAction)
-Tray.Add("CTRL+F2 - Sus4 Chords - 0-5-7", NoAction)
-Tray.Add("CTRL+F3 - DOMINANT 7th Chords - 0-4-7-10", NoAction)
-Tray.Add("CTRL+F4 - Half-Diminished Chords - 0-3-6-10", NoAction)
+AddChordsToTray()
 
 Tray.Add() ; Creates a separator line.
 Tray.Add("DAW", dawMenu) ; Add the DAW submenu
@@ -189,8 +174,17 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
     ToolTipChord(ChordTypeName)
 }
 
-ChordsIni := StrSplit(IniRead("Chords.ini"), "`n")
-; MsgBox(ChordNames . " - " . ChordIntervals . " - " . ShortCutKeys)
+
+AddChordsToTray() {
+    for i, chord in ChordsIni {
+        section := IniRead("Chords.ini", chord)
+        chordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
+        chordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
+        shortcutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
+
+        Tray.Add(shortcutKey . " | " . chordName . " | " . chordInterval, NoAction)
+    }
+}
 
 DynamicIniMapping(OnOff := "Off") {
     for sections in ChordsIni {
