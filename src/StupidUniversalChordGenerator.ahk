@@ -3,9 +3,7 @@ SendMode("Input")  ; Recommended for new scripts due to its superior speed and r
 SetWorkingDir(A_ScriptDir)  ; Ensures a consistent starting directory.
 Persistent  ; Keep the script running until the user exits it.
 #SingleInstance force
-
-AppName := "Centomila's Stupid Universal Chord Generator"
-AppVersion := "1.0.0"
+#Include About.ahk
 
 try {
     IniRead("Settings.ini", "Settings", "ToolTipDuration")
@@ -88,27 +86,15 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 MenuAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 {
-    aboutGui := About()
-    aboutGui.Show()
-}
-About()
-{
-    #Include About.ahk
+    aboutGui := aboutGuiToggle()
 }
 
 TopGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     #Include TopGui.ahk
 }
 
-; Function to open the website
-OpenWebsite()
-{
-    Run("https://centomila.com")
-}
-
-
 NoAction(*) {
-    ; Do nothing.
+    return
 }
 
 ExitApp(*)
@@ -175,8 +161,6 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
 
 
 AddChordsToTray() {
-    
-    
     Tray.Add("F1/F12 - Basic Chords",NoAction,"BarBreak") ; Creates a separator line.
     Tray.Add()
     for i, chord in ChordsIni {
@@ -199,8 +183,6 @@ DynamicIniMapping(OnOff := "Off") {
         ChordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
         ShortCutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
 
-        ; MsgBox(ChordName . " - " . ChordInterval . " - " . ShortCutKey)
-
         Hotkey(ShortCutKey, GenerateChord.Bind(ChordInterval, ChordName), OnOff)
     }
 }
@@ -219,11 +201,9 @@ ToggleEnable() {
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }
 
-ToggleEnable() ; Execute ChangeIcon on startup.
+ToggleEnable() ; Execute ToggleEnable on startup.
 
-; the tilde (~) symbol before a hotkey tells AutoHotkey to allow the original function of the key to pass through.
-; This means that the key will still perform its default action, in addition to executing the script you've defined.
-~CapsLock:: ToggleEnable ; Execute the ChangeIcon function when the Caps Lock key is pressed.
+~CapsLock:: ToggleEnable 
 
 
 ;-------------------------------------------------------------------------------
