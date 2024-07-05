@@ -147,16 +147,22 @@ try {
 
 ; Main function to convert note intervals to shortcut commands
 ToolTipChord(ChordTypeName) {
-    ToolTip(ChordTypeName) ; Show the tooltip with the chord name
+    ToolTip("`n" . ChordTypeName . "`n") ; Show the tooltip with the chord name
     SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
 }
 
 
 ; Main function to convert note intervals to shortcut commands
-GenerateChord(NotesToAdd) {
+GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
+    If !WinActive(DawHotFixString) {
+        ; exit function
+        ToggleEnable()
+        SendInput "{" . ThisHotkey . "}"
+        return
+    }
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
-    ChordNotes := StrSplit(NotesToAdd, "-")
+    ChordNotes := StrSplit(NotesInterval, "-")
     ; Loop through the array and convert strings into numbers
     Loop ChordNotes.Length - 1 ; Skip the root note 0
     {
@@ -180,116 +186,44 @@ GenerateChord(NotesToAdd) {
                 SendEvent("^v")
         }
     }
+    ToolTipChord(ChordTypeName)
 }
 
-#HotIf WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")
+ChordsIni := StrSplit(IniRead("Chords.ini"), "`n")
+; MsgBox(ChordNames . " - " . ChordIntervals . " - " . ShortCutKeys)
 
-; TRIADS
-; F1 - MAJOR Chords 0-4-7
-F1:: {
-    GenerateChord("0-4-7")
-    ToolTipChord("MAJOR Chords 0-4-7")
+DynamicIniMapping(OnOff := "Off") {
+    for sections in ChordsIni {
+        section := IniRead("Chords.ini", sections)
+        ChordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
+        ChordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
+        ShortCutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
+
+        ; MsgBox(ChordName . " - " . ChordInterval . " - " . ShortCutKey)
+
+        Hotkey(ShortCutKey, GenerateChord.Bind(ChordInterval, ChordName), OnOff)
+    }
 }
 
-; F2 - MINOR Chords 0-3-7
-F2:: {
-    GenerateChord("0-3-7")
-    ToolTipChord("MINOR Chords 0-3-7")
+; Function to change the system tray icon based on the Caps Lock state.
+ToggleEnable() {
+    If (WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")) {
+        DynamicIniMapping(OnOff := "On")
+        ToolTip "`nCHORDS ON`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
+        ; TraySetIcon(IconOn) ; Set the system tray icon to the "F13-ON.ico" icon.
+    } else {
+        DynamicIniMapping(OnOff := "Off")
+        ToolTip "`nOFF`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
+        ; TraySetIcon(IconOff) ; Set the system tray icon to the "F13-OFF.ico" icon.
+    }
+    SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }
 
-; F3 - AUGMENTED Chords 0-4-8
-F3:: {
-    GenerateChord("0-4-8")
-    ToolTipChord("AUGMENTED Chords 0-4-8")
-}
+ToggleEnable() ; Execute ChangeIcon on startup.
 
-; F4 - DIMINISHED Chords 0-3-6
-F4:: {
-    GenerateChord("0-3-6")
-    ToolTipChord("DIMINISHED Chords 0-3-6")
-}
-
-;-------------------------------------------------------------------------------
-
-; 7th Chords
-
-; F5 - MAJOR 7th Chords 0-4-7-11
-F5:: {
-    GenerateChord("0-4-7-11")
-    ToolTipChord("MAJOR 7th Chords 0-4-7-11")
-}
-
-; F6 - MINOR 7th Chords 0-3-7-10
-F6:: {
-    GenerateChord("0-3-7-10")
-    ToolTipChord("MINOR 7th Chords 0-3-7-10")
-}
-
-; F7 - AUGMENTED 7th Chords 0-4-8-11
-F7:: {
-    GenerateChord("0-4-8-11")
-    ToolTipChord("AUGMENTED 7th Chords 0-4-8-11")
-}
-
-; F8 - DIMINISHED 7th Chords 0-3-6-9
-F8:: {
-    GenerateChord("0-3-6-9")
-    ToolTipChord("DIMINISHED 7th Chords 0-3-6-9")
-}
-
-;-------------------------------------------------------------------------------
-; 9th Chords
-
-; F9 - MAJOR 9th Chords 0-4-7-11-14
-F9:: {
-    GenerateChord("0-4-7-11-14")
-    ToolTipChord("MAJOR 9th Chords 0-4-7-11-14")
-}
-
-; F10 - MINOR 9th Chords 0-3-7-10-13
-F10:: {
-    GenerateChord("0-3-7-10-13")
-    ToolTipChord("MINOR 9th Chords 0-3-7-10-13")
-}
-
-; F11 - AUGMENTED 9th Chords 0-4-8-11-14
-F11:: {
-    GenerateChord("0-4-8-11-14")
-    ToolTipChord("AUGMENTED 9th Chords 0-4-8-11-14")
-}
-
-; F12 - DIMINISHED 9th Chords 0-3-6-9-12
-F12:: {
-    GenerateChord("0-3-6-9-12")
-    ToolTipChord("DIMINISHED 9th Chords 0-3-6-9-12")
-}
-
-
-;-------------------------------------------------------------------------------
-; Suspended Chords
-; CTRL+F1 - Sus2 Chords - 0-2-7
-^F1:: {
-    GenerateChord("0-2-7")
-    ToolTipChord("Sus2 Chords - 0-2-7")
-}
-
-; CTRL+F2 - Sus4 Chords - 0-5-7
-^F2:: {
-    GenerateChord("0-5-7")
-    ToolTipChord("Sus4 Chords - 0-5-7")
-}
-
-; CTRL+F3 - DOMINANT 7th Chords 0-4-7-10
-^F3:: {
-    GenerateChord("0-4-7-10")
-    ToolTipChord("DOMINANT 7th Chords 0-4-7-10")
-}
-
-; CTRL+F4 - Half-Diminished Chords (0-3-6-10)
-^F4:: {
-    GenerateChord("0-3-6-10")
-    ToolTipChord("Half-Diminished Chords (0-3-6-10)")
-}
+; the tilde (~) symbol before a hotkey tells AutoHotkey to allow the original function of the key to pass through.
+; This means that the key will still perform its default action, in addition to executing the script you've defined.
+~CapsLock:: ToggleEnable ; Execute the ChangeIcon function when the Caps Lock key is pressed.
 
 
 ;-------------------------------------------------------------------------------
