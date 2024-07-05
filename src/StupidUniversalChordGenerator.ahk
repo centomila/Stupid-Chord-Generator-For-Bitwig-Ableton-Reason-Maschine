@@ -15,7 +15,6 @@ try {
 
 ChordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
-
 ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
 DawList := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
 CurrentDaw := ""
@@ -48,21 +47,21 @@ Tray := A_TrayMenu
 Tray.Delete()
 
 Tray.Add(AppName, NoAction)  ; Creates a separator line.
-Tray.Add() ; Creates a separator line.
 
-AddChordsToTray()
 
 Tray.Add() ; Creates a separator line.
 Tray.Add("DAW", dawMenu) ; Add the DAW submenu
-Tray.Add("About", MenuAbout)  ; Creates a new menu item.
+Tray.Add("About - v" . AppVersion , MenuAbout)  ; Creates a new menu item.
 
 
 Tray.Add() ; Creates a separator line.
 Tray.Add("Top Info OSD", TopGui)  ; Creates a new menu item.
 Tray.Add("Quit", ExitApp)  ; Creates a new menu item.
-; Tray default the first item in the menu programmaticaly
-; Tray.Default := AppName
-Tray.Default := "About"
+
+AddChordsToTray()
+
+
+Tray.Default := "About - v" . AppVersion 
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
@@ -132,7 +131,7 @@ try {
 
 ; Main function to convert note intervals to shortcut commands
 ToolTipChord(ChordTypeName) {
-    ToolTip("`n" . ChordTypeName . "`n") ; Show the tooltip with the chord name
+    ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
     SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
 }
 
@@ -176,12 +175,19 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
 
 
 AddChordsToTray() {
+    
+    
+    Tray.Add("F1/F12 - Basic Chords",NoAction,"BarBreak") ; Creates a separator line.
+    Tray.Add()
     for i, chord in ChordsIni {
         section := IniRead("Chords.ini", chord)
         chordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
         chordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
         shortcutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
-
+        if (A_Index == 13) {
+            Tray.Add("CTRL+F1/CTRL+F12 - Advanced Chords",NoAction,"BarBreak") ; Creates a separator line.
+            Tray.Add()
+        }
         Tray.Add(shortcutKey . " | " . chordName . " | " . chordInterval, NoAction)
     }
 }
@@ -221,6 +227,7 @@ ToggleEnable() ; Execute ChangeIcon on startup.
 
 
 ;-------------------------------------------------------------------------------
+#HotIf WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")
 ; Octave change
 ; Page Down Select all and move an octave DOWN
 PgDn:: {
