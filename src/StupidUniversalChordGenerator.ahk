@@ -174,6 +174,14 @@ AddChordsToTray() {
             Tray.Add("CTRL+F1/CTRL+F12 - Advanced Chords",NoAction,"BarBreak") ; Creates a separator line.
             Tray.Add()
         }
+        if (A_Index == 25) {
+            Tray.Add("SHIFT+F1/SHIFT+F12 - Advanced Chords",NoAction,"BarBreak") ; Creates a separator line.
+            Tray.Add()
+        }
+        if (A_Index == 37) {
+            Tray.Add("ALT+F1/ALT+F12 - Advanced Chords",NoAction,"BarBreak") ; Creates a separator line.
+            Tray.Add()
+        }
         Tray.Add(shortcutKey . " | " . chordName . " | " . chordInterval, NoAction)
     }
 }
