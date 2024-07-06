@@ -218,12 +218,10 @@ DynamicIniMapping(OnOff := "Off") {
 ToggleEnable() {
     If (WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")) {
         DynamicIniMapping(OnOff := "On")
-        ToggleOSDGui(OnOff := "On")
         ToolTip "`nCHORDS ON`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
         ; TraySetIcon(IconOn) ; Set the system tray icon to the "F13-ON.ico" icon.
     } else {
         DynamicIniMapping(OnOff := "Off")
-        ToggleOSDGui(OnOff := "Off")
         ToolTip "`nOFF`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
         ; TraySetIcon(IconOff) ; Set the system tray icon to the "F13-OFF.ico" icon.
     }
@@ -249,6 +247,9 @@ PgUp:: {
     ToolTipChord("Octave UP")
 }
 
+SC029:: { ; Scan code for backtick or \
+    ToggleOSDGui()
+}
 
 #HotIf
 

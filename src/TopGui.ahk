@@ -1,5 +1,7 @@
 #Requires AutoHotkey v2.0
 
+global OSD := false
+
 DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
     for sections in ChordsIni {
@@ -36,9 +38,9 @@ DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
 }
 
-ToggleOSDGui(OnOff := "Off") {
+ToggleOSDGui() {
     static OSDGui := 0
-    if (OnOff == "On" && !OSDGui) {
+    if (OSD == false && !OSDGui) {
         ; Calculate the screen width and height
         screenWidth := A_ScreenWidth
         screenHeight := A_ScreenHeight
@@ -69,12 +71,12 @@ ToggleOSDGui(OnOff := "Off") {
         OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
         ; Show the GUI
         OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
-
-    } else if (OnOff == "Off") {
+        global OSD := true
+    } else if (OSD = true) {
         try {
             OSDGui.Hide()
-            
             OSDGui := 0
+            global OSD := false
         }
     }
 }
