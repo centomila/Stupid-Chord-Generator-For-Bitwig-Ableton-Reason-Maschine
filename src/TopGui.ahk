@@ -2,81 +2,83 @@
 
 global OSD := false
 
-DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
+ToggleOSDGui() {
+    static OSDGui := 0
+    if (OSD == false && !OSDGui) {
+        OSDGui := BuildOSDGui()
+        global OSD := true
+    } else if (OSD = true) {
+        try {
+            DeleteOSDGui()
+            global OSD := false
+        }
+    }
+}
 
+BuildOSDGui() {
+    ; Calculate the screen width and height
+    screenWidth := A_ScreenWidth
+    screenHeight := A_ScreenHeight
+
+    ; Calculate the width and height of the GUI
+    guiWidth := screenWidth * 1
+    guiHeight := screenHeight / 2
+
+    ; Calculate the horizontal position to center the GUI
+    guiX := (screenWidth - guiWidth) / 2
+    guiY := 0
+
+    ; Create the GUI
+    OSDGui := Gui("+AlwaysOnTop -Caption")
+
+    ; Number of columns and rows
+    columns := 12
+    rows := 4
+
+    ; Calculate the width of each column
+    columnWidth := guiWidth / columns
+    rowHeight := guiHeight / rows
+
+    ; Add the GUI elements
+    AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
+
+    ; Set the transparency
+    WinSetTransparent(230, OSDGui.Hwnd)
+
+    OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
+    ; Show the GUI
+    OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
+    return OSDGui
+}
+
+DeleteOSDGui() {
+    OSDGui.Hide()
+    OSDGui := 0
+}
+
+AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
     for sections in ChordsIni {
-
         section := IniRead("Chords.ini", sections)
         chordInfo := GetChordsInfoFromIni(section)
         ChordName := chordInfo[1]
         ChordInterval := chordInfo[2]
         TextForLabel := chordInfo[3]
         
-
         TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
         TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
         TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
         TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
 
-
         if A_Index <= 12 {
-            OSDLabel := OSDGui.AddText("Center Y10 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)           
-        }
-
-        if A_Index > 12 and A_Index <= 24 {
-            OSDLabel := OSDGui.AddText("Center Y90 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), TextForLabel)           
-        }
-        if A_Index > 24 and A_Index <= 36 {
+            OSDLabel := OSDGui.AddText("Center Y10 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)
+        } else if A_Index > 12 and A_Index <= 24 {
+            OSDLabel := OSDGui.AddText("Center Y90 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), TextForLabel)
+        } else if A_Index > 24 and A_Index <= 36 {
             OSDLabel := OSDGui.AddText("Center Y160 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), TextForLabel)
-        }
-        if A_Index > 36 {
+        } else if A_Index > 36 {
             OSDLabel := OSDGui.AddText("Center Y230 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), TextForLabel)
         }
         OSDLabel.SetFont("s11 q5")
-
-    }
-
-}
-
-ToggleOSDGui() {
-    static OSDGui := 0
-    if (OSD == false && !OSDGui) {
-        ; Calculate the screen width and height
-        screenWidth := A_ScreenWidth
-        screenHeight := A_ScreenHeight
-
-        ; Calculate the width and height of the GUI
-        guiWidth := screenWidth * 1
-        guiHeight := 300
-
-        ; Calculate the horizontal position to center the GUI
-        guiX := (screenWidth - guiWidth) / 2
-        guiY := 0
-
-        ; Create the GUI
-        OSDGui := Gui("+AlwaysOnTop -Caption")
-
-        ; Number of columns and rows
-        columns := 12
-        rows := 4
-
-        ; Calculate the width of each column
-        columnWidth := guiWidth / columns
-        rowHeight := guiHeight / rows
-
-        ; Add the GUI elements
-        DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
-        WinSetTransparent(200, OSDGui.Hwnd)
-
-        OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
-        ; Show the GUI
-        OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
-        global OSD := true
-    } else if (OSD = true) {
-        try {
-            OSDGui.Hide()
-            OSDGui := 0
-            global OSD := false
-        }
     }
 }
+
