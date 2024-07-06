@@ -8,9 +8,14 @@ DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         chordInfo := GetChordsInfoFromIni(section)
         ChordName := chordInfo[1]
         ChordInterval := chordInfo[2]
-        ShortCutKey := chordInfo[3]
+        TextForLabel := chordInfo[3]
+        
 
-        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . ShortCutKey
+        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
+        TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
+        TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
+        TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
+
 
         if A_Index <= 12 {
             OSDLabel := OSDGui.AddText("Center Y10 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)           
@@ -39,7 +44,7 @@ ToggleOSDGui(OnOff := "Off") {
         screenHeight := A_ScreenHeight
 
         ; Calculate the width and height of the GUI
-        guiWidth := screenWidth * 0.90
+        guiWidth := screenWidth * 1
         guiHeight := 300
 
         ; Calculate the horizontal position to center the GUI
