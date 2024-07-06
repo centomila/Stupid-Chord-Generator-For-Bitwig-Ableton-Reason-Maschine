@@ -1,44 +1,57 @@
 #Requires AutoHotkey v2.0
 
-; Function to Draw the GUI elements
 DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
-    for i, sections in ChordsIni {
-        if (i > 12) {
-            break
-        }
+    for sections in ChordsIni {
+
         section := IniRead("Chords.ini", sections)
-        ChordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
-        ChordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
-        ShortCutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
-        OSDLabel := OSDGui.AddText("Center X" . (columnWidth * (A_Index - 1)) . " Y0" . " W" . columnWidth - 2 . " H" . rowHeight, ChordName . "`n(" . ChordInterval . ")`n" . ShortCutKey)
-        OSDLabel.SetFont("s12 q5 w800")
-        OSDLabel.MarginX := 50
-        OSDLabel.MarginY := 50
+        chordInfo := GetChordsInfoFromIni(section)
+        ChordName := chordInfo[1]
+        ChordInterval := chordInfo[2]
+        ShortCutKey := chordInfo[3]
+
+        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . ShortCutKey
+
+        if A_Index <= 12 {
+            OSDLabel := OSDGui.AddText("Center Y10 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)           
+        }
+
+        if A_Index > 12 and A_Index <= 24 {
+            OSDLabel := OSDGui.AddText("Center Y90 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), TextForLabel)           
+        }
+        if A_Index > 24 and A_Index <= 36 {
+            OSDLabel := OSDGui.AddText("Center Y160 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), TextForLabel)
+        }
+        if A_Index > 36 {
+            OSDLabel := OSDGui.AddText("Center Y230 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), TextForLabel)
+        }
+        OSDLabel.SetFont("s11 q5")
+
     }
+
 }
 
 ToggleOSDGui(OnOff := "Off") {
     static OSDGui := 0
-    if (OnOff == "On") {
+    if (OnOff == "On" && !OSDGui) {
         ; Calculate the screen width and height
         screenWidth := A_ScreenWidth
         screenHeight := A_ScreenHeight
 
         ; Calculate the width and height of the GUI
-        guiWidth := screenWidth * 0.95
-        guiHeight := 60
+        guiWidth := screenWidth * 0.90
+        guiHeight := 300
 
         ; Calculate the horizontal position to center the GUI
         guiX := (screenWidth - guiWidth) / 2
-        guiY := 10
+        guiY := 0
 
         ; Create the GUI
         OSDGui := Gui("+AlwaysOnTop -Caption")
 
         ; Number of columns and rows
         columns := 12
-        rows := 1
+        rows := 4
 
         ; Calculate the width of each column
         columnWidth := guiWidth / columns
@@ -46,14 +59,17 @@ ToggleOSDGui(OnOff := "Off") {
 
         ; Add the GUI elements
         DrawGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
-        WinSetTransparent(155, OSDGui.Hwnd)
+        WinSetTransparent(200, OSDGui.Hwnd)
 
-        OSDGui.OnEvent('Close', (*) => OSDGui := 0)
+        OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
         ; Show the GUI
-        OSDGui.Show("NA AutoSize " "W" guiWidth "xCenter " "Y" guiY)
+        OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
 
-    } else if (OnOff == "Off" and OSDGui != 0) {
-        OSDGui.Destroy()
-        OSDGui := 0
+    } else if (OnOff == "Off") {
+        try {
+            OSDGui.Hide()
+            
+            OSDGui := 0
+        }
     }
 }

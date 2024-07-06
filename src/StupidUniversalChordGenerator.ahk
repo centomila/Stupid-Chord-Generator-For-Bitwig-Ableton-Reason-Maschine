@@ -208,7 +208,7 @@ DynamicIniMapping(OnOff := "Off") {
         ChordName := chordInfo[1]
         ChordInterval := chordInfo[2]
         ShortCutKey := chordInfo[3]
-        ; MsgBox(ChordName . " " . ChordInterval . " " . ShortCutKey)
+        
         Hotkey(ShortCutKey, GenerateChord.Bind(ChordInterval, ChordName), OnOff)
     }
 
@@ -216,7 +216,6 @@ DynamicIniMapping(OnOff := "Off") {
 
 ; Function to change the system tray icon based on the Caps Lock state.
 ToggleEnable() {
-    
     If (WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")) {
         DynamicIniMapping(OnOff := "On")
         ToggleOSDGui(OnOff := "On")
@@ -231,12 +230,11 @@ ToggleEnable() {
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }
 
-ToggleEnable() ; Execute ToggleEnable on startup.
-
 ~CapsLock:: ToggleEnable
 
 
-;-------------------------------------------------------------------------------
+
+
 #HotIf WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")
 ; Octave change
 ; Page Down Select all and move an octave DOWN
@@ -250,6 +248,8 @@ PgUp:: {
     SendEvent("((^a)(+{Up}))")
     ToolTipChord("Octave UP")
 }
+
+
 #HotIf
 
 
