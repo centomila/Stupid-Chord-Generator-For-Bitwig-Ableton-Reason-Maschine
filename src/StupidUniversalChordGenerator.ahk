@@ -143,18 +143,18 @@ ToggleEnable() {
 
 
 #HotIf WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")
-    ; Octave change
-    ; Page Down Select all and move an octave DOWN
-    PgDn:: {
-        SendEvent("((^a)(+{Down}))")
-    }
+; Octave change
+; Page Down Select all and move an octave DOWN
+PgDn:: {
+    SendEvent("((^a)(+{Down}))")
+}
 
-    ; Page Up Select all and move an octave UP
-    PgUp:: {
-        SendEvent("((^a)(+{Up}))")
-    }
+; Page Up Select all and move an octave UP
+PgUp:: {
+    SendEvent("((^a)(+{Up}))")
+}
 
-    SC029:: { ; Scan code for backtick or \
-        ToggleOSDGui()
-    }
+SC029:: { ; Scan code for backtick or \
+    ToggleOSDGui()
+}
 #HotIf
