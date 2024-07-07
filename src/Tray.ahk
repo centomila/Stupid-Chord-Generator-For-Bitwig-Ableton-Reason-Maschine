@@ -31,7 +31,7 @@ Tray.Add("About - v" . AppVersion, MenuAbout)  ; Creates a new menu item.
 
 
 Tray.Add() ; Creates a separator line.
-Tray.Add("Top Info OSD", OpenOSDGui)  ; Creates a new menu item.
+Tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
 Tray.Add("Quit", ExitApp)  ; Creates a new menu item.
 
 AddChordsToTray()
@@ -88,26 +88,26 @@ AddChordsToTray() {
         chordInfo := GetChordsInfoFromIni(section)
         ChordName := chordInfo[1]
         ChordInterval := chordInfo[2]
-        TextForLabel := chordInfo[3]
+        ShortCutKey := chordInfo[3]
 
-        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
+        TextForLabel := ShortCutKey . "`t" . ChordName . " [" . ChordInterval . "]"
         TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
         TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
         TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
         if (A_Index == 13) {
             Tray.Add()
-            Tray.Add("CTRL+F1/CTRL+F12 - Advanced Chords", NoAction, "") ; Creates a separator line.
+            Tray.Add("CTRL+F1/CTRL+F12", NoAction, "") ; Creates a separator line.
             Tray.Add()
         }
         if (A_Index == 25) {
-            Tray.Add("SHIFT+F1/SHIFT+F12 - Advanced Chords", NoAction, "BarBreak") ; Creates a separator line.
+            Tray.Add("SHIFT+F1/SHIFT+F12", NoAction, "BarBreak") ; Creates a separator line.
             Tray.Add()
         }
         if (A_Index == 37) {
             Tray.Add()
-            Tray.Add("ALT+F1/ALT+F12 - Advanced Chords", NoAction, "") ; Creates a separator line.
+            Tray.Add("ALT+F1/ALT+F12", NoAction, "") ; Creates a separator line.
             Tray.Add()
         }
-        Tray.Add(TextForLabel . A_Tab . chordName . "  (" . chordInterval . ")", NoAction)
+        Tray.Add(TextForLabel, NoAction)
     }
 }
