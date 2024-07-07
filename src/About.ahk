@@ -1,7 +1,5 @@
 #Requires AutoHotkey v2.0
 
-AppName := "Centomila's Stupid Universal Chord Generator"
-AppVersion := "1.0.0"
 
 aboutGuiToggle() {
     static aboutGui := 0
