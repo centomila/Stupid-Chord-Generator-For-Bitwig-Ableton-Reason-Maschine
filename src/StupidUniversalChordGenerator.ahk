@@ -219,6 +219,7 @@ ToggleEnable() {
     } else {
         DynamicIniMapping(OnOff := "Off")
         ToolTip "`nOFF`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
+        ToggleOSDGui()
         ; TraySetIcon(IconOff) ; Set the system tray icon to the "F13-OFF.ico" icon.
     }
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
