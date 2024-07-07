@@ -9,29 +9,23 @@ Persistent  ; Keep the script running until the user exits it.
 #Include About.ahk
 #Include VsCodeReload.ahk
 
-try {
-    IniRead("Settings.ini", "Settings", "ToolTipDuration")
-} catch {
-    IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
+
+LoadSettings() {
+    try {
+        global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
+        global toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+    } catch {
+        IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
+        IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
+        global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
+        global toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+    }
+    dawMenu.Check(currentDaw)
+    toolTipMenu.Check(toolTipDuration)
+
+    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
 }
-
-
-try {
-    IniRead("Settings.ini", "Settings", "DAW")
-    dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
-    currentDaw := IniRead("Settings.ini", "Settings", "DAW")
-
-    toolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
-    toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
-
-    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(IniRead("Settings.ini", "Settings", "DAW"))
-
-} catch {
-    IniWrite("Bitwig Studio", "Settings.ini", "Settings", "DAW")
-    dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
-    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(IniRead("Settings.ini", "Settings", "DAW"))
-}
-
+LoadSettings()
 
 ; Main function to convert note intervals to shortcut commands
 GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
@@ -70,7 +64,7 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
         }
     }
     ; Tooltip
-    if toolTipDuration > 0 {   
+    if toolTipDuration > 0 {
         thisHotkey := ReplaceShortCutSymbols(thisHotkey)
         ToolTip("`n" . thisHotkey . "`n`n" . chordTypeName . "`n`n " . notesInterval . "`n ") ; Show the tooltip with the chord name
         SetTimer () => ToolTip(), toolTipDuration ; Show the tooltip for ToolTipDuration seconds

@@ -6,11 +6,12 @@ APP_VERSION := "1.0.0"
 chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
 ; Tooltip Duration
-toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+toolTipDuration := 0
 toolTipDurationOptions := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
 
 ; DAWs
 DAW_LIST := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
+DEFAULT_DAW := "Bitwig Studio"
 currentDaw := ""
 
 DAW_LIST_EXE_CLASS_MAP := Map(
