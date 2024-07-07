@@ -18,33 +18,33 @@ loop DAW_LIST.Length {
 }
 
 toolTipMenu := Menu()
-loop ToolTipDurationOptions.Length {
-    toolTipMenu.Add(ToolTipDurationOptions.Get(A_Index), SelectToolTipDuration, "Radio")
+loop toolTipDurationOptions.Length {
+    toolTipMenu.Add(toolTipDurationOptions.Get(A_Index), SelectToolTipDuration, "Radio")
 }
 
-Tray := A_TrayMenu
-Tray.Delete()
+tray := A_TrayMenu
+tray.Delete()
 A_IconTip := APP_NAME
 
 
-Tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
+tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
 
 
-Tray.Add() ; Creates a separator line.
-Tray.Add("DAW", dawMenu) ; Add the DAW submenu
-Tray.Add("ToolTipDuration", toolTipMenu) ; Add the ToolTipDuration submenu
-Tray.Add("Edit Chords.ini", EditChordsIniFile)
+tray.Add() ; Creates a separator line.
+tray.Add("DAW", dawMenu) ; Add the DAW submenu
+tray.Add("ToolTipDuration", toolTipMenu) ; Add the ToolTipDuration submenu
+tray.Add("Edit Chords.ini", EditChordsIniFile)
 
-Tray.Add() ; Creates a separator line.
-Tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
-Tray.Add() ; Creates a separator line.
-Tray.Add("About - v" . APP_VERSION, MenuAbout)  ; Creates a new menu item.
-Tray.Add("Quit", ExitApp)  ; Creates a new menu item.
+tray.Add() ; Creates a separator line.
+tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
+tray.Add() ; Creates a separator line.
+tray.Add("About - v" . APP_VERSION, MenuAbout)  ; Creates a new menu item.
+tray.Add("Quit", ExitApp)  ; Creates a new menu item.
 
 AddChordsToTray()
 
 
-Tray.Default := "About - v" . APP_VERSION
+tray.Default := "About - v" . APP_VERSION
 
 EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     Run "Chords.ini"
@@ -52,8 +52,8 @@ EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
-    loop ToolTipDurationOptions.Length {
-        toolTipMenu.Uncheck(ToolTipDurationOptions.Get(A_Index))
+    loop toolTipDurationOptions.Length {
+        toolTipMenu.Uncheck(toolTipDurationOptions.Get(A_Index))
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
     toolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
@@ -68,14 +68,14 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
-    CurrentDaw := A_ThisMenuItem
+    currentDaw := A_ThisMenuItem
 
-    switch CurrentDaw {
+    switch currentDaw {
         case "NI Maschine 2":
             MsgBox(
                 "Instructions:`n`n" .
                 "Right Click on the piano roll and select`n`n" .
-                "NUDGE GRID > STEP", CurrentDaw)
+                "NUDGE GRID > STEP", currentDaw)
         default:
             return
     }
@@ -102,31 +102,30 @@ ExitApp(*)
 }
 
 AddChordsToTray() {
-    Tray.Add("F1/F12 - Basic Chords", NoAction, "BarBreak") ; Creates a separator line.
-    Tray.Add()
+    tray.Add("F1/F12 - Basic Chords", NoAction, "BarBreak") ; Creates a separator line.
+    tray.Add()
     for sections in chordsIni {
         section := IniRead("Chords.ini", sections)
-        chordInfo := GetChordsInfoFromIni(section)
-        ChordName := chordInfo[1]
-        ChordInterval := chordInfo[2]
-        ShortCutKey := chordInfo[3]
+        chordName := GetChordsInfoFromIni(section)[1]
+        chordInterval := GetChordsInfoFromIni(section)[2]
+        shortcutKey := GetChordsInfoFromIni(section)[3]
 
-        TextForLabel := ShortCutKey . "`t" . ChordName . " [" . ChordInterval . "]"
-        TextForLabel := ReplaceShortCutSymbols(TextForLabel)
+        textForLabel := shortcutKey . "`t" . chordName . " [" . chordInterval . "]"
+        textForLabel := ReplaceShortCutSymbols(textForLabel)
         if (A_Index == 13) {
-            Tray.Add()
-            Tray.Add("CTRL+F1/CTRL+F12", NoAction, "") ; Creates a separator line.
-            Tray.Add()
+            tray.Add()
+            tray.Add("CTRL+F1/CTRL+F12", NoAction, "") ; Creates a separator line.
+            tray.Add()
         }
         if (A_Index == 25) {
-            Tray.Add("SHIFT+F1/SHIFT+F12", NoAction, "BarBreak") ; Creates a separator line.
-            Tray.Add()
+            tray.Add("SHIFT+F1/SHIFT+F12", NoAction, "BarBreak") ; Creates a separator line.
+            tray.Add()
         }
         if (A_Index == 37) {
-            Tray.Add()
-            Tray.Add("ALT+F1/ALT+F12", NoAction, "") ; Creates a separator line.
-            Tray.Add()
+            tray.Add()
+            tray.Add("ALT+F1/ALT+F12", NoAction, "") ; Creates a separator line.
+            tray.Add()
         }
-        Tray.Add(TextForLabel, NoAction)
+        tray.Add(textForLabel, NoAction)
     }
 }
