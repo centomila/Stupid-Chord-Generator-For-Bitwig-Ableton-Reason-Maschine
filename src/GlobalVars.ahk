@@ -3,6 +3,7 @@
 APP_NAME := "Centomila's Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
+CHORDS_INI_LIST := ["All-Chords.ini", "Basic-Chords.ini", "Custom-Chords.ini", "Custom-Chords-2.ini", "Custom-Chords-3.ini"]
 chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
 ; Tooltip Duration

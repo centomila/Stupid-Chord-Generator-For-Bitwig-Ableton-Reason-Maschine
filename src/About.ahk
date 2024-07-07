@@ -1,13 +1,16 @@
 #Requires AutoHotkey v2.0
+#Include ControlColor.ahk
 
 
 aboutGuiToggle() {
     static aboutGui := 0
 
     if (aboutGui == 0) {
-        
+
         aboutGui := Gui()
         aboutGui.BackColor := "0x111111"
+        aboutGuiWidth := 500
+        aboutGuiHeight := 500
 
         ; Set the font for the application title
         aboutGui.SetFont("c0xf4f4f4 s20 bold")
@@ -28,22 +31,22 @@ aboutGuiToggle() {
             "Your support means a lot to me!`n`n" .
             "Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!"
         )
-
         ; Add the button to the website
         aboutButton := aboutGui.Add(
             "Button",
-            "x150 y440 w200 h30 +Center",
+            "W300 X" . aboutGuiWidth / 2 - 150 . " Y" . aboutGuiHeight - 50 . "  h60 +Center",
             "CENTOMILA.COM"
         )
+        aboutButton.SetFont("s20 bold")
         aboutButton.OnEvent("Click", (*) => OpenCentomila())
-        aboutButton.BackColor := "0x333333"
-        aboutButton.SetFont("c0xf4f4f4")
+
+        ControlColor(aboutButton, aboutGui, 0x111111)
 
         ; Event handler for closing the GUI
         aboutGui.OnEvent('Close', (*) => aboutGui.Destroy())
         aboutGui.Title := APP_NAME
 
-        aboutGui.Show()
+        aboutGui.Show("NA AutoSize xCenter " . "W460 H360")
 
         return aboutGui
     } else {

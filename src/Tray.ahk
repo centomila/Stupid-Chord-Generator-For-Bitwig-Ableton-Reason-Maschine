@@ -25,6 +25,7 @@ loop toolTipDurationOptions.Length {
 tray := A_TrayMenu
 tray.Delete()
 A_IconTip := APP_NAME
+; tray.SetColor(0x333333)
 
 
 tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
@@ -33,6 +34,7 @@ tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
 tray.Add() ; Creates a separator line.
 tray.Add("DAW", dawMenu) ; Add the DAW submenu
 tray.Add("ToolTipDuration", toolTipMenu) ; Add the ToolTipDuration submenu
+tray.Add() ; Creates a separator line.
 tray.Add("Edit Chords.ini", EditChordsIniFile)
 
 tray.Add() ; Creates a separator line.
