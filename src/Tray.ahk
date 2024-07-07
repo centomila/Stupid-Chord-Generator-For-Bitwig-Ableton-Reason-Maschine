@@ -33,17 +33,22 @@ Tray.Add(AppName, NoAction)  ; Creates a separator line.
 Tray.Add() ; Creates a separator line.
 Tray.Add("DAW", dawMenu) ; Add the DAW submenu
 Tray.Add("ToolTipDuration", ToolTipMenu) ; Add the ToolTipDuration submenu
-Tray.Add("About - v" . AppVersion, MenuAbout)  ; Creates a new menu item.
-
+Tray.Add("Edit Chords.ini", EditChordsIniFile)
 
 Tray.Add() ; Creates a separator line.
 Tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
+Tray.Add() ; Creates a separator line.
+Tray.Add("About - v" . AppVersion, MenuAbout)  ; Creates a new menu item.
 Tray.Add("Quit", ExitApp)  ; Creates a new menu item.
 
 AddChordsToTray()
 
 
 Tray.Default := "About - v" . AppVersion
+
+EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    Run "Chords.ini"
+}
 
 SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
@@ -52,6 +57,7 @@ SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
     ToolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+    Reload
 }
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
