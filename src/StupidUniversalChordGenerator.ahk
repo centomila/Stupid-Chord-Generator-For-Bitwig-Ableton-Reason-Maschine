@@ -117,12 +117,6 @@ try {
     DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
 }
 
-; Main function to convert note intervals to shortcut commands
-ToolTipChord(ChordTypeName) {
-    ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
-    SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
-}
-
 
 ; Main function to convert note intervals to shortcut commands
 GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
@@ -160,7 +154,9 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
                 SendEvent("^v")
         }
     }
-    ToolTipChord(ChordTypeName)
+    ; Tooltip
+    ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
+    SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
 }
 
 
@@ -238,13 +234,11 @@ ToggleEnable() {
 ; Page Down Select all and move an octave DOWN
 PgDn:: {
     SendEvent("((^a)(+{Down}))")
-    ToolTipChord("Octave DOWN")
 }
 
 ; Page Up Select all and move an octave UP
 PgUp:: {
     SendEvent("((^a)(+{Up}))")
-    ToolTipChord("Octave UP")
 }
 
 SC029:: { ; Scan code for backtick or \

@@ -5,56 +5,58 @@ global OSD := false
 ToggleOSDGui() {
     static OSDGui := 0
     if (OSD == false && !OSDGui) {
-        OSDGui := BuildOSDGui()
+        OSDGui := BuildDeleteOSDGui()
         global OSD := true
     } else if (OSD = true) {
-        try {
-            DeleteOSDGui()
-            global OSD := false
-        }
+        OSDGui := BuildDeleteOSDGui()
+        global OSD := false
     }
 }
 
-BuildOSDGui() {
-    ; Calculate the screen width and height
-    screenWidth := A_ScreenWidth
-    screenHeight := A_ScreenHeight
+BuildDeleteOSDGui() {
+    static OSDGui := 0
+    if (OSD == false && !OSDGui) {
+        ; Calculate the screen width and height
+        screenWidth := A_ScreenWidth
+        screenHeight := A_ScreenHeight
 
-    ; Calculate the width and height of the GUI
-    guiWidth := screenWidth * 1
-    guiHeight := screenHeight / 2
+        ; Calculate the width and height of the GUI
+        guiWidth := screenWidth * 1
+        guiHeight := screenHeight / 2
 
-    ; Calculate the horizontal position to center the GUI
-    guiX := (screenWidth - guiWidth) / 2
-    guiY := 0
+        ; Calculate the horizontal position to center the GUI
+        guiX := (screenWidth - guiWidth) / 2
+        guiY := 0
 
-    ; Create the GUI
-    OSDGui := Gui("+AlwaysOnTop -Caption")
+        ; Create the GUI
+        OSDGui := Gui("+AlwaysOnTop -Caption")
 
-    ; Number of columns and rows
-    columns := 12
-    rows := 4
+        ; Number of columns and rows
+        columns := 12
+        rows := 4
 
-    ; Calculate the width of each column
-    columnWidth := guiWidth / columns
-    rowHeight := guiHeight / rows
+        ; Calculate the width of each column
+        columnWidth := guiWidth / columns
+        rowHeight := guiHeight / rows
 
-    ; Add the GUI elements
-    AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
+        ; Add the GUI elements
+        AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
 
-    ; Set the transparency
-    WinSetTransparent(230, OSDGui.Hwnd)
+        ; Set the transparency
+        WinSetTransparent(230, OSDGui.Hwnd)
 
-    OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
-    ; Show the GUI
-    OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
-    return OSDGui
+        OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
+        ; Show the GUI
+        OSDGui.Show("NA " . "W" . guiWidth . "xCenter " . "Y" . guiY)
+        return OSDGui
+    } else {
+        OSDGui.Hide() ; Hide the GUI before destroying it
+        OSDGui.Destroy() ; Destroy the GUI
+        OSDGui := 0
+        global OSD := false
+    }
 }
 
-DeleteOSDGui() {
-    OSDGui.Hide()
-    OSDGui := 0
-}
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
     for sections in ChordsIni {
@@ -63,7 +65,7 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         ChordName := chordInfo[1]
         ChordInterval := chordInfo[2]
         TextForLabel := chordInfo[3]
-        
+
         TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
         TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
         TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
@@ -81,4 +83,3 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         OSDLabel.SetFont("s11 q5")
     }
 }
-
