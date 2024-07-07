@@ -17,16 +17,22 @@ loop DawList.Length {
     dawMenu.Add(dawName, SelectDaw, "Radio")
 }
 
-
+ToolTipMenu := Menu()
+loop ToolTipDurationOptions.Length {
+    ToolTipMenu.Add(ToolTipDurationOptions.Get(A_Index), SelectToolTipDuration, "Radio")
+}
 
 Tray := A_TrayMenu
 Tray.Delete()
+A_IconTip := AppName
+
 
 Tray.Add(AppName, NoAction)  ; Creates a separator line.
 
 
 Tray.Add() ; Creates a separator line.
 Tray.Add("DAW", dawMenu) ; Add the DAW submenu
+Tray.Add("ToolTipDuration", ToolTipMenu) ; Add the ToolTipDuration submenu
 Tray.Add("About - v" . AppVersion, MenuAbout)  ; Creates a new menu item.
 
 
@@ -38,6 +44,15 @@ AddChordsToTray()
 
 
 Tray.Default := "About - v" . AppVersion
+
+SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    ; Uncheck all items
+    loop ToolTipDurationOptions.Length {
+        ToolTipMenu.Uncheck(ToolTipDurationOptions.Get(A_Index))
+    }
+    IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
+    ToolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+}
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items

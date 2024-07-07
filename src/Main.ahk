@@ -20,6 +20,10 @@ try {
     IniRead("Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
     CurrentDaw := IniRead("Settings.ini", "Settings", "DAW")
+
+    ToolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+    ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+
     DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
 
 } catch {
@@ -66,8 +70,10 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
         }
     }
     ; Tooltip
-    ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
-    SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
+    if ToolTipDuration > 0 {   
+        ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
+        SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
+    }
 }
 
 GetChordsInfoFromIni(section) {

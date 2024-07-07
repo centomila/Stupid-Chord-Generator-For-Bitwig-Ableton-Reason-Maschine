@@ -22,7 +22,7 @@ BuildDeleteOSDGui() {
 
         ; Calculate the width and height of the GUI
         guiWidth := screenWidth * 1
-        guiHeight := screenHeight / 3
+        guiHeight := screenHeight / 2.5
 
         ; Calculate the horizontal position to center the GUI
         guiX := (screenWidth - guiWidth) / 2
@@ -74,7 +74,7 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
 
         if A_Index <= 12 {
-            OSDLabel := OSDGui.AddText("Center Y10 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)
+            OSDLabel := OSDGui.AddText("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
             OSDLabel := OSDGui.AddText("Center Y" . rowHeight . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), TextForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
