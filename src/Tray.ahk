@@ -79,3 +79,35 @@ ExitApp(*)
 {
     ExitApp()
 }
+
+AddChordsToTray() {
+    Tray.Add("F1/F12 - Basic Chords", NoAction, "BarBreak") ; Creates a separator line.
+    Tray.Add()
+    for sections in ChordsIni {
+        section := IniRead("Chords.ini", sections)
+        chordInfo := GetChordsInfoFromIni(section)
+        ChordName := chordInfo[1]
+        ChordInterval := chordInfo[2]
+        TextForLabel := chordInfo[3]
+
+        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
+        TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
+        TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
+        TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
+        if (A_Index == 13) {
+            Tray.Add()
+            Tray.Add("CTRL+F1/CTRL+F12 - Advanced Chords", NoAction, "") ; Creates a separator line.
+            Tray.Add()
+        }
+        if (A_Index == 25) {
+            Tray.Add("SHIFT+F1/SHIFT+F12 - Advanced Chords", NoAction, "BarBreak") ; Creates a separator line.
+            Tray.Add()
+        }
+        if (A_Index == 37) {
+            Tray.Add()
+            Tray.Add("ALT+F1/ALT+F12 - Advanced Chords", NoAction, "") ; Creates a separator line.
+            Tray.Add()
+        }
+        Tray.Add(TextForLabel . A_Tab . chordName . "  (" . chordInterval . ")", NoAction)
+    }
+}
