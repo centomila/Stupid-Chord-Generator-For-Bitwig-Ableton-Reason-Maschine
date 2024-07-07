@@ -1,22 +1,29 @@
 #Requires AutoHotkey v2.0
 
-AppName := "Centomila's Stupid Universal Chord Generator"
-AppVersion := "1.0.0"
+APP_NAME := "Centomila's Stupid Universal Chord Generator"
+APP_VERSION := "1.0.0"
 
-ChordsIni := StrSplit(IniRead("Chords.ini"), "`n")
+chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
 ; Tooltip Duration
-ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
 ToolTipDurationOptions := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
 
 ; DAWs
-DawList := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
-CurrentDaw := ""
+DAW_LIST := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
+currentDaw := ""
 
-MapHotFixStrings := Map(
+DAW_LIST_EXE_CLASS_MAP := Map(
     "Bitwig Studio", "ahk_class bitwig",
     "Ableton Live", "ahk_class Ableton Live Window Class",
     "Reason", "ahk_exe Reason.exe",
     "NI Maschine 2", "ahk_exe Maschine 2.exe")
 
-DawHotFixString := "" ; Empty until the script has loaded the correct DAW
+dawHotFixString := "" ; Empty until the script has loaded the correct DAW
+
+ReplaceShortCutSymbols(shortcutKeyString) {
+    shortcutKeyString := StrReplace(shortcutKeyString, "+", "SHIFT - ")
+    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - ")
+    shortcutKeyString := StrReplace(shortcutKeyString, "!", "ALT - ")
+    return shortcutKeyString
+}

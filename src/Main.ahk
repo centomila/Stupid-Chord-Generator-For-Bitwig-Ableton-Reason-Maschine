@@ -1,5 +1,5 @@
-﻿; #Warn  ; Enable warnings to assist with detecting common errors.
-SendMode("Input")  ; Recommended for new scripts due to its superior speed and reliability.
+﻿#Requires AutoHotkey v2.0
+
 SetWorkingDir(A_ScriptDir)  ; Ensures a consistent starting directory.
 Persistent  ; Keep the script running until the user exits it.
 #SingleInstance force
@@ -19,39 +19,39 @@ try {
 try {
     IniRead("Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
-    CurrentDaw := IniRead("Settings.ini", "Settings", "DAW")
+    currentDaw := IniRead("Settings.ini", "Settings", "DAW")
 
-    ToolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
-    ToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+    toolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+    toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
 
-    DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
+    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(IniRead("Settings.ini", "Settings", "DAW"))
 
 } catch {
     IniWrite("Bitwig Studio", "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))
-    DawHotFixString := MapHotFixStrings.Get(IniRead("Settings.ini", "Settings", "DAW"))
+    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(IniRead("Settings.ini", "Settings", "DAW"))
 }
 
 
 ; Main function to convert note intervals to shortcut commands
-GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
-    If !WinActive(DawHotFixString) {
+GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
+    If !WinActive(dawHotFixString) {
         ; exit function
         ToggleEnable()
-        SendInput "{" . ThisHotkey . "}"
+        SendInput "{" . thisHotkey . "}"
         return
     }
     SendEvent("{Shift Up}{Ctrl Up}{Alt Up}") ; Reset all modifiers
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
-    ChordNotes := StrSplit(NotesInterval, "-")
+    chordNotes := StrSplit(notesInterval, "-")
     ; Loop through the array and convert strings into numbers
-    Loop ChordNotes.Length - 1 ; Skip the root note 0
+    Loop chordNotes.Length - 1 ; Skip the root note 0
     {
-        semitones := ChordNotes.Get(A_Index + 1)
+        semitones := chordNotes.Get(A_Index + 1)
 
-        switch CurrentDaw {
+        switch currentDaw {
             case "Reason":
                 SendEvent("^l")
                 SendEvent("^c")
@@ -70,36 +70,37 @@ GenerateChord(NotesInterval, ChordTypeName, ThisHotkey := "", ThisLabel := "") {
         }
     }
     ; Tooltip
-    if ToolTipDuration > 0 {   
-        ToolTip("`n" . ChordTypeName . "`n ") ; Show the tooltip with the chord name
-        SetTimer () => ToolTip(), ToolTipDuration ; Show the tooltip for ToolTipDuration seconds
+    if toolTipDuration > 0 {   
+        thisHotkey := ReplaceShortCutSymbols(thisHotkey)
+        ToolTip("`n" . thisHotkey . "`n`n" . chordTypeName . "`n`n " . notesInterval . "`n ") ; Show the tooltip with the chord name
+        SetTimer () => ToolTip(), toolTipDuration ; Show the tooltip for ToolTipDuration seconds
     }
+    return
 }
 
 GetChordsInfoFromIni(section) {
-    ChordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
-    ChordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
-    ShortCutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
-    return [ChordName, ChordInterval, ShortCutKey]
+    chordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
+    chordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
+    shortcutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
+    return [chordName, chordInterval, shortcutKey]
 }
 
 
-DynamicIniMapping(OnOff := "Off") {
-    for sections in ChordsIni {
+DynamicIniMapping(onOff := "Off") {
+    for sections in chordsIni {
         section := IniRead("Chords.ini", sections)
-        chordInfo := GetChordsInfoFromIni(section)
-        ChordName := chordInfo[1]
-        ChordInterval := chordInfo[2]
-        ShortCutKey := chordInfo[3]
+        chordName := GetChordsInfoFromIni(section)[1]
+        chordInterval := GetChordsInfoFromIni(section)[2]
+        shortcutKey := GetChordsInfoFromIni(section)[3]
 
-        Hotkey(ShortCutKey, GenerateChord.Bind(ChordInterval, ChordName), OnOff)
+        Hotkey(shortcutKey, GenerateChord.Bind(chordInterval, chordName), onOff)
     }
 
 }
 
 ; Function to change the system tray icon based on the Caps Lock state.
 ToggleEnable() {
-    If (WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")) {
+    If (WinActive(dawHotFixString) and GetKeyState("CapsLock", "T")) {
         DynamicIniMapping(OnOff := "On")
         ToolTip "`nCHORDS ON`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
         ; TraySetIcon(IconOn) ; Set the system tray icon to the "F13-ON.ico" icon.
@@ -115,7 +116,7 @@ ToggleEnable() {
 ~CapsLock:: ToggleEnable
 
 
-#HotIf WinActive(DawHotFixString) and GetKeyState("CapsLock", "T")
+#HotIf WinActive(dawHotFixString) and GetKeyState("CapsLock", "T")
 ; Octave change
 ; Page Down Select all and move an octave DOWN
 PgDn:: {

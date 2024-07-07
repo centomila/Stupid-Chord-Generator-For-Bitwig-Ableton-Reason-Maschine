@@ -14,7 +14,7 @@ aboutGuiToggle() {
         appTitleAboutText := aboutGui.Add(
             "Text",
             "x20 y20 w460 h100 +Center",
-            StrUpper(AppName . " - " . AppVersion)
+            StrUpper(APP_NAME . " - " . APP_VERSION)
         )
 
         ; Set the font for the about text
@@ -41,7 +41,7 @@ aboutGuiToggle() {
 
         ; Event handler for closing the GUI
         aboutGui.OnEvent('Close', (*) => aboutGui.Destroy())
-        aboutGui.Title := AppName
+        aboutGui.Title := APP_NAME
 
         aboutGui.Show()
 

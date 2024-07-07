@@ -1,21 +1,21 @@
 #Requires AutoHotkey v2.0
 
-global OSD := false
+global osd := false
 
 ToggleOSDGui() {
     static OSDGui := 0
-    if (OSD == false && !OSDGui) {
+    if (osd == false && !OSDGui) {
         OSDGui := BuildDeleteOSDGui()
-        global OSD := true
-    } else if (OSD = true) {
+        global osd := true
+    } else if (osd = true) {
         OSDGui := BuildDeleteOSDGui()
-        global OSD := false
+        global osd := false
     }
 }
 
 BuildDeleteOSDGui() {
-    static OSDGui := 0
-    if (OSD == false && !OSDGui && GetKeyState("CapsLock", "T")) {
+    static osdGui := 0
+    if (osd == false && !osdGui && WinActive(dawHotFixString) && GetKeyState("CapsLock", "T")) {
         ; Calculate the screen width and height
         screenWidth := A_ScreenWidth
         screenHeight := A_ScreenHeight
@@ -37,52 +37,50 @@ BuildDeleteOSDGui() {
         rowHeight := guiHeight / rows
         
         ; Create the GUI without button in the taskbar
-        OSDGui := Gui("+AlwaysOnTop -Caption")
+        osdGui := Gui("+AlwaysOnTop -Caption")
 
-        OSDGui.BackColor := "0x111111"
+        osdGui.BackColor := "0x111111"
 
         ; Add the GUI elements
-        AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight)
+        AddGUIElements(osdGui, columns, rows, columnWidth, rowHeight)
 
         ; Set the transparency
-        WinSetTransparent(230, OSDGui.Hwnd)
+        WinSetTransparent(230, osdGui.Hwnd)
 
-        OSDGui.OnEvent('Close', (*) => OSDGui.Hide())
+        osdGui.OnEvent('Close', (*) => osdGui.Hide())
         ; Show the GUI
-        OSDGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0 H" . guiHeight)
-        return OSDGui
+        osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0 H" . guiHeight)
+        return osdGui
     } else {
         try {
-            OSDGui.Hide() ; Hide the GUI before destroying it
-            OSDGui.Destroy() ; Destroy the GUI
-            OSDGui := 0
-            global OSD := false
+            osdGui.Hide() ; Hide the GUI before destroying it
+            osdGui.Destroy() ; Destroy the GUI
+            osdGui := 0
+            global osd := false
         }
     }
 }
 
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
-    for sections in ChordsIni {
+    for sections in chordsIni {
         section := IniRead("Chords.ini", sections)
         chordInfo := GetChordsInfoFromIni(section)
         ChordName := chordInfo[1]
-        ChordInterval := chordInfo[2]
-        TextForLabel := chordInfo[3]
+        chordInterval := chordInfo[2]
+        textForLabel := chordInfo[3]
 
-        TextForLabel := ChordName . "`n(" . ChordInterval . ")`n" . TextForLabel
-        TextForLabel := StrReplace(TextForLabel, "+", "SHIFT - ")
-        TextForLabel := StrReplace(TextForLabel, "^", "CTRL - ")
-        TextForLabel := StrReplace(TextForLabel, "!", "ALT - ")
+        textForLabel := ChordName . "`n(" . chordInterval . ")`n" . textForLabel
+        textForLabel := ReplaceShortCutSymbols(textForLabel)
 
         if A_Index <= 12 {
-            OSDLabel := OSDGui.AddText("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), TextForLabel)
+            OSDLabel := OSDGui.AddText("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), textForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), TextForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*2+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), TextForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*2+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
         } else if A_Index > 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*3+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), TextForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*3+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
         }
         OSDLabel.SetFont("s10 q5 w600 c0xFFFFFF")
     }
