@@ -6,7 +6,8 @@ AppVersion := "1.0.0"
 aboutGuiToggle() {
     static aboutGui := 0
 
-    if (aboutGui == 0 || !WinExist("ahk_id " . aboutGui.Hwnd)) {
+    if (aboutGui == 0) {
+        
         aboutGui := Gui()
         aboutGui.BackColor := "0x111111"
 
@@ -45,6 +46,8 @@ aboutGuiToggle() {
         aboutGui.Title := AppName
 
         aboutGui.Show()
+
+        return aboutGui
     } else {
         aboutGui.Destroy()
         aboutGui := 0
