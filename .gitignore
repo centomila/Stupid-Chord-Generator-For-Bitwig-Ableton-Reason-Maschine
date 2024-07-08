@@ -1,0 +1,9 @@
+.vscode/
+
+*.ahk~
+*.exe
+*.pdb
+*.log
+*.tmp
+
+Settings.ini
