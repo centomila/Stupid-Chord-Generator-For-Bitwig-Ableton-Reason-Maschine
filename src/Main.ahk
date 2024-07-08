@@ -7,23 +7,24 @@ Persistent  ; Keep the script running until the user exits it.
 #Include Tray.ahk
 #Include TopGui.ahk
 #Include About.ahk
-#Include VsCodeReload.ahk
+; #Include VsCodeReload.ahk
 
 
 LoadSettings() {
     try {
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
-        global toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
     } catch {
-        IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
+        IniWrite(DAW_LIST[1], "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
-        global toolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
     }
     dawMenu.Check(currentDaw)
-    toolTipMenu.Check(toolTipDuration)
+    tooltipMenu.Check(currentToolTipDuration)
 
-    dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
+    global dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
+    OutputDebug("Current DAW: " . currentDaw . " - " . dawHotFixString)
 }
 LoadSettings()
 
@@ -64,10 +65,10 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
         }
     }
     ; Tooltip
-    if toolTipDuration > 0 {
+    if currentToolTipDuration > 0 {
         thisHotkey := ReplaceShortCutSymbols(thisHotkey)
         ToolTip("`n" . thisHotkey . "`n`n" . chordTypeName . "`n`n " . notesInterval . "`n ") ; Show the tooltip with the chord name
-        SetTimer () => ToolTip(), toolTipDuration ; Show the tooltip for ToolTipDuration seconds
+        SetTimer () => ToolTip(), currentToolTipDuration ; Show the tooltip for ToolTipDuration seconds
     }
     return
 }

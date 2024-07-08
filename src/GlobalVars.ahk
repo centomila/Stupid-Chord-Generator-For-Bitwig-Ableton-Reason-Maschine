@@ -3,16 +3,21 @@
 APP_NAME := "Centomila's Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
-CHORDS_INI_LIST := ["All-Chords.ini", "Basic-Chords.ini", "Custom-Chords.ini", "Custom-Chords-2.ini", "Custom-Chords-3.ini"]
+CHORDS_INI_LIST := Map(
+    "All Chords", "All-Chords.ini",
+    "Basic Chords", "Basic-Chords.ini",
+    "Custom Chords", "Custom-Chords.ini",
+    "Custom Chords 2", "Custom-Chords-2.ini",
+    "Custom Chords 3", "Custom-Chords-3.ini"
+)
 chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
 ; Tooltip Duration
-toolTipDuration := 0
-toolTipDurationOptions := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
+TOOLTIP_DURATION_LIST := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
+currentToolTipDuration := 0
 
 ; DAWs
 DAW_LIST := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
-DEFAULT_DAW := "Bitwig Studio"
 currentDaw := ""
 
 DAW_LIST_EXE_CLASS_MAP := Map(
