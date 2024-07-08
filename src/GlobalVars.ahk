@@ -4,11 +4,11 @@ APP_NAME := "Centomila's Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
 CHORDS_INI_LIST := Map(
-    "All Chords", "Chords.ini",
-    "BasicChords", "Basic-Chords.ini",
-    "CustomChords", "Custom-Chords.ini",
-    "CustomChords 2", "Custom-Chords-2.ini",
-    "CustomChords 3", "Custom-Chords-3.ini"
+    "All Chords", "Chords\Chords.ini",
+    "BasicChords", "Chords\Basic-Chords.ini",
+    "CustomChords", "Chords\Custom-Chords.ini",
+    "CustomChords 2", "Chords\Custom-Chords-2.ini",
+    "CustomChords 3", "Chords\Custom-Chords-3.ini"
 )
 currentChordsIniSet := ""
 currentChordsIniSetFile := ""
