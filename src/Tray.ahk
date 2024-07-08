@@ -23,7 +23,7 @@ for tooltipValues in TOOLTIP_DURATION_LIST {
 
 chordsIniListMenu := Menu()
 for chordsIniFiles in CHORDS_INI_LIST {
-    chordsIniListMenu.Add(chordsIniFiles, NoAction, "Radio")
+    chordsIniListMenu.Add(chordsIniFiles, SelectChordsIniSet, "Radio")
 }
 
 tray := A_TrayMenu
@@ -64,6 +64,17 @@ SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
     tooltipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+    LoadSettings()
+    return
+}
+
+SelectChordsIniSet(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    ; Uncheck all items
+    for chordsIniFiles in CHORDS_INI_LIST {
+        chordsIniListMenu.Uncheck(chordsIniFiles)
+    }
+    IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ChordIniSet")
+    chordsIniListMenu.Check(IniRead("Settings.ini", "Settings", "ChordIniSet"))
     LoadSettings()
     return
 }

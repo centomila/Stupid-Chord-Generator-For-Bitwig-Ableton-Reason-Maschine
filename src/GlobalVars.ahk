@@ -10,6 +10,7 @@ CHORDS_INI_LIST := Map(
     "Custom Chords 2", "Custom-Chords-2.ini",
     "Custom Chords 3", "Custom-Chords-3.ini"
 )
+currentChordsIniSet := ""
 chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
 
 ; Tooltip Duration

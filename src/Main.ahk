@@ -14,14 +14,19 @@ LoadSettings() {
     try {
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
     } catch {
         IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
+        IniWrite("Chords.ini", "Settings.ini", "Settings", "ChordIniSet")
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
+
     }
     dawMenu.Check(currentDaw)
     tooltipMenu.Check(currentToolTipDuration)
+    chordsIniListMenu.Check(currentChordsIniSet)
 
     global dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
     OutputDebug("Current DAW: " . currentDaw . " - " . dawHotFixString)
