@@ -38,7 +38,7 @@ LoadSettings() {
     NewGetChordsIni(currentChordsIniSetFile)
     GenerateTrayMenu()
     ResetCheckboxes()
-
+    ToggleEnable()
 }
 LoadSettings()
 
@@ -89,12 +89,6 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     return
 }
 
-GetChordsInfoFromIni(section) {
-    chordName := StrSplit(StrSplit(section, "`n")[1], "=")[2]
-    chordInterval := StrSplit(StrSplit(section, "`n")[2], "=")[2]
-    shortcutKey := StrSplit(StrSplit(section, "`n")[3], "=")[2]
-    return [chordName, chordInterval, shortcutKey]
-}
 
 NewGetChordsIni(ChordsIniFile := "Chords.ini") {
     splitChordsIni := StrSplit(IniRead(ChordsIniFile), "`n")

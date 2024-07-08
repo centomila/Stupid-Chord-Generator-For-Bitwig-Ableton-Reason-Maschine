@@ -32,10 +32,8 @@ for chordsIniFiles in CHORDS_INI_LIST {
 
 
 GenerateTrayMenu() {
-
     tray.Delete() ; empty the menu
     tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
-
 
     tray.Add() ; Creates a separator line.
     tray.Add("DAW", dawMenu) ; Add the DAW submenu
@@ -54,7 +52,7 @@ GenerateTrayMenu() {
     A_IconTip := APP_NAME
 
     ; AddChordsToTray()
-    NewAddChordsToTray()
+    AddChordsToTray()
 
     ResetCheckboxes()
 }
@@ -128,7 +126,7 @@ ExitApp(*)
     ExitApp()
 }
 
-NewAddChordsToTray() {
+AddChordsToTray() {
     tray.Add("F1/F12 - Basic Chords", NoAction, "BarBreak") ; Creates a separator line.
     tray.Add()
 

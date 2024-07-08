@@ -63,14 +63,12 @@ BuildDeleteOSDGui() {
 
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
-    for sections in chordsIni {
-        section := IniRead("Chords.ini", sections)
-        chordInfo := GetChordsInfoFromIni(section)
-        ChordName := chordInfo[1]
-        chordInterval := chordInfo[2]
-        textForLabel := chordInfo[3]
+    for chords in chordsArray {
+        chordName := chords[1]
+        chordInterval := chords[2]
+        shortcutKey := chords[3]
 
-        textForLabel := ChordName . "`n(" . chordInterval . ")`n" . textForLabel
+        textForLabel := ChordName . "`n(" . chordInterval . ")`n" . shortcutKey
         textForLabel := ReplaceShortCutSymbols(textForLabel)
 
         if A_Index <= 12 {
