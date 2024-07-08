@@ -12,9 +12,8 @@ if (A_IsCompiled) {
 
 ; Create the submenu for DAWs
 dawMenu := Menu()
-loop DAW_LIST.Length {
-    dawName := DAW_LIST.Get(A_Index)
-    dawMenu.Add(dawName, SelectDaw, "Radio")
+for DAWs in DAW_LIST_EXE_CLASS_MAP {
+    dawMenu.Add(DAWs, SelectDaw, "Radio")
 }
 
 tooltipMenu := Menu()
@@ -61,7 +60,6 @@ EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
     for tooltipValues in TOOLTIP_DURATION_LIST {
-        outputDebug("tooltipValues: " . tooltipValues)
         tooltipMenu.Uncheck(tooltipValues)
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
@@ -72,9 +70,8 @@ SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
-    loop DAW_LIST.Length {
-        dawName := DAW_LIST.Get(A_Index)
-        dawMenu.Uncheck(dawName)
+    for DAWs in DAW_LIST_EXE_CLASS_MAP {
+        dawMenu.Uncheck(DAWs)
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "DAW")
     dawMenu.Check(IniRead("Settings.ini", "Settings", "DAW"))

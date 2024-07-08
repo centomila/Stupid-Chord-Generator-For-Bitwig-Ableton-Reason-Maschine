@@ -15,7 +15,7 @@ LoadSettings() {
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
     } catch {
-        IniWrite(DAW_LIST[1], "Settings.ini", "Settings", "DAW")
+        IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")

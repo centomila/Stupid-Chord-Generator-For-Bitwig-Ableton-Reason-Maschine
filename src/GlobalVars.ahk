@@ -4,7 +4,7 @@ APP_NAME := "Centomila's Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
 CHORDS_INI_LIST := Map(
-    "All Chords", "All-Chords.ini",
+    "All Chords", "Chords.ini",
     "Basic Chords", "Basic-Chords.ini",
     "Custom Chords", "Custom-Chords.ini",
     "Custom Chords 2", "Custom-Chords-2.ini",
@@ -17,14 +17,13 @@ TOOLTIP_DURATION_LIST := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500
 currentToolTipDuration := 0
 
 ; DAWs
-DAW_LIST := ["Bitwig Studio", "Ableton Live", "Reason", "NI Maschine 2"]
-currentDaw := ""
-
+DEFAULT_DAW := "Bitwig Studio"
 DAW_LIST_EXE_CLASS_MAP := Map(
     "Bitwig Studio", "ahk_class bitwig",
     "Ableton Live", "ahk_class Ableton Live Window Class",
     "Reason", "ahk_exe Reason.exe",
     "NI Maschine 2", "ahk_exe Maschine 2.exe")
+currentDaw := ""
 
 dawHotFixString := "" ; Empty until the script has loaded the correct DAW
 
