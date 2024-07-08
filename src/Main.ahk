@@ -8,6 +8,7 @@ Persistent  ; Keep the script running until the user exits it.
 #Include TopGui.ahk
 #Include About.ahk
 #Include VsCodeReload.ahk
+LoadSettings()
 
 
 
@@ -20,7 +21,7 @@ LoadSettings() {
         ; If the file or the values don't exist, create them
         IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
-        IniWrite("Chords.ini", "Settings.ini", "Settings", "ChordIniSet")
+        IniWrite("All Chords", "Settings.ini", "Settings", "ChordIniSet")
         ; set global variables values from the ini file
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
@@ -40,7 +41,6 @@ LoadSettings() {
     ResetCheckboxes()
     ToggleEnable()
 }
-LoadSettings()
 
 
 
@@ -89,6 +89,12 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     return
 }
 
+ReplaceShortCutSymbols(shortcutKeyString) {
+    shortcutKeyString := StrReplace(shortcutKeyString, "+", "SHIFT - ")
+    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - ")
+    shortcutKeyString := StrReplace(shortcutKeyString, "!", "ALT - ")
+    return shortcutKeyString
+}
 
 NewGetChordsIni(ChordsIniFile := "Chords.ini") {
     splitChordsIni := StrSplit(IniRead(ChordsIniFile), "`n")

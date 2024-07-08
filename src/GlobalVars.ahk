@@ -12,7 +12,7 @@ CHORDS_INI_LIST := Map(
 )
 currentChordsIniSet := ""
 currentChordsIniSetFile := ""
-chordsIni := StrSplit(IniRead("Chords.ini"), "`n")
+
 chordsArray := []
 
 ; Tooltip Duration
@@ -30,9 +30,4 @@ currentDaw := ""
 currentDawExeClass := "" ; Empty until the script has loaded the correct DAW
 
 
-ReplaceShortCutSymbols(shortcutKeyString) {
-    shortcutKeyString := StrReplace(shortcutKeyString, "+", "SHIFT - ")
-    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - ")
-    shortcutKeyString := StrReplace(shortcutKeyString, "!", "ALT - ")
-    return shortcutKeyString
-}
+
