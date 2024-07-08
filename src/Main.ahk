@@ -112,15 +112,13 @@ NewGetChordsIni(ChordsIniFile := "Chords.ini") {
 
 
 DynamicIniMapping(onOff := "Off") {
-    for sections in chordsIni {
-        section := IniRead("Chords.ini", sections)
-        chordName := GetChordsInfoFromIni(section)[1]
-        chordInterval := GetChordsInfoFromIni(section)[2]
-        shortcutKey := GetChordsInfoFromIni(section)[3]
+    for chords in chordsArray {
+        chordName := chords[1]
+        chordInterval := chords[2]
+        shortcutKey := chords[3]
 
         Hotkey(shortcutKey, GenerateChord.Bind(chordInterval, chordName), onOff)
     }
-
 }
 
 ; Function to change the system tray icon based on the Caps Lock state.
