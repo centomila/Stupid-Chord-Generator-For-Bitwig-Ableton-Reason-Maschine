@@ -17,9 +17,14 @@ loop DAW_LIST.Length {
     dawMenu.Add(dawName, SelectDaw, "Radio")
 }
 
-toolTipMenu := Menu()
-loop toolTipDurationOptions.Length {
-    toolTipMenu.Add(toolTipDurationOptions.Get(A_Index), SelectToolTipDuration, "Radio")
+tooltipMenu := Menu()
+for tooltipValues in TOOLTIP_DURATION_LIST {
+    tooltipMenu.Add(tooltipValues, SelectToolTipDuration, "Radio")
+}
+
+chordsIniListMenu := Menu()
+for chordsIniFiles in CHORDS_INI_LIST {
+    chordsIniListMenu.Add(chordsIniFiles, NoAction, "Radio")
 }
 
 tray := A_TrayMenu
@@ -33,7 +38,8 @@ tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
 
 tray.Add() ; Creates a separator line.
 tray.Add("DAW", dawMenu) ; Add the DAW submenu
-tray.Add("ToolTipDuration", toolTipMenu) ; Add the ToolTipDuration submenu
+tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
+tray.Add("Chord Set", chordsIniListMenu) ; Add the ToolTipDuration submenu
 tray.Add() ; Creates a separator line.
 tray.Add("Edit Chords.ini", EditChordsIniFile)
 
@@ -54,12 +60,14 @@ EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     ; Uncheck all items
-    loop toolTipDurationOptions.Length {
-        toolTipMenu.Uncheck(toolTipDurationOptions.Get(A_Index))
+    for tooltipValues in TOOLTIP_DURATION_LIST {
+        outputDebug("tooltipValues: " . tooltipValues)
+        tooltipMenu.Uncheck(tooltipValues)
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
-    toolTipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
-    Reload
+    tooltipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
+    LoadSettings()
+    return
 }
 
 SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
@@ -78,11 +86,13 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
                 "Instructions:`n`n" .
                 "Right Click on the piano roll and select`n`n" .
                 "NUDGE GRID > STEP", currentDaw)
+            LoadSettings()
+            return
         default:
+            LoadSettings()
             return
     }
-    ; Reload the script
-    Reload
+
 }
 
 MenuAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
