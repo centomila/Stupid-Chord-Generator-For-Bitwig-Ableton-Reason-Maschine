@@ -7,7 +7,8 @@ Persistent  ; Keep the script running until the user exits it.
 #Include Tray.ahk
 #Include TopGui.ahk
 #Include About.ahk
-; #Include VsCodeReload.ahk
+#Include VsCodeReload.ahk
+
 
 
 LoadSettings() {
@@ -16,26 +17,36 @@ LoadSettings() {
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
         global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
     } catch {
+        ; If the file or the values don't exist, create them
         IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
         IniWrite("Chords.ini", "Settings.ini", "Settings", "ChordIniSet")
+        ; set global variables values from the ini file
         global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
         global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
-
+        Reload
     }
-    dawMenu.Check(currentDaw)
-    tooltipMenu.Check(currentToolTipDuration)
-    chordsIniListMenu.Check(currentChordsIniSet)
 
-    global dawHotFixString := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
-    OutputDebug("Current DAW: " . currentDaw . " - " . dawHotFixString)
+
+    ; Access the appropriate global variable value from the map
+    global currentDawExeClass := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
+    global currentChordsIniSetFile := CHORDS_INI_LIST.Get(currentChordsIniSet)
+
+    debugTextAllOptions := "Current Chord Set: " . currentChordsIniSet . " - " . currentChordsIniSetFile . " - " . currentToolTipDuration . " - " . currentDaw . " - " . currentDawExeClass
+    OutputDebug(debugTextAllOptions)
+    NewGetChordsIni(currentChordsIniSetFile)
+    GenerateTrayMenu()
+    ResetCheckboxes()
+
 }
 LoadSettings()
 
+
+
 ; Main function to convert note intervals to shortcut commands
 GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
-    If !WinActive(dawHotFixString) {
+    If !WinActive(currentDawExeClass) {
         ; exit function
         ToggleEnable()
         SendInput "{" . thisHotkey . "}"
@@ -85,6 +96,20 @@ GetChordsInfoFromIni(section) {
     return [chordName, chordInterval, shortcutKey]
 }
 
+NewGetChordsIni(ChordsIniFile := "Chords.ini") {
+    splitChordsIni := StrSplit(IniRead(ChordsIniFile), "`n")
+    global chordsArray := Array()
+    for sections in splitChordsIni {
+        ChordName := IniRead(CHORDS_INI_LIST.Get(currentChordsIniSet), sections, "ChordName")
+        ChordInterval := IniRead(CHORDS_INI_LIST.Get(currentChordsIniSet), sections, "ChordInterval")
+        ShortcutKey := IniRead(CHORDS_INI_LIST.Get(currentChordsIniSet), sections, "ShortcutKey")
+        ; add elements to the array
+        chordsArray.Push([ChordName, ChordInterval, ShortcutKey])
+    }
+    OutputDebug("ChordsIniArray: " . chordsArray.Length)
+    return chordsArray
+}
+
 
 DynamicIniMapping(onOff := "Off") {
     for sections in chordsIni {
@@ -100,7 +125,7 @@ DynamicIniMapping(onOff := "Off") {
 
 ; Function to change the system tray icon based on the Caps Lock state.
 ToggleEnable() {
-    If (WinActive(dawHotFixString) and GetKeyState("CapsLock", "T")) {
+    If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
         DynamicIniMapping(OnOff := "On")
         ToolTip "`nCHORDS ON`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
         ; TraySetIcon(IconOn) ; Set the system tray icon to the "F13-ON.ico" icon.
@@ -116,7 +141,7 @@ ToggleEnable() {
 ~CapsLock:: ToggleEnable
 
 
-#HotIf WinActive(dawHotFixString) and GetKeyState("CapsLock", "T")
+#HotIf WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")
 ; Octave change
 ; Page Down Select all and move an octave DOWN
 PgDn:: {

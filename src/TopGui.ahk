@@ -15,7 +15,7 @@ ToggleOSDGui() {
 
 BuildDeleteOSDGui() {
     static osdGui := 0
-    if (osd == false && !osdGui && WinActive(dawHotFixString) && GetKeyState("CapsLock", "T")) {
+    if (osd == false && !osdGui && WinActive(currentDawExeClass) && GetKeyState("CapsLock", "T")) {
         ; Calculate the screen width and height
         screenWidth := A_ScreenWidth
         screenHeight := A_ScreenHeight
