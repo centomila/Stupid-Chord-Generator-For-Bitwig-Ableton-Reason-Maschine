@@ -35,7 +35,7 @@ BuildDeleteOSDGui() {
         ; Calculate the width of each column
         columnWidth := guiWidth / columns
         rowHeight := guiHeight / rows
-        
+
         ; Create the GUI without button in the taskbar
         osdGui := Gui("+AlwaysOnTop -Caption")
 
@@ -74,11 +74,11 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         if A_Index <= 12 {
             OSDLabel := OSDGui.AddText("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), textForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*2+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight * 2 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
         } else if A_Index > 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight*3+20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
+            OSDLabel := OSDGui.AddText("Center Y" . rowHeight * 3 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
         }
         OSDLabel.SetFont("s10 q5 w600 c0xFFFFFF")
     }

@@ -45,7 +45,7 @@ GenerateTrayMenu() {
     tray.Add() ; Creates a separator line.
     tray.Add("About - v" . APP_VERSION, MenuAbout)  ; Creates a new menu item.
     tray.Add("Quit", ExitApp)  ; Creates a new menu item.
-    
+
     tray.Default := "About - v" . APP_VERSION
     A_IconTip := APP_NAME
 
@@ -125,7 +125,7 @@ ExitApp(*)
 }
 
 AddChordsToTray() {
-    
+
     tray.Add("Shortcut`t" . "01-12 | " . currentChordsIniSet, NoAction, "BarBreak") ; Creates a separator line.
     tray.Add()
 
@@ -169,9 +169,6 @@ ChordsMenu() {
         ToggleOSDGui()
     }
 
-    
-
-    
 
 }
 

@@ -6,7 +6,7 @@ Persistent  ; Keep the script running until the user exits it.
 
 ; Install resources for compiled script
 #Include InstallResources.ahk
-InstallBasicResources() 
+InstallBasicResources()
 
 ; Includes
 #Include GlobalVars.ahk
@@ -15,7 +15,6 @@ InstallBasicResources()
 #Include About.ahk
 #Include VsCodeReload.ahk
 LoadSettings()
-
 
 
 LoadSettings() {
@@ -47,7 +46,6 @@ LoadSettings() {
     ResetCheckboxes()
     ToggleEnable()
 }
-
 
 
 ; Main function to convert note intervals to shortcut commands

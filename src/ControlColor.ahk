@@ -11,7 +11,7 @@
         ; https://www.autohotkey.com/docs/v2/misc/Colors.htm
 */
 class ControlColor {
-    static Call(Control, Window, bc := "", tc := "", Redraw := true) 
+    static Call(Control, Window, bc := "", tc := "", Redraw := true)
     {
         Control := Control.hwnd, Window := Window.hwnd
         if IsAlpha(Trim(bc)) && not (bc = "") {
@@ -26,8 +26,8 @@ class ControlColor {
         this.CC_WindowProc("Set", a, "", "")
         if (Redraw) {
             WinRedraw(, , "ahk_id " Control)
-    } }
-    static CC_WindowProc(hWnd, uMsg, wParam, lParam) 
+        } }
+    static CC_WindowProc(hWnd, uMsg, wParam, lParam)
     {
         static Win := Map()
         if (IsNumber(uMsg) && uMsg >= 306 && uMsg <= 312) { ; WM_CTLCOLOR(MSGBOX|EDIT|LISTBOX|BTN|DLG|SCROLLBAR|STATIC)
@@ -39,7 +39,7 @@ class ControlColor {
                     DllCall("gdi32\SetBkColor", "Ptr", wParam, "UInt", bc)
                 }
                 return Win[hWnd][lParam].Brush ; return the HBRUSH to notify the OS that we altered the HDC.
-        } }
+            } }
         if (hWnd = "Set") {
             a := uMsg
             Win[a.g] := Map(a.c, a)
@@ -62,9 +62,9 @@ class ControlColor {
     }
     static HColors(userColor)
     {
-        Colors := Map("Black", 0x000000, "Silver", 0xC0C0C0, "Gray", 0x808080, "White", 0xFFFFFF, "Maroon", 0x800000, "Red", 0xFF0000, 
-                    "Purple", 0x800080, "Fuchsia", 0xFF00FF, "Green", 0x008000, "Lime", 0x00FF00, "Olive", 0x808000, "Yellow", 0xFFFF00, 
-                    "Navy", 0x000080, "Blue", 0x0000FF, "Teal", 0x008080, "Aqua", 0x00FFFF)
+        Colors := Map("Black", 0x000000, "Silver", 0xC0C0C0, "Gray", 0x808080, "White", 0xFFFFFF, "Maroon", 0x800000, "Red", 0xFF0000,
+            "Purple", 0x800080, "Fuchsia", 0xFF00FF, "Green", 0x008000, "Lime", 0x00FF00, "Olive", 0x808000, "Yellow", 0xFFFF00,
+            "Navy", 0x000080, "Blue", 0x0000FF, "Teal", 0x008080, "Aqua", 0x00FFFF)
         for color, code in Colors {
             if InStr(color, userColor) {
                 return code
@@ -72,14 +72,13 @@ class ControlColor {
         }
         return false
     }
-    static SetAll(g, color){
+    static SetAll(g, color) {
         for index, guiItem in g {
             if guiItem.Type = "Button" {
-            ControlColor(guiItem, g, color)
+                ControlColor(guiItem, g, color)
             }
         }
         g.BackColor := color
         sleep(1)
     }
 }
-
