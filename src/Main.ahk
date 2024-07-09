@@ -62,6 +62,7 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
+    ; TODO Change the split with spaces instead of -. Then add the case to make inversions
     chordNotes := StrSplit(notesInterval, "-")
     ; Loop through the array and convert strings into numbers
     Loop chordNotes.Length - 1 ; Skip the root note 0

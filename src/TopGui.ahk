@@ -46,7 +46,7 @@ BuildDeleteOSDGui() {
 
         ; Set the transparency
         WinSetTransparent(230, osdGui.Hwnd)
-
+        osdGui.Title := currentChordsIniSet
         osdGui.OnEvent('Close', (*) => osdGui.Hide())
         ; Show the GUI
         osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0 H" . guiHeight)

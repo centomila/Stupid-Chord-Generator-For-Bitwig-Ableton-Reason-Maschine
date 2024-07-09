@@ -38,7 +38,7 @@ GenerateTrayMenu() {
     tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; Creates a separator line.
-    tray.Add("Edit Chords.ini", EditChordsIniFile)
+    tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; Creates a separator line.
     tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
@@ -55,8 +55,8 @@ GenerateTrayMenu() {
     ResetCheckboxes()
 }
 
-EditChordsIniFile(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
-    Run "Chords.ini"
+OpenChordsFolder(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    Run "Explorer.exe /e," . A_ScriptDir . "\Chords"
 }
 
 SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
