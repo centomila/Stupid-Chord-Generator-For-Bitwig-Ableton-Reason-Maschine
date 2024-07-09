@@ -3,6 +3,12 @@
 SetWorkingDir(A_ScriptDir)  ; Ensures a consistent starting directory.
 Persistent  ; Keep the script running until the user exits it.
 #SingleInstance force
+
+; Install resources for compiled script
+#Include InstallResources.ahk
+InstallBasicResources() 
+
+; Includes
 #Include GlobalVars.ahk
 #Include Tray.ahk
 #Include TopGui.ahk

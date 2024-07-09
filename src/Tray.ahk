@@ -1,8 +1,6 @@
 #Requires AutoHotkey v2.0
 
-
 tray := A_TrayMenu
-
 
 ; Tray icon
 if (A_IsCompiled) {
@@ -38,7 +36,7 @@ GenerateTrayMenu() {
     tray.Add() ; Creates a separator line.
     tray.Add("DAW", dawMenu) ; Add the DAW submenu
     tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
-    tray.Add("Chord Set", chordsIniListMenu) ; Add the ToolTipDuration submenu
+    tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; Creates a separator line.
     tray.Add("Edit Chords.ini", EditChordsIniFile)
 
@@ -127,7 +125,8 @@ ExitApp(*)
 }
 
 AddChordsToTray() {
-    tray.Add("F1/F12 - Basic Chords", NoAction, "BarBreak") ; Creates a separator line.
+    
+    tray.Add("Shortcut`t" . "01-12 | " . currentChordsIniSet, NoAction, "BarBreak") ; Creates a separator line.
     tray.Add()
 
     for chords in chordsArray {
@@ -138,16 +137,16 @@ AddChordsToTray() {
         textForLabel := ReplaceShortCutSymbols(textForLabel)
         if (A_Index == 13) {
             tray.Add()
-            tray.Add("CTRL+F1/CTRL+F12", NoAction, "") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "13-24", NoAction, "") ; Creates a separator line.
             tray.Add()
         }
         if (A_Index == 25) {
-            tray.Add("SHIFT+F1/SHIFT+F12", NoAction, "BarBreak") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "25-36", NoAction, "BarBreak") ; Creates a separator line.
             tray.Add()
         }
         if (A_Index == 37) {
             tray.Add()
-            tray.Add("ALT+F1/ALT+F12", NoAction, "") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "37-48", NoAction, "") ; Creates a separator line.
             tray.Add()
         }
         tray.Add(textForLabel, NoAction)
