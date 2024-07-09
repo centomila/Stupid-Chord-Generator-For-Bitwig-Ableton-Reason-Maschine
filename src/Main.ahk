@@ -82,7 +82,7 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
                     SendEvent("{Down " . semitones . "}")
                 }
                 SendEvent("^v")
-                
+
             case "NI Maschine 2":
                 SendEvent("^c")
                 if semitones > 0 {
@@ -180,5 +180,9 @@ PgUp:: {
 
 SC029:: { ; Scan code for backtick or \
     ToggleOSDGui()
+}
+
+^SC029:: {
+    ChordsMenu()
 }
 #HotIf
