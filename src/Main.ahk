@@ -63,27 +63,47 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
     ; TODO Change the split with spaces instead of -. Then add the case to make inversions
-    chordNotes := StrSplit(notesInterval, "-")
+    chordNotes := StrSplit(notesInterval, " ")
     ; Loop through the array and convert strings into numbers
     Loop chordNotes.Length - 1 ; Skip the root note 0
     {
         semitones := chordNotes.Get(A_Index + 1)
-
+        OutputDebug("Semitones: " . semitones)
         switch currentDaw {
             case "Reason":
                 SendEvent("^l")
                 SendEvent("^c")
                 SendEvent("!{Left}")
-                SendEvent("^{Up " . semitones . "}")
+                if semitones > 0 {
+                    SendEvent("{Up " . semitones . "}")
+                } else {
+                    ; Convert negative numbers to positive
+                    semitones := semitones * -1
+                    SendEvent("{Down " . semitones . "}")
+                }
                 SendEvent("^v")
+                
             case "NI Maschine 2":
                 SendEvent("^c")
-                SendEvent("!{Up " . semitones . "}")
+                if semitones > 0 {
+                    SendEvent("{Up " . semitones . "}")
+                } else {
+                    ; Convert negative numbers to positive
+                    semitones := semitones * -1
+                    SendEvent("{Down " . semitones . "}")
+                }
                 SendEvent("^v")
                 SendEvent("!{Left}")
+
             default:
                 SendEvent("^c")
-                SendEvent("{Up " . semitones . "}")
+                if semitones > 0 {
+                    SendEvent("{Up " . semitones . "}")
+                } else {
+                    ; Convert negative numbers to positive
+                    semitones := semitones * -1
+                    SendEvent("{Down " . semitones . "}")
+                }
                 SendEvent("^v")
         }
     }

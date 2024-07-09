@@ -19,34 +19,34 @@ Examples:
 
 [Shortcut_1]
 ChordName=MAJOR
-ChordInterval=0-4-7
+ChordInterval=0 4 7
 ShortcutKey=F1
 
 2. Using Alt modifier (represented by !):
 
 [Shortcut_2]
 ChordName=MINOR
-ChordInterval=0-3-7
+ChordInterval=0 3 7
 ShortcutKey=!F1
 
 3. Using Ctrl modifier (represented by ^):
 
 [Shortcut_3]
 ChordName=DOMINANT 7th
-ChordInterval=0-4-7-10
+ChordInterval=0 4 7 10
 ShortcutKey=^F1
 
 4. Using Shift modifier (represented by +):
 
 [Shortcut_4]
 ChordName=AUGMENTED
-ChordInterval=0-4-8
+ChordInterval=0 4 8
 ShortcutKey=+F1
 
 Notes:
 - You can use any key on your keyboard but F1 through F12 are recommended.
 - Modifiers follow AutoHotkey conventions: ! for Alt, ^ for Ctrl, + for Shift.
-- ChordInterval represents the semitones from the root note. For example, 0-4-7 represents a major chord (root, major third, perfect fifth). Numbers must be separated by the symbol "-".
+- ChordInterval represents the semitones from the root note. For example, 0 4 7 represents a major chord (root, major third, perfect fifth). Numbers must be separated by a single space " ".
 
 5. Save your file as "My-Custom-Chords.ini" in the Chords folder.
 6. Restart the application then select your new custom preset in the dropdown menu.
