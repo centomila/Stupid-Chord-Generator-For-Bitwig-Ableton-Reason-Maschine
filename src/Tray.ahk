@@ -2,13 +2,23 @@
 
 tray := A_TrayMenu
 
-; Tray icon
-if (A_IsCompiled) {
-    ; Compiled version, use icon from the .exe file
-    TraySetIcon(A_ScriptName)
-} else {
-    ; Source version, use the custom icon
-    TraySetIcon("FChordsGen.ico")
+ToggleTraySetIcon() {
+    if StatusEnabled {
+        if (A_IsCompiled) {
+            ; Compiled version, use icon from the .exe file
+            TraySetIcon(A_ScriptName)
+        } else {
+            ; Source version, use the custom icon
+            TraySetIcon("Icon-On.ico")
+        }
+    } else {
+        if (A_IsCompiled) {
+            TraySetIcon(A_ScriptName)
+        }
+        else {
+            TraySetIcon("Icon-Off.ico")
+        }
+    }
 }
 
 

@@ -60,7 +60,6 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
-    ; TODO Change the split with spaces instead of -. Then add the case to make inversions
     chordNotes := StrSplit(notesInterval, " ")
     ; Loop through the array and convert strings into numbers
     Loop chordNotes.Length - 1 ; Skip the root note 0
@@ -149,14 +148,16 @@ DynamicIniMapping(onOff := "Off") {
 ; Function to change the system tray icon based on the Caps Lock state.
 ToggleEnable() {
     If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
+        global StatusEnabled := true
         DynamicIniMapping(OnOff := "On")
-        ToolTip "`nCHORDS ON`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
-        ; TraySetIcon(IconOn) ; Set the system tray icon to the "F13-ON.ico" icon.
+        ToolTip "`n `t" . currentChordsIniSet . " `t `n ", 9999, 9999
+        ToggleTraySetIcon()
     } else {
+        global StatusEnabled := false
         DynamicIniMapping(OnOff := "Off")
-        ToolTip "`nOFF`n ", 9999, 9999 ; Positioned at 9999,9999 so it is always on the lower right corner
+        ToolTip "`n`tOFF`t `n ", 9999, 9999
         ToggleOSDGui()
-        ; TraySetIcon(IconOff) ; Set the system tray icon to the "F13-OFF.ico" icon.
+        ToggleTraySetIcon() ; Set the system tray icon to the "F13-ON.ico" icon.
     }
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }
