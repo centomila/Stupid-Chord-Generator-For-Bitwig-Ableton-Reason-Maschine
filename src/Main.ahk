@@ -150,16 +150,48 @@ ToggleEnable() {
     If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
         global StatusEnabled := true
         DynamicIniMapping(OnOff := "On")
-        ToolTip "`n `t" . currentChordsIniSet . " `t `n ", 9999, 9999
+        ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
         ToggleTraySetIcon()
     } else {
         global StatusEnabled := false
         DynamicIniMapping(OnOff := "Off")
-        ToolTip "`n`tOFF`t `n ", 9999, 9999
+        ToolTip CenterTextInTooltip("O F F"), 9999, 9999
         ToggleOSDGui()
         ToggleTraySetIcon() ; Set the system tray icon to the "F13-ON.ico" icon.
     }
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
+}
+
+CenterTextInTooltip(text) {
+    lines := StrSplit(text, "`n")
+    maxLength := 0
+    for _, line in lines
+        maxLength := Max(maxLength, StrLen(line))
+    
+    width := maxLength + 20  ; Add 6 for some horizontal padding
+    height := lines.Length + 2  ; Add 4 for some vertical padding
+    
+    centered := ""
+    verticalPadding := Floor((height - lines.Length) / 2)
+    
+    Loop height {
+        if (A_Index <= verticalPadding || A_Index > height - verticalPadding) {
+            centered .= Format("{1:" . width . "}`n", " ")  ; Full width of spaces
+        } else {
+            lineIndex := A_Index - verticalPadding
+            if (lineIndex <= lines.Length) {
+                line := lines[lineIndex]
+                spaces := width - StrLen(line)
+                leftSpaces := Floor(spaces / 2)
+                rightSpaces := spaces - leftSpaces
+                centered .= Format("{1:" . leftSpaces . "}{2}{1:" . rightSpaces . "}`n", " ", line)
+            } else {
+                centered .= Format("{1:" . width . "}`n", " ")  ; Full width of spaces
+            }
+        }
+    }
+    
+    return RTrim(centered, "`n")
 }
 
 ~CapsLock:: ToggleEnable
