@@ -3,6 +3,7 @@
 APP_NAME := "Centomila's Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
+StatusEnabled := false
 
 GenerateChordsMap() {
     chordsMap := Map()
@@ -38,5 +39,3 @@ DAW_LIST_EXE_CLASS_MAP := Map(
     "NI Maschine 2", "ahk_exe Maschine 2.exe")
 currentDaw := ""
 currentDawExeClass := "" ; Empty until the script has loaded the correct DAW
-
-StatusEnabled := false
