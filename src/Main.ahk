@@ -107,7 +107,8 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     ; Tooltip
     if currentToolTipDuration > 0 {
         thisHotkey := ReplaceShortCutSymbols(thisHotkey)
-        ToolTip("`n" . thisHotkey . "`n`n" . chordTypeName . "`n`n " . notesInterval . "`n ") ; Show the tooltip with the chord name
+        toolTipText := CenterTextInTooltip(thisHotkey . "`t" . chordTypeName . "`t" . notesInterval)
+        ToolTip(toolTipText, 9999, 9999) ; Show the tooltip with the chord name
         SetTimer () => ToolTip(), currentToolTipDuration ; Show the tooltip for ToolTipDuration seconds
     }
     return
@@ -115,7 +116,7 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
 
 ReplaceShortCutSymbols(shortcutKeyString) {
     shortcutKeyString := StrReplace(shortcutKeyString, "+", "SHIFT - ")
-    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - ")
+    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - " )
     shortcutKeyString := StrReplace(shortcutKeyString, "!", "ALT - ")
     return shortcutKeyString
 }
@@ -163,35 +164,9 @@ ToggleEnable() {
 }
 
 CenterTextInTooltip(text) {
-    lines := StrSplit(text, "`n")
-    maxLength := 0
-    for _, line in lines
-        maxLength := Max(maxLength, StrLen(line))
-    
-    width := maxLength + 20  ; Add 6 for some horizontal padding
-    height := lines.Length + 2  ; Add 4 for some vertical padding
-    
-    centered := ""
-    verticalPadding := Floor((height - lines.Length) / 2)
-    
-    Loop height {
-        if (A_Index <= verticalPadding || A_Index > height - verticalPadding) {
-            centered .= Format("{1:" . width . "}`n", " ")  ; Full width of spaces
-        } else {
-            lineIndex := A_Index - verticalPadding
-            if (lineIndex <= lines.Length) {
-                line := lines[lineIndex]
-                spaces := width - StrLen(line)
-                leftSpaces := Floor(spaces / 2)
-                rightSpaces := spaces - leftSpaces
-                centered .= Format("{1:" . leftSpaces . "}{2}{1:" . rightSpaces . "}`n", " ", line)
-            } else {
-                centered .= Format("{1:" . width . "}`n", " ")  ; Full width of spaces
-            }
-        }
-    }
-    
-    return RTrim(centered, "`n")
+    centeredText := ""
+    centeredText := "`n " . text . " `n "
+    return centeredText
 }
 
 ~CapsLock:: ToggleEnable
