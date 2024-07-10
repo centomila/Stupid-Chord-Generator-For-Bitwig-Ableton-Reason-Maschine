@@ -1,0 +1,11 @@
+{
+    "configurations": [
+    {
+        "type": "autohotkey",
+        "request": "launch",
+        "name": "AutoHotkey v2 Debugger",
+        "program": "${workspaceFolder}\\src\\Main.ahk",
+        "stopOnEntry": false
+    }
+    ]
+}
