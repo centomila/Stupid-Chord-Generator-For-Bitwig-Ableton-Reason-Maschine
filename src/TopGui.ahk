@@ -19,13 +19,17 @@ BuildDeleteOSDGui() {
         ; Calculate the screen width and height
         screenWidth := A_ScreenWidth
         screenHeight := A_ScreenHeight
+        DPI := A_ScreenDPI
 
+        OutputDebug("DPI:" . A_ScreenDPI)
         ; Number of columns and rows
         columns := 12
         rows := 4
 
-        ; Calculate the width and height of the GUI
-        guiWidth := screenWidth * 1
+        guiWidth := Ceil(screenWidth)
+        if (DPI = 192) {
+            guiWidth := Ceil(screenWidth) / 2
+        }
         guiHeight := 350
 
         ; Calculate the horizontal position to center the GUI
@@ -37,7 +41,7 @@ BuildDeleteOSDGui() {
         rowHeight := guiHeight / rows
 
         ; Create the GUI without button in the taskbar
-        osdGui := Gui("+AlwaysOnTop -Caption")
+        osdGui := Gui("+AlwaysOnTop -Caption +DPIScale")
 
         osdGui.BackColor := "0x111111"
 
@@ -49,7 +53,7 @@ BuildDeleteOSDGui() {
         osdGui.Title := currentChordsIniSet
         osdGui.OnEvent('Close', (*) => osdGui.Hide())
         ; Show the GUI
-        osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0 H" . guiHeight)
+        osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0")
         return osdGui
     } else {
         try {
@@ -80,6 +84,6 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         } else if A_Index > 36 {
             OSDLabel := OSDGui.AddText("Center Y" . rowHeight * 3 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
         }
-        OSDLabel.SetFont("s10 q5 w600 c0xFFFFFF")
+        OSDLabel.SetFont("s10 q5 w800 c0xFFFFFF")
     }
 }
