@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-APP_NAME := "Centomila's Stupid Universal Chord Generator"
+APP_NAME := "Stupid Universal Chord Generator"
 APP_VERSION := "1.0.0"
 
 StatusEnabled := false
