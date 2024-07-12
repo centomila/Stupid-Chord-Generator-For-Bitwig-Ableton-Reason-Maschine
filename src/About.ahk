@@ -1,5 +1,4 @@
 #Requires AutoHotkey v2.0
-#Include ControlColor.ahk
 
 global aboutGui := 0
 global aboutGuiWidth := 800
