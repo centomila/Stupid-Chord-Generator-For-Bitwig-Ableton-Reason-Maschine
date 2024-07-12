@@ -11,8 +11,8 @@ InstallBasicResources() {
 
     if A_IsCompiled { ; This actions are only executed when the script is compiled (executable).
 
-        FileInstall("Icon-Off.ico", A_WorkingDir . "\Icon-Off.ico", 1)
-        FileInstall("Icon-On.ico", A_WorkingDir . "\Icon-On.ico", 1)
+        FileInstall("Icon-Off.ico", A_WorkingDir . "Images\ICO\Icon-Off.ico", 1)
+        FileInstall("Icon-On.ico", A_WorkingDir . "Images\ICO\Icon-On.ico", 1)
 
 
         if not FileExist(ChordsFolder) {

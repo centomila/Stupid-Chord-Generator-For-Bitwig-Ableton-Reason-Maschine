@@ -9,6 +9,7 @@ Persistent  ; Keep the script running until the user exits it.
 InstallBasicResources()
 
 ; Includes
+#Include GuiEnhancerKit.ahk
 #Include GlobalVars.ahk
 #Include Tray.ahk
 #Include TopGui.ahk
@@ -158,7 +159,7 @@ ToggleEnable() {
         DynamicIniMapping(OnOff := "Off")
         ToolTip CenterTextInTooltip("O F F"), 9999, 9999
         ToggleOSDGui()
-        ToggleTraySetIcon() ; Set the system tray icon to the "F13-ON.ico" icon.
+        ToggleTraySetIcon()
     }
     SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }

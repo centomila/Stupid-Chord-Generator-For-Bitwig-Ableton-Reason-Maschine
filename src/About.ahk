@@ -14,11 +14,13 @@ OpenUrl(url := "https://centomila.com") {
 aboutGuiToggle() {
     if (aboutGui == 0) {
         global aboutGui := Gui()
+        aboutGui.SetDarkTitle()
+
         aboutGui.BackColor := "0x111111"
         aboutGui.MarginX := +30
         aboutGui.MarginY := +30
 
-        aboutLogo := aboutGui.Add("Pic", "w" . leftColumnWidth . " h-1 +Center", "centomila-logo.png")
+        aboutLogo := aboutGui.Add("Pic", "w" . leftColumnWidth . " h-1 +Center", "Images\PNG\centomila-logo.png")
 
         ; Left column (links)
         linksHeader := aboutGui.Add("Text", "y+0 h20 w" . leftColumnWidth . " c0xf4f4f4 +Center", "🎧")
@@ -58,32 +60,29 @@ aboutGuiToggle() {
         ; Right column (existing content)
         xRight := leftColumnWidth + 30
 
-        aboutLogo2 := aboutGui.Add("Pic", "y15 w" . rightColumnWidth . " h-1 +Center", "centomila-logo.png")
+        appLogo := aboutGui.Add("Pic", "y15 w" . rightColumnWidth . " h-1 +Center", "Images\PNG\SCG-Banner-Logo.png")
 
-        aboutGui.SetFont("c0xf4f4f4 s20 bold")
-        appTitleAboutText := aboutGui.Add(
-            "Text",
-            " y+10 w" . rightColumnWidth . " +Center",
-            StrUpper(APP_NAME)
-        )
+        
 
-        aboutGui.SetFont("c0xf4f4f4 s12")
+
+        
         aboutText := aboutGui.Add(
             "Text",
-            " y+40 w" . rightColumnWidth . " +Center",
-            "Thank you for using this application.`n`n" .
+            "w" . rightColumnWidth . " r25 +Center",
+            "Thank you for using " . APP_NAME . ".`n`n" .
             "I hope you enjoy it!`n`n" .
-            "I don't want money, but if you find it useful, please consider listening or sharing my music. " .
+            "I don't want money, but if you find it useful, please consider listening, add to your playlists, buying or sharing my music. " .
             "Your support means a lot to me!`n`n" .
             "Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!"
         )
+        aboutText.SetFont("c0xf4f4f4 s16")
 
         versionText := aboutGui.Add(
             "Text",
-            " y+50 w" . rightColumnWidth . " +Center",
+            "w" . rightColumnWidth . " +Center r2",
             "Version: " . APP_VERSION
         )
-
+        versionText.SetFont("c0xf4f4f4 s12")
         ; Empty space at the bottom
         emptySpace := aboutGui.Add(
             "Text",

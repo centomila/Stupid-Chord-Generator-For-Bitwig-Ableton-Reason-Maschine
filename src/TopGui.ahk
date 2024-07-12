@@ -41,7 +41,7 @@ BuildDeleteOSDGui() {
         rowHeight := guiHeight / rows
 
         ; Create the GUI without button in the taskbar
-        osdGui := Gui("+AlwaysOnTop -Caption +DPIScale")
+        osdGui := Gui("+AlwaysOnTop -Caption +ToolWindow +DPIScale")
 
         osdGui.BackColor := "0x111111"
 
@@ -53,6 +53,8 @@ BuildDeleteOSDGui() {
         osdGui.Title := currentChordsIniSet
         osdGui.OnEvent('Close', (*) => osdGui.Hide())
         ; Show the GUI
+        osdGui.SetDarkTitle()
+
         osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0")
         return osdGui
     } else {

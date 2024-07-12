@@ -9,14 +9,14 @@ ToggleTraySetIcon() {
             TraySetIcon(A_ScriptName)
         } else {
             ; Source version, use the custom icon
-            TraySetIcon("Icon-On.ico")
+            TraySetIcon("Images\Ico\Icon-On.ico")
         }
     } else {
         if (A_IsCompiled) {
             TraySetIcon(A_ScriptName)
         }
         else {
-            TraySetIcon("Icon-Off.ico")
+            TraySetIcon("Images\Ico\Icon-Off.ico")
         }
     }
 }
