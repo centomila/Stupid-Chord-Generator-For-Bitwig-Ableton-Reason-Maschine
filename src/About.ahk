@@ -55,8 +55,6 @@ aboutGuiToggle() {
         linkCentomila.SetFont("s14 bold underline")
         linkCentomila.OnEvent("Click", (*) => OpenCentomila())
 
-        ; ControlColor(aboutButton, aboutGui, 0x111111)
-
         ; Right column (existing content)
         xRight := leftColumnWidth + 30
 
