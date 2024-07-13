@@ -134,6 +134,15 @@ OpenLicense(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 }
 
 OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    ; Enable capslock
+    if GetKeyState("CapsLock") == 0 {
+        WinActivate(currentDawExeClass)
+        SendEvent("{CapsLock}")
+        ToggleEnable()
+    } else {
+        WinActivate(currentDawExeClass)
+        ToggleEnable()
+    }
     ToggleOSDGui()
 }
 

@@ -26,7 +26,7 @@ BuildDeleteOSDGui() {
         if (DPI = 192) {
             guiWidth := Ceil(SCREEN_WIDTH) / 2
         }
-        guiHeight := 350
+        guiHeight := 280
 
 
         ; Calculate the width of each column
