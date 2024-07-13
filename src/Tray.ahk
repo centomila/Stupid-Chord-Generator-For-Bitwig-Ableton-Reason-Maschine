@@ -32,20 +32,26 @@ for chordsIniFiles in CHORDS_INI_LIST {
 
 GenerateTrayMenu() {
     tray.Delete() ; empty the menu
-    tray.Add(APP_NAME, NoAction)  ; Creates a separator line.
+    tray.Add(APP_NAME, OpenAbout)  ; Title
 
-    tray.Add() ; Creates a separator line.
+    tray.Add() ; ------------------------------
     tray.Add("DAW", dawMenu) ; Add the DAW submenu
     tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
+    tray.Add() ; ------------------------------
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
-    tray.Add() ; Creates a separator line.
     tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
-    tray.Add() ; Creates a separator line.
-    tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  ; Creates a new menu item.
-    tray.Add() ; Creates a separator line.
-    tray.Add("About - v" . APP_VERSION, MenuAbout)  ; Creates a new menu item.
-    tray.Add("Quit", ExitApp)  ; Creates a new menu item.
+    tray.Add() ; ------------------------------
+    tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  
+    tray.Add() ; ------------------------------
+    tray.Add("About - v" . APP_VERSION, OpenAbout) ; About  
+    tray.Add("MIT License", OpenLicense) ; License
+    tray.Add("Help", NoAction) ; License
+    
+    tray.Add() ; ------------------------------
+
+    tray.Add("Reload", ReloadApp)  
+    tray.Add("Quit", ExitApp)
 
     tray.Default := "About - v" . APP_VERSION
     A_IconTip := APP_NAME
@@ -54,6 +60,10 @@ GenerateTrayMenu() {
     AddChordsToTray()
 
     ResetCheckboxes()
+}
+
+ReloadApp(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    Reload
 }
 
 OpenChordsFolder(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
@@ -107,9 +117,14 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
 }
 
-MenuAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
+OpenAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 {
-    aboutGui := aboutGuiToggle()
+    aboutGui := AboutGuiToggle()
+}
+
+OpenLicense(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
+{
+    licenseGui := LicenseGuiToggle()
 }
 
 OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
@@ -127,7 +142,7 @@ ExitApp(*)
 
 AddChordsToTray() {
 
-    tray.Add("Shortcut`t" . "01-12 | " . currentChordsIniSet, NoAction, "BarBreak") ; Creates a separator line.
+    tray.Add("Shortcut`t" . "01-12 | " . currentChordsIniSet, NoAction, "BarBreak") ; ------------------------------
     tray.Add()
 
     for chords in chordsArray {
@@ -138,16 +153,16 @@ AddChordsToTray() {
         textForLabel := ReplaceShortCutSymbols(textForLabel)
         if (A_Index == 13) {
             tray.Add()
-            tray.Add("Shortcut`t" . "13-24", NoAction, "") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "13-24", NoAction, "") ; ------------------------------
             tray.Add()
         }
         if (A_Index == 25) {
-            tray.Add("Shortcut`t" . "25-36", NoAction, "BarBreak") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "25-36", NoAction, "BarBreak") ; ------------------------------
             tray.Add()
         }
         if (A_Index == 37) {
             tray.Add()
-            tray.Add("Shortcut`t" . "37-48", NoAction, "") ; Creates a separator line.
+            tray.Add("Shortcut`t" . "37-48", NoAction, "") ; ------------------------------
             tray.Add()
         }
         tray.Add(textForLabel, NoAction)
@@ -165,12 +180,10 @@ ResetCheckboxes() {
 ChordsMenu() {
     ; show the "Chord Preset" menu on the cursor location
     chordsIniListMenu.Show()
-    if osd == true {
+    if topGuiOSD == true {
         ToggleOSDGui()
         ToggleOSDGui()
     }
-
-
 }
 
 try {

@@ -1,16 +1,18 @@
 #Requires AutoHotkey v2.0
 
 global aboutGui := 0
-global aboutGuiWidth := 800
-global aboutGuiHeight := 600
-global leftColumnWidth := 200
-global rightColumnWidth := aboutGuiWidth - leftColumnWidth - 30  ; Subtracting 30 for margins
+
 
 OpenUrl(url := "https://centomila.com") {
     return (*) => Run(url)
 }
 
-aboutGuiToggle() {
+AboutGuiToggle() {
+    aboutGuiWidth := 800
+    aboutGuiHeight := 600
+    leftColumnWidth := 200
+    rightColumnWidth := aboutGuiWidth - leftColumnWidth - 30  ; Subtracting 30 for margins
+    
     if (aboutGui == 0) {
         global aboutGui := Gui("+ToolWindow +DPIScale")
         aboutGui.SetDarkTitle()
@@ -19,6 +21,7 @@ aboutGuiToggle() {
         aboutGui.BackColor := "0x111111"
         aboutGui.MarginX := +50
         aboutGui.MarginY := +50
+
 
         logoCentomila := aboutGui.Add("Pic", " w" . leftColumnWidth/1.2 . " h-1 ", "Images\PNG\centomila-Logo.png")
         logoCentomila.OnEvent("Click", OpenUrl())
@@ -96,14 +99,20 @@ aboutGuiToggle() {
         ; )
 
 
-        aboutGui.OnEvent('Close', (*) => aboutGui.Destroy())
+        aboutGui.OnEvent('Close', (*) => closeAboutGui())
         
 
         aboutGui.Show("NA AutoSize xCenter w" . aboutGuiWidth . " h" . aboutGuiHeight)
 
         return aboutGui
     } else {
-        aboutGui.Destroy()
-        aboutGui := 0
+        closeAboutGui()
     }
+}
+
+
+closeAboutGui(*) {
+    aboutGui.Destroy()
+    global aboutGui := 0
+    return
 }

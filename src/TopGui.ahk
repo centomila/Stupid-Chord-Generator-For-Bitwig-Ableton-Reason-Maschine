@@ -1,70 +1,54 @@
 #Requires AutoHotkey v2.0
 
-global osd := false
+global topGuiOSD := 0
 
 ToggleOSDGui() {
-    static OSDGui := 0
-    if (osd == false && !OSDGui) {
-        OSDGui := BuildDeleteOSDGui()
-        global osd := true
-    } else if (osd = true) {
-        OSDGui := BuildDeleteOSDGui()
-        global osd := false
+    global topGuiOSD
+    if (topGuiOSD == 0 && WinActive(currentDawExeClass) && GetKeyState("CapsLock", "T")) {
+        topGuiOSD := BuildDeleteOSDGui()
+    } else {
+        closeTopGuiOSD()
     }
 }
 
 BuildDeleteOSDGui() {
-    static osdGui := 0
-    if (osd == false && !osdGui && WinActive(currentDawExeClass) && GetKeyState("CapsLock", "T")) {
+        ; Create the GUI without button in the taskbar
+        topGuiOSD := Gui("+AlwaysOnTop -Caption +ToolWindow +DPIScale ")
         ; Calculate the screen width and height
-        screenWidth := A_ScreenWidth
-        screenHeight := A_ScreenHeight
-        DPI := A_ScreenDPI
+        
 
         OutputDebug("DPI:" . A_ScreenDPI)
         ; Number of columns and rows
         columns := 12
         rows := 4
 
-        guiWidth := Ceil(screenWidth)
+        guiWidth := Ceil(SCREEN_WIDTH)
         if (DPI = 192) {
-            guiWidth := Ceil(screenWidth) / 2
+            guiWidth := Ceil(SCREEN_WIDTH) / 2
         }
         guiHeight := 350
 
-        ; Calculate the horizontal position to center the GUI
-        guiX := (screenWidth - guiWidth) / 2
-        guiY := 0
 
         ; Calculate the width of each column
         columnWidth := guiWidth / columns
         rowHeight := guiHeight / rows
 
-        ; Create the GUI without button in the taskbar
-        osdGui := Gui("+AlwaysOnTop -Caption +ToolWindow +DPIScale")
 
-        osdGui.BackColor := "0x111111"
+        topGuiOSD.BackColor := "0x111111"
 
         ; Add the GUI elements
-        AddGUIElements(osdGui, columns, rows, columnWidth, rowHeight)
+        AddGUIElements(topGuiOSD, columns, rows, columnWidth, rowHeight)
 
         ; Set the transparency
-        WinSetTransparent(230, osdGui.Hwnd)
-        osdGui.Title := currentChordsIniSet
-        osdGui.OnEvent('Close', (*) => osdGui.Hide())
+        WinSetTransparent(230, topGuiOSD.Hwnd)
+        topGuiOSD.Title := currentChordsIniSet
+        topGuiOSD.OnEvent('Close', (*) => topGuiOSD.Hide())
         ; Show the GUI
-        osdGui.SetDarkTitle()
+        topGuiOSD.SetDarkTitle()
+        topGuiOSD.SetDarkMenu()
 
-        osdGui.Show("NA AutoSize " . "W" . guiWidth . "xCenter Y0")
-        return osdGui
-    } else {
-        try {
-            osdGui.Hide() ; Hide the GUI before destroying it
-            osdGui.Destroy() ; Destroy the GUI
-            osdGui := 0
-            global osd := false
-        }
-    }
+        topGuiOSD.Show("NA AutoSize " . "W" . guiWidth . " xCenter Y0")
+        return topGuiOSD
 }
 
 
@@ -88,4 +72,13 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         }
         OSDLabel.SetFont("s10 q5 w800 c0xFFFFFF")
     }
+}
+
+
+closeTopGuiOSD(*) {
+    try {
+        topGuiOSD.Destroy()
+    }
+    global topGuiOSD := 0
+    return
 }

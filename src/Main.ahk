@@ -14,6 +14,7 @@ InstallBasicResources()
 #Include Tray.ahk
 #Include TopGui.ahk
 #Include About.ahk
+#Include License.ahk
 #Include VsCodeReload.ahk
 LoadSettings()
 

@@ -3,6 +3,10 @@
 APP_NAME := "Stupid Chord Generator"
 APP_VERSION := "1.0.0"
 
+SCREEN_WIDTH := A_ScreenWidth
+SCREEN_HEIGHT := A_ScreenHeight
+DPI := A_ScreenDPI
+
 StatusEnabled := false
 
 GenerateChordsMap() {
@@ -39,5 +43,3 @@ DAW_LIST_EXE_CLASS_MAP := Map(
     "NI Maschine 2", "ahk_exe Maschine 2.exe")
 currentDaw := ""
 currentDawExeClass := "" ; Empty until the script has loaded the correct DAW
-
-ZWSP := Chr(0x200B) ; Zero Width Space
