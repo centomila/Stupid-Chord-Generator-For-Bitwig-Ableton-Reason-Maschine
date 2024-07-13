@@ -19,33 +19,38 @@ InstallBasicResources()
 LoadSettings()
 
 
+
 LoadSettings() {
+    global currentDaw
+    global currentToolTipDuration
+    global currentChordsIniSet
+    global currentDawExeClass
+    global currentChordsIniSetFile
     try {
-        global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
-        global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
-        global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
+        currentDaw := IniRead("Settings.ini", "Settings", "DAW")
+        currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
     } catch {
         ; If the file or the values don't exist, create them
         IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
         IniWrite("All Chords", "Settings.ini", "Settings", "ChordIniSet")
         ; set global variables values from the ini file
-        global currentDaw := IniRead("Settings.ini", "Settings", "DAW")
-        global currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
-        global currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
+        currentDaw := IniRead("Settings.ini", "Settings", "DAW")
+        currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
+        currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
         Reload
     }
 
 
     ; Access the appropriate global variable value from the map
-    global currentDawExeClass := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
-    global currentChordsIniSetFile := CHORDS_INI_LIST.Get(currentChordsIniSet)
+    currentDawExeClass := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
+    currentChordsIniSetFile := CHORDS_INI_LIST.Get(currentChordsIniSet)
 
-    debugTextAllOptions := "Current Chord Set: " . currentChordsIniSet . " - " . currentChordsIniSetFile . " - " . currentToolTipDuration . " - " . currentDaw . " - " . currentDawExeClass
+    debugTextAllOptions := "Daw: " . currentDaw . " - " . currentDawExeClass . "`nChord Preset: " . currentChordsIniSet . " - " . currentChordsIniSetFile . "`nToolTipDuration: " . currentToolTipDuration . "`n"
     OutputDebug(debugTextAllOptions)
     NewGetChordsIni(currentChordsIniSetFile)
     GenerateTrayMenu()
-    ResetCheckboxes()
     ToggleEnable()
 }
 
@@ -133,7 +138,7 @@ NewGetChordsIni(ChordsIniFile := "Chords.ini") {
         ; add elements to the array
         chordsArray.Push([ChordName, ChordInterval, ShortcutKey])
     }
-    OutputDebug("ChordsIniArray: " . chordsArray.Length)
+    ;OutputDebug("ChordsIniArray: " . chordsArray.Length)
     return chordsArray
 }
 
@@ -153,7 +158,7 @@ ToggleEnable() {
     If !WinExist(currentDawExeClass) {
         global StatusEnabled := false
         DynamicIniMapping(OnOff := "Off")
-        OutputDebug(currentDaw . " seems to be closed`n")
+        ;OutputDebug(currentDaw . " seems to be closed`n")
         TraySetIcon("Images\ICO\Icon.ico")
         ToolTip CenterTextInTooltip(currentDaw . " seems to be close"), 9999, 9999
         SetTimer () => ToolTip(), -3000 ; Clear the tooltip after 1.5 seconds

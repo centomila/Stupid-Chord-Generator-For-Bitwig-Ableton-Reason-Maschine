@@ -4,13 +4,21 @@
 global tray := A_TrayMenu
 global trayGui := 0
 
+global labelAbout := "About"
+global labelTitle := APP_NAME . " - Version " . APP_VERSION
+global labelTooltip := "Tooltip Duration (ms)"
+global labelDaw := "DAW"
+
+
 ToggleTraySetIcon() {
-    if WinExist(currentDawExeClass) {
+    if WinActive(currentDawExeClass) {
         if StatusEnabled {
             TraySetIcon("Images\ICO\Icon-On.ico")
         } else {
             TraySetIcon("Images\ICO\Icon-Off.ico")
         }
+    } else {
+        TraySetIcon("Images\ICO\Icon.ico")
     }
 }
 
@@ -32,21 +40,27 @@ for chordsIniFiles in CHORDS_INI_LIST {
 }
 
 GenerateTrayMenu() {
+
+    global labelDaw := "DAW - " . currentDaw
+    global labelTooltip := "Tooltip Duration - " . currentToolTipDuration . " ms"
+
     trayGui := Gui("+DPIScale")
     trayGui.SetDarkMenu()
     tray.Delete() ; empty the menu
-    tray.Add(APP_NAME, OpenAbout)  ; Title
-    tray.Add("About - v" . APP_VERSION, OpenAbout) ; About  
-    tray.Add("MIT License", OpenLicense) ; License
+    tray.Add(labelTitle, OpenAbout)  ; Title
+    tray.Add(labelAbout, OpenAbout) ; About  
+    tray.Add("License", OpenLicense) ; License
     tray.Add("Help", NoAction) ; License
 
     tray.Add() ; ------------------------------
-    tray.Add("DAW", dawMenu) ; Add the DAW submenu
-    tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
+    tray.Add(labelDaw, dawMenu) ; Add the DAW submenu
+    
+    tray.Add(labelTooltip, tooltipMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; ------------------------------
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
-    chordsIniListMenu.Add()
-    chordsIniListMenu.Add("Open Chords Preset Folder", OpenChordsFolder)
+    tray.Add()
+
+    tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; ------------------------------
     tray.Add("Top Info OSD`tKey Left of 1 (`` or \)", OpenOSDGui)  
@@ -59,12 +73,36 @@ GenerateTrayMenu() {
     tray.Add("Quit", ExitApp)
 
     tray.ClickCount := 1
-    tray.Default := "About - v" . APP_VERSION
+    tray.Default := labelAbout
     A_IconTip :=  APP_NAME . " - v" . APP_VERSION . " - " . currentDaw
 
     AddChordsToTray()
-
+    AddIconsToTray()
     ResetCheckboxes()
+}
+
+AddIconsToTray() {
+    tray.SetIcon(labelTitle, "Images\ICO\Icon.ico")
+    tray.SetIcon(labelAbout, "Images\ICO\Info.ico")
+    tray.SetIcon("Open Chords Preset Folder", "Images\ICO\Folder.ico")
+    
+    tray.SetIcon("Quit", "Images\ICO\Close.ico")
+
+    switch currentDaw {
+        case "Bitwig Studio":
+            tray.SetIcon(labelDaw, "Images\ICO\Bitwig.ico")
+        case "Ableton Live":
+            tray.SetIcon(labelDaw, "Images\ICO\AbletonLive.ico")
+        case "Reason":
+            tray.SetIcon(labelDaw, "Images\ICO\Reason.ico")
+        case "NI Maschine 2":
+            tray.SetIcon(labelDaw, "Images\ICO\Maschine2.ico")
+    }
+
+    dawMenu.SetIcon("Bitwig Studio", "Images\ICO\Bitwig.ico")
+    dawMenu.SetIcon("Ableton Live", "Images\ICO\AbletonLive.ico")
+    dawMenu.SetIcon("Reason", "Images\ICO\Reason.ico")
+    dawMenu.SetIcon("NI Maschine 2", "Images\ICO\Maschine2.ico")
 }
 
 ReloadApp(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
@@ -81,6 +119,7 @@ SelectToolTipDuration(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
         tooltipMenu.Uncheck(tooltipValues)
     }
     IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "ToolTipDuration")
+    currentToolTipDuration := A_ThisMenuItem
     tooltipMenu.Check(IniRead("Settings.ini", "Settings", "ToolTipDuration"))
     LoadSettings()
     return
@@ -134,16 +173,26 @@ OpenLicense(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 }
 
 OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
-    ; Enable capslock
-    if GetKeyState("CapsLock") == 0 {
-        WinActivate(currentDawExeClass)
-        SendEvent("{CapsLock}")
-        ToggleEnable()
+    if WinExist(currentDawExeClass) {
+        if GetKeyState("CapsLock") == 0 {
+            try {
+                OutputDebug("`nCapslock is off. I will activate the app and enable capslock then OSD.")
+                WinActivate(currentDawExeClass)
+                SendEvent("{CapsLock}")
+                ToggleEnable()
+            }
+        } else {
+            try {
+                OutputDebug("`nCapslock is off. I will activate the app and OSD.")
+                WinActivate(currentDawExeClass)
+                ToggleEnable()
+            }
+        }
+        ToggleOSDGui()
     } else {
-        WinActivate(currentDawExeClass)
-        ToggleEnable()
+        MsgBox("Error: " . currentDaw . " is not running.`n`n " .
+        "The OSD is shown only when the selected DAW is the active window.", "Error", 16)
     }
-    ToggleOSDGui()
 }
 
 NoAction(*) {
@@ -194,7 +243,7 @@ ResetCheckboxes() {
 ChordsMenu() {
     ; show the "Chord Preset" menu on the cursor location
     chordsIniListMenu.Show()
-    if topGuiOSD == true {
+    if topGuiOSD != 0 {
         ToggleOSDGui()
         ToggleOSDGui()
     }
