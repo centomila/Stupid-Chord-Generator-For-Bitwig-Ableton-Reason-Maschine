@@ -149,19 +149,29 @@ DynamicIniMapping(onOff := "Off") {
 
 ; Function to change the system tray icon based on the Caps Lock state.
 ToggleEnable() {
-    If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
-        global StatusEnabled := true
-        DynamicIniMapping(OnOff := "On")
-        ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
-        ToggleTraySetIcon()
-    } else {
+    If !WinExist(currentDawExeClass) {
         global StatusEnabled := false
         DynamicIniMapping(OnOff := "Off")
-        ToolTip CenterTextInTooltip("O F F"), 9999, 9999
-        ToggleOSDGui()
-        ToggleTraySetIcon()
+        OutputDebug(currentDaw . " seems to be closed`n")
+        TraySetIcon("Images\ICO\Icon.ico")
+        ToolTip CenterTextInTooltip(currentDaw . " seems to be close"), 9999, 9999
+        SetTimer () => ToolTip(), -3000 ; Clear the tooltip after 1.5 seconds
+    } else {
+
+        If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
+            global StatusEnabled := true
+            DynamicIniMapping(OnOff := "On")
+            ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
+            ToggleTraySetIcon()
+        } else {
+            global StatusEnabled := false
+            DynamicIniMapping(OnOff := "Off")
+            ToolTip CenterTextInTooltip("O F F"), 9999, 9999
+            ToggleOSDGui()
+            ToggleTraySetIcon()
+        }
+        SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
     }
-    SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
 }
 
 CenterTextInTooltip(text) {

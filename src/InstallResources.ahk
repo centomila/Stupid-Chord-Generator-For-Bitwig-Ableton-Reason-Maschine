@@ -7,17 +7,24 @@ Loop Files, "Chords\*.ini", "R"  ; Recurse into subfolders.
 ; If the app is compiled, install all ini file resources in the Chords folder
 InstallBasicResources() {
     ChordsFolder := A_WorkingDir . "\Chords"
+    IcoFolder := A_WorkingDir . "\Images\ICO"
+    PngFolder := A_WorkingDir . "\Images\PNG"
     OutputDebug(ChordsFolder)
 
     if A_IsCompiled { ; This actions are only executed when the script is compiled (executable).
+        
+        if not FileExist(IcoFolder) {
+            DirCreate(IcoFolder)
+        }
 
-        FileInstall("Icon-Off.ico", A_WorkingDir . "Images\ICO\Icon-Off.ico", 1)
-        FileInstall("Icon-On.ico", A_WorkingDir . "Images\ICO\Icon-On.ico", 1)
-
-
+        if not FileExist(PngFolder) {
+            DirCreate(PngFolder)
+        }
+        
         if not FileExist(ChordsFolder) {
             DirCreate(ChordsFolder)
         }
+
 
         FileInstall("Chords\All Chords.ini", A_WorkingDir . "\Chords\All Chords.ini", 1)
         FileInstall("Chords\Cinematic Dark.ini", A_WorkingDir . "\Chords\Cinematic Dark.ini", 1)
@@ -29,6 +36,15 @@ InstallBasicResources() {
         FileInstall("Chords\Majors.ini", A_WorkingDir . "\Chords\Majors.ini", 1)
         FileInstall("Chords\Minors.ini", A_WorkingDir . "\Chords\Minors.ini", 1)
         FileInstall("Chords\My-Custom-Chords.ini", A_WorkingDir . "\Chords\My-Custom-Chords.ini", 1)
+
+        FileInstall("Images\ICO\Icon-Off.ico", A_WorkingDir . "\Images\ICO\Icon-Off.ico", 1)
+        FileInstall("Images\ICO\Icon-On.ico", A_WorkingDir . "\Images\ICO\Icon-On.ico", 1)
+
+        ;Images\PNG\centomila-logo.png
+        FileInstall("Images\PNG\centomila-logo.png", A_WorkingDir . "\Images\PNG\centomila-logo.png", 1)
+
+        ;Images\PNG\SCG-Banner-Logo.png
+        FileInstall("Images\PNG\SCG-Banner-Logo.png", A_WorkingDir . "\Images\PNG\SCG-Banner-Logo.png", 1)
         
 
     }

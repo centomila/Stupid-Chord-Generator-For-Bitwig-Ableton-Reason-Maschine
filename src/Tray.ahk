@@ -3,20 +3,11 @@
 tray := A_TrayMenu
 
 ToggleTraySetIcon() {
-    if StatusEnabled {
-        if (A_IsCompiled) {
-            ; Compiled version, use icon from the .exe file
-            TraySetIcon(A_ScriptName)
+    if WinExist(currentDawExeClass) {
+        if StatusEnabled {
+            TraySetIcon("Images\ICO\Icon-On.ico")
         } else {
-            ; Source version, use the custom icon
-            TraySetIcon("Images\Ico\Icon-On.ico")
-        }
-    } else {
-        if (A_IsCompiled) {
-            TraySetIcon(A_ScriptName)
-        }
-        else {
-            TraySetIcon("Images\Ico\Icon-Off.ico")
+            TraySetIcon("Images\ICO\Icon-Off.ico")
         }
     }
 }

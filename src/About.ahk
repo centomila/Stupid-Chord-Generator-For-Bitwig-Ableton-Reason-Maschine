@@ -12,17 +12,20 @@ OpenUrl(url := "https://centomila.com") {
 
 aboutGuiToggle() {
     if (aboutGui == 0) {
-        global aboutGui := Gui()
+        global aboutGui := Gui("+ToolWindow +DPIScale")
         aboutGui.SetDarkTitle()
+        aboutGui.Title := APP_NAME . " " . APP_VERSION . " - About"
 
         aboutGui.BackColor := "0x111111"
-        aboutGui.MarginX := +30
-        aboutGui.MarginY := +30
+        aboutGui.MarginX := +50
+        aboutGui.MarginY := +50
 
-        aboutLogo := aboutGui.Add("Pic", "w" . leftColumnWidth . " h-1 +Center", "Images\PNG\centomila-logo.png")
+        logoCentomila := aboutGui.Add("Pic", " w" . leftColumnWidth/1.2 . " h-1 ", "Images\PNG\centomila-Logo.png")
+        logoCentomila.OnEvent("Click", OpenUrl())
+
 
         ; Left column (links)
-        linksHeader := aboutGui.Add("Text", "y+0 h20 w" . leftColumnWidth . " c0xf4f4f4 +Center", "🎧")
+        linksHeader := aboutGui.Add("Text", "y+30 h30 w" . leftColumnWidth . " c0xf4f4f4 ", "Listen on 🎧")
         linksHeader.SetFont("c0xf4f4f4 s14 bold")
 
         linksAbout := Map(
@@ -40,24 +43,27 @@ aboutGuiToggle() {
 
 
         for links, url in linksAbout {
-            linkText := aboutGui.Add("Text", "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4 +Center", links)
+            linkText := aboutGui.Add("Text", "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4", links)
             linkText.OnEvent("Click", OpenUrl(url))
             linkText.SetFont("c0xf4f4f4 s12 underline")
         }
 
 
-        linkCentomila := aboutGui.Add(
-            "Text",
-            "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4 +Center",
-            "centomila.com"
-        )
-        linkCentomila.SetFont("s14 bold underline")
-        linkCentomila.OnEvent("Click", (*) => OpenCentomila())
+        ; linkCentomila := aboutGui.Add(
+        ;     "Text",
+        ;     "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4",
+        ;     "centomila.com"
+        ; )
+        ; linkCentomila.SetFont("s14 bold underline")
+
 
         ; Right column (existing content)
         xRight := leftColumnWidth + 30
 
-        appLogo := aboutGui.Add("Pic", "y15 w" . rightColumnWidth . " h-1 +Center", "Images\PNG\SCG-Banner-Logo.png")
+
+        ; aboutCentomilaLogo := aboutGui.Add("Pic", "w" . leftColumnWidth . " h-1 ", "Images\PNG\centomila-logo.png")
+
+        appLogo := aboutGui.Add("Pic",  "y" . aboutGui.MarginY . " w" . rightColumnWidth . " h-1 ", "Images\PNG\SCG-Banner-Logo.png")
 
         
 
@@ -65,7 +71,7 @@ aboutGuiToggle() {
         
         aboutText := aboutGui.Add(
             "Text",
-            "w" . rightColumnWidth . " r25 +Center",
+            "w" . rightColumnWidth . " r25 ",
             "Thank you for using " . APP_NAME . ".`n`n" .
             "I hope you enjoy it!`n`n" .
             "I don't want money, but if you find it useful, please consider listening, add to your playlists, buying or sharing my music. " .
@@ -74,22 +80,24 @@ aboutGuiToggle() {
         )
         aboutText.SetFont("c0xf4f4f4 s16")
 
+
+
         versionText := aboutGui.Add(
             "Text",
-            "w" . rightColumnWidth . " +Center r2",
+            "w" . rightColumnWidth . " +Right r2",
             "Version: " . APP_VERSION
         )
         versionText.SetFont("c0xf4f4f4 s12")
         ; Empty space at the bottom
-        emptySpace := aboutGui.Add(
-            "Text",
-            " y+20 w" . rightColumnWidth . " +Center",
-            " "
-        )
+        ; emptySpace := aboutGui.Add(
+        ;     "Text",
+        ;     " y+20 w" . rightColumnWidth . " +Center",
+        ;     " "
+        ; )
 
 
         aboutGui.OnEvent('Close', (*) => aboutGui.Destroy())
-        aboutGui.Title := APP_NAME
+        
 
         aboutGui.Show("NA AutoSize xCenter w" . aboutGuiWidth . " h" . aboutGuiHeight)
 
@@ -98,8 +106,4 @@ aboutGuiToggle() {
         aboutGui.Destroy()
         aboutGui := 0
     }
-}
-
-OpenCentomila() {
-    Run "https://centomila.com"
 }
