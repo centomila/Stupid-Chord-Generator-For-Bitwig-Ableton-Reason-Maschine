@@ -1,6 +1,8 @@
 #Requires AutoHotkey v2.0
 
-tray := A_TrayMenu
+
+global tray := A_TrayMenu
+global trayGui := 0
 
 ToggleTraySetIcon() {
     if WinExist(currentDawExeClass) {
@@ -29,34 +31,37 @@ for chordsIniFiles in CHORDS_INI_LIST {
     chordsIniListMenu.Add(chordsIniFiles, SelectChordsIniSet, "Radio")
 }
 
-
 GenerateTrayMenu() {
+    trayGui := Gui("+DPIScale")
+    trayGui.SetDarkMenu()
     tray.Delete() ; empty the menu
     tray.Add(APP_NAME, OpenAbout)  ; Title
+    tray.Add("About - v" . APP_VERSION, OpenAbout) ; About  
+    tray.Add("MIT License", OpenLicense) ; License
+    tray.Add("Help", NoAction) ; License
 
     tray.Add() ; ------------------------------
     tray.Add("DAW", dawMenu) ; Add the DAW submenu
     tray.Add("Tooltip Duration (ms)", tooltipMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; ------------------------------
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
-    tray.Add("Open Chords Preset Folder", OpenChordsFolder)
+    chordsIniListMenu.Add()
+    chordsIniListMenu.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; ------------------------------
-    tray.Add("Key Left of 1 (`` or \)`tTop Info OSD", OpenOSDGui)  
+    tray.Add("Top Info OSD`tKey Left of 1 (`` or \)", OpenOSDGui)  
     tray.Add() ; ------------------------------
-    tray.Add("About - v" . APP_VERSION, OpenAbout) ; About  
-    tray.Add("MIT License", OpenLicense) ; License
-    tray.Add("Help", NoAction) ; License
+
     
     tray.Add() ; ------------------------------
 
     tray.Add("Reload", ReloadApp)  
     tray.Add("Quit", ExitApp)
 
+    tray.ClickCount := 1
     tray.Default := "About - v" . APP_VERSION
-    A_IconTip := APP_NAME
+    A_IconTip :=  APP_NAME . " - v" . APP_VERSION . " - " . currentDaw
 
-    ; AddChordsToTray()
     AddChordsToTray()
 
     ResetCheckboxes()
@@ -90,6 +95,7 @@ SelectChordsIniSet(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     chordsIniListMenu.Check(IniRead("Settings.ini", "Settings", "ChordIniSet"))
 
     LoadSettings()
+    GenerateTrayMenu()
     return
 }
 
@@ -141,31 +147,30 @@ ExitApp(*)
 }
 
 AddChordsToTray() {
+    chordGroupSize := 12
+    currentGroup := 1
+    groupMenu := Menu()
 
-    tray.Add("Shortcut`t" . "01-12 | " . currentChordsIniSet, NoAction, "BarBreak") ; ------------------------------
-    tray.Add()
-
-    for chords in chordsArray {
+    for index, chords in chordsArray {
         chordName := chords[1]
         chordInterval := chords[2]
         shortcutKey := chords[3]
-        textForLabel := shortcutKey . "`t" . chordName . " [" . chordInterval . "]"
+        textForLabel := chordName . " [" . chordInterval . "]" . "`t" . shortcutKey
         textForLabel := ReplaceShortCutSymbols(textForLabel)
-        if (A_Index == 13) {
-            tray.Add()
-            tray.Add("Shortcut`t" . "13-24", NoAction, "") ; ------------------------------
-            tray.Add()
+
+        if (Mod(index - 1, chordGroupSize) == 0) {
+            if (index > 1) {
+                tray.Insert("Chord Presets","Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . (currentGroup * chordGroupSize), groupMenu, "")
+                currentGroup++
+            }
+            groupMenu := Menu()
         }
-        if (A_Index == 25) {
-            tray.Add("Shortcut`t" . "25-36", NoAction, "BarBreak") ; ------------------------------
-            tray.Add()
+
+        groupMenu.Add(textForLabel, NoAction)
+
+        if (index == chordsArray.Length) {
+            tray.Insert("Chord Presets","Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . index, groupMenu, "")
         }
-        if (A_Index == 37) {
-            tray.Add()
-            tray.Add("Shortcut`t" . "37-48", NoAction, "") ; ------------------------------
-            tray.Add()
-        }
-        tray.Add(textForLabel, NoAction)
     }
 }
 
