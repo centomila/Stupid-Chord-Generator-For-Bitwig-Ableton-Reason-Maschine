@@ -193,12 +193,14 @@ CenterTextInTooltip(text) {
 ; Octave change
 ; Page Down Select all and move an octave DOWN
 PgDn:: {
-    SendEvent("((^a)(+{Down}))")
+    SendEvent("^a")
+    SendEvent("+{Down}")
 }
 
 ; Page Up Select all and move an octave UP
 PgUp:: {
-    SendEvent("((^a)(+{Up}))")
+    SendEvent("^a")
+    SendEvent("+{Up}")
 }
 
 SC029:: { ; Scan code for backtick or \
