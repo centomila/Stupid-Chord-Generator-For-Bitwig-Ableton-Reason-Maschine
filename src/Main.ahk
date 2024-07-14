@@ -19,7 +19,6 @@ InstallBasicResources()
 LoadSettings()
 
 
-
 LoadSettings() {
     global currentDaw
     global currentToolTipDuration
@@ -69,46 +68,49 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
     chordNotes := StrSplit(notesInterval, " ")
     ; Loop through the array and convert strings into numbers
-    Loop chordNotes.Length - 1 ; Skip the root note 0
+    Loop chordNotes.Length ; Skip the root note 0
     {
-        semitones := chordNotes.Get(A_Index + 1)
+        semitones := chordNotes.Get(A_Index)
         OutputDebug("Semitones: " . semitones)
         switch currentDaw {
             case "Reason":
-                SendEvent("^l")
-                SendEvent("^c")
-                SendEvent("!{Left}")
-                if semitones > 0 {
-                    SendEvent("{Up " . semitones . "}")
-                } else {
-                    ; Convert negative numbers to positive
-                    semitones := semitones * -1
-                    SendEvent("{Down " . semitones . "}")
+                if semitones != 0 {
+                    SendEvent("^l")
+                    SendEvent("^c")
+                    SendEvent("!{Left}")
+                    if semitones > 0 {
+                        SendEvent("{Up " . semitones . "}")
+                    } else if semitones < 0 {
+                        semitones := semitones * -1 ; Convert negative numbers to positive
+                        SendEvent("{Down " . semitones . "}")
+                    }
+                    SendEvent("^v")
                 }
-                SendEvent("^v")
 
             case "NI Maschine 2":
-                SendEvent("^c")
-                if semitones > 0 {
-                    SendEvent("{Up " . semitones . "}")
-                } else {
-                    ; Convert negative numbers to positive
-                    semitones := semitones * -1
-                    SendEvent("{Down " . semitones . "}")
+                if semitones != 0 {
+                    SendEvent("^c")
+                    if semitones > 0 {
+                        SendEvent("{Up " . semitones . "}")
+                    } else if semitones < 0 {
+                        semitones := semitones * -1 ; Convert negative numbers to positive
+                        SendEvent("{Down " . semitones . "}")
+                    }
+                    SendEvent("^v")
+                    SendEvent("!{Left}")
                 }
-                SendEvent("^v")
-                SendEvent("!{Left}")
-
             default:
-                SendEvent("^c")
-                if semitones > 0 {
-                    SendEvent("{Up " . semitones . "}")
-                } else {
-                    ; Convert negative numbers to positive
-                    semitones := semitones * -1
-                    SendEvent("{Down " . semitones . "}")
+                if semitones != 0 {
+
+                    SendEvent("^c")
+                    if semitones > 0 {
+                        SendEvent("{Up " . semitones . "}")
+                    } else if semitones < 0 {
+                        semitones := semitones * -1 ; Convert negative numbers to positive
+                        SendEvent("{Down " . semitones . "}")
+                    }
+                    SendEvent("^v")
                 }
-                SendEvent("^v")
         }
     }
     ; Tooltip
@@ -123,7 +125,7 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
 
 ReplaceShortCutSymbols(shortcutKeyString) {
     shortcutKeyString := StrReplace(shortcutKeyString, "+", "SHIFT - ")
-    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - " )
+    shortcutKeyString := StrReplace(shortcutKeyString, "^", "CTRL - ")
     shortcutKeyString := StrReplace(shortcutKeyString, "!", "ALT - ")
     return shortcutKeyString
 }
