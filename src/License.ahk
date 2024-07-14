@@ -4,14 +4,14 @@ global licenseGui := 0
 
 LicenseGuiToggle() {
     if (licenseGui == 0) {
-        global licenseGui := Gui("+DPIScale")
+        global licenseGui := Gui("+DPIScale ")
         
-        licenseGui.SetFont("cWhite s16", "Segoe UI")
+        licenseGui.SetFont("cWhite s12", "Segoe UI")
         licenseGui.SetDarkTitle()
         licenseGui.SetDarkMenu()
         
-        licenseGuiWidth := 800
-        licenseGuiHeight := 600
+        licenseGuiWidth := 960
+        licenseGuiHeight := 960
         
         licenseGui.Title := APP_NAME . " " . APP_VERSION . " - License"
         licenseGui.BackColor := "0x111111"

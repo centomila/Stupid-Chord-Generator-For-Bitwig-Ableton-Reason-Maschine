@@ -48,6 +48,7 @@ GenerateTrayMenu() {
     trayGui.SetDarkMenu()
     tray.Delete() ; empty the menu
     tray.Add(labelTitle, OpenAbout)  ; Title
+    tray.Add() ; ------------------------------
     tray.Add(labelAbout, OpenAbout) ; About  
     tray.Add("License", OpenLicense) ; License
     tray.Add("Help", NoAction) ; License
