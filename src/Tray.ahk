@@ -159,7 +159,7 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
             LoadSettings()
             return
     }
-
+    Reload
 }
 
 OpenAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
