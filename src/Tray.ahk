@@ -61,6 +61,7 @@ GenerateTrayMenu() {
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
     tray.Add()
 
+    tray.Add("Install additional Chord Preset", InstallAdditionalChordPresets)
     tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; ------------------------------

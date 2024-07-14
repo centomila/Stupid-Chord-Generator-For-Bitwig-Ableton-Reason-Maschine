@@ -28,14 +28,10 @@ InstallBasicResources() {
         FileInstall("Chords\How to create your chords presets.txt", A_WorkingDir . "\Chords\How to create your chords presets.txt", 1)
 
         FileInstall("Chords\All Chords.ini", A_WorkingDir . "\Chords\All Chords.ini", 1)
-        FileInstall("Chords\Cinematic Dark.ini", A_WorkingDir . "\Chords\Cinematic Dark.ini", 1)
-        FileInstall("Chords\Cinematic Epic.ini", A_WorkingDir . "\Chords\Cinematic Epic.ini", 1)
         FileInstall("Chords\Common Inversions.ini", A_WorkingDir . "\Chords\Common Inversions.ini", 1)
         FileInstall("Chords\Common.ini", A_WorkingDir . "\Chords\Common.ini", 1)
-        FileInstall("Chords\Jazzy.ini", A_WorkingDir . "\Chords\Jazzy.ini", 1)
         FileInstall("Chords\Majors.ini", A_WorkingDir . "\Chords\Majors.ini", 1)
         FileInstall("Chords\Minors.ini", A_WorkingDir . "\Chords\Minors.ini", 1)
-        FileInstall("Chords\My-Custom-Chords.ini", A_WorkingDir . "\Chords\My-Custom-Chords.ini", 1)
 
         FileInstall("Images\ICO\AbletonLive.ico", A_WorkingDir . "\Images\ICO\AbletonLive.ico", 1)
         FileInstall("Images\ICO\Bitwig.ico", A_WorkingDir . "\Images\ICO\Bitwig.ico", 1)
@@ -55,11 +51,15 @@ InstallBasicResources() {
         FileInstall("Images\PNG\centomila-logo.png", A_WorkingDir . "\Images\PNG\centomila-logo.png", 1)
 
         ;Images\PNG\SCG-Banner-Logo.png
-        FileInstall("Images\PNG\SCG-Banner-Logo.png", A_WorkingDir . "\Images\PNG\SCG-Banner-Logo.png", 1)
-        
+        FileInstall("Images\PNG\SCG-Banner-Logo.png", A_WorkingDir . "\Images\PNG\SCG-Banner-Logo.png", 1) 
 
     }
-
-
     return
+}
+
+InstallAdditionalChordPresets(*) {
+    FileInstall("Chords\Cinematic Dark.ini", A_WorkingDir . "\Chords\Cinematic Dark.ini", 1)
+    FileInstall("Chords\Cinematic Epic.ini", A_WorkingDir . "\Chords\Cinematic Epic.ini", 1)
+    FileInstall("Chords\Jazzy.ini", A_WorkingDir . "\Chords\Jazzy.ini", 1)
+    FileInstall("Chords\My-Custom-Chords.ini", A_WorkingDir . "\Chords\My-Custom-Chords.ini", 1)
 }
