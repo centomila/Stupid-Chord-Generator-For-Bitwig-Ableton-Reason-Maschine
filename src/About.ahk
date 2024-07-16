@@ -29,7 +29,7 @@ AboutGuiToggle() {
 
         ; Left column (links)
         linksHeader := aboutGui.Add("Text", "y+30 h30 w" . leftColumnWidth . " c0xf4f4f4 ", "Listen on 🎧")
-        linksHeader.SetFont("c0xf4f4f4 s14 bold")
+        linksHeader.SetFont("c0xf4f4f4 s14 bold", "Segoe UI")
 
         linksAbout := Map(
             "YouTube", "https://www.youtube.com/@centomila",
@@ -48,7 +48,7 @@ AboutGuiToggle() {
         for links, url in linksAbout {
             linkText := aboutGui.Add("Text", "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4", links)
             linkText.OnEvent("Click", OpenUrl(url))
-            linkText.SetFont("c0xf4f4f4 s12 underline")
+            linkText.SetFont("c0xf4f4f4 s12 underline", "Segoe UI")
         }
 
 
@@ -81,7 +81,7 @@ AboutGuiToggle() {
             "Your support means a lot to me!`n`n" .
             "Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!"
         )
-        aboutText.SetFont("c0xf4f4f4 s16")
+        aboutText.SetFont("c0xf4f4f4 s16", "Segoe UI")
 
 
 
@@ -90,7 +90,7 @@ AboutGuiToggle() {
             "w" . rightColumnWidth . " +Right r2",
             "Version: " . APP_VERSION
         )
-        versionText.SetFont("c0xf4f4f4 s12")
+        versionText.SetFont("c0xf4f4f4 s12", "Segoe UI")
         ; Empty space at the bottom
         ; emptySpace := aboutGui.Add(
         ;     "Text",

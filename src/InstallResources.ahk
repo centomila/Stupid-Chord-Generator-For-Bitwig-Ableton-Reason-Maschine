@@ -53,13 +53,23 @@ InstallBasicResources() {
         ;Images\PNG\SCG-Banner-Logo.png
         FileInstall("Images\PNG\SCG-Banner-Logo.png", A_WorkingDir . "\Images\PNG\SCG-Banner-Logo.png", 1) 
 
+        ;Install license
+        FileInstall("LICENSE", A_WorkingDir . "\LICENSE", 1)
+
     }
     return
 }
 
 InstallAdditionalChordPresets(*) {
-    FileInstall("Chords\Cinematic Dark.ini", A_WorkingDir . "\Chords\Cinematic Dark.ini", 1)
-    FileInstall("Chords\Cinematic Epic.ini", A_WorkingDir . "\Chords\Cinematic Epic.ini", 1)
-    FileInstall("Chords\Jazzy.ini", A_WorkingDir . "\Chords\Jazzy.ini", 1)
-    FileInstall("Chords\My-Custom-Chords.ini", A_WorkingDir . "\Chords\My-Custom-Chords.ini", 1)
+    ; MsgBox that explain what is going to be installed and ask for confirmation before installing
+    InstallChordsYesNo := MsgBox("Do you want to install additional Chord Presets?", "Install Additional Chord Presets", "Icon? YesNo")
+    if (InstallChordsYesNo  = "No") {
+        return
+    } else {
+        FileInstall("Chords\Cinematic Dark.ini", A_WorkingDir . "\Chords\Cinematic Dark.ini", 1)
+        FileInstall("Chords\Cinematic Epic.ini", A_WorkingDir . "\Chords\Cinematic Epic.ini", 1)
+        FileInstall("Chords\Jazzy.ini", A_WorkingDir . "\Chords\Jazzy.ini", 1)
+        FileInstall("Chords\My-Custom-Chords.ini", A_WorkingDir . "\Chords\My-Custom-Chords.ini", 1)
+        Reload
+    }
 }

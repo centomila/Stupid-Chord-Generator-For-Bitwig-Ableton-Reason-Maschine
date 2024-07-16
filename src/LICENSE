@@ -10,6 +10,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ---
 
+This software uses the GuiEnhancerKit library (https://github.com/nperovic/GuiEnhancerKit), which is licensed under the MIT License.
+
+---
+
 These product names and their respective logos are trademarks or registered trademarks of their respective owners:
 
 - Ableton and Ableton Live are registered trademarks of Ableton AG.
@@ -18,7 +22,5 @@ These product names and their respective logos are trademarks or registered trad
 - Maschine and Maschine 2 are registered trademarks of Native Instruments GmbH.
 
 This script is an independent project and is not affiliated with, endorsed by, sponsored by, or in any way officially connected with Ableton AG, Bitwig GmbH, Reason Studios AB, or Native Instruments GmbH.
-
-This script is intended for use by legal owners of the aforementioned software programs. Users are responsible for ensuring their use of this script complies with the terms of service and license agreements of the respective software programs.
 
 All product names, logos, and brands mentioned are property of their respective owners and are used solely for identification purposes. Use of these names, logos, and brands does not imply endorsement.
