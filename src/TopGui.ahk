@@ -19,12 +19,8 @@ BuildDeleteOSDGui() {
     topGuiOSD.SetDarkMenu()
     topGuiOSD.BackColor := 0x202020
     topGuiOSD.SetWindowColor(, topGuiOSD.BackColor, topGuiOSD.BackColor)
-
-    /* Set Mica (Alt) background. (Supported starting with Windows 11 Build 22000.) */
-    ; if (VerCompare(A_OSVersion, "10.0.22600") >= 0)
-    ;     topGuiOSD.SetWindowAttribute(38, 4)
-
-    ; topGuiOSD.SetBorderless(6, (g, x, y) => (y <= g['Titlebar'].GetWindowRect().bottom), 500, 500, 500, 500)
+    topGuiOSD.MarginX := 15
+    topGuiOSD.MarginY := 15
 
 
     OutputDebug("DPI:" . A_ScreenDPI)
@@ -32,11 +28,11 @@ BuildDeleteOSDGui() {
     columns := 12
     rows := 4
 
-    guiWidth := Ceil(SCREEN_WIDTH)
+    guiWidth := SCREEN_WIDTH - topGuiOSD.MarginX
     if (DPI = 192) {
-        guiWidth := Ceil(SCREEN_WIDTH) / 2
+        guiWidth := SCREEN_WIDTH / 2 - topGuiOSD.MarginX
     }
-    guiHeight := 320
+    guiHeight := 400
 
 
     ; Calculate the width of each column
@@ -49,7 +45,7 @@ BuildDeleteOSDGui() {
     ; Set the transparency
     WinSetTransparent(250, topGuiOSD.Hwnd)
 
-    topGuiOSD.SetFont("cWhite s16", "Segoe UI")
+    ; topGuiOSD.SetFont("cWhite s16", "Segoe UI")
 
     topGuiOSD.Title := currentChordsIniSet
     topGuiOSD.OnEvent('Close', (*) => topGuiOSD.Hide())
@@ -68,18 +64,18 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         textForLabel := ReplaceShortCutSymbols(textForLabel)
 
         if A_Index <= 12 {
-            OSDButton := OSDGui.AddButton("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . topGuiOSD.MarginY  .   " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 1) + topGuiOSD.MarginX), textForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
-            OSDButton := OSDGui.AddButton("Center Y" . rowHeight + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)+topGuiOSD.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 13)+ topGuiOSD.MarginX), textForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
-            OSDButton := OSDGui.AddButton("Center Y" . rowHeight * 2 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*2+topGuiOSD.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 25)+ topGuiOSD.MarginX), textForLabel)
         } else if A_Index > 36 {
-            OSDButton := OSDGui.AddButton("Center Y" . rowHeight * 3 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*3+topGuiOSD.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 37)+ topGuiOSD.MarginX), textForLabel)
         }
         OSDButton.SetRounded()
         OSDButton.SetTheme("DarkMode_Explorer")
-        OSDButton.BackColor := 0x202020
-        OSDButton.Color := 0xFFFFFF
+        ; OSDButton.BackColor := 0x202020
+        ; OSDButton.Color := 0xFFFFFF
         OSDButton.SetFont("s10 c0xFFFFFF q5", "Segoe UI")
 
 
