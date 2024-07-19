@@ -69,9 +69,6 @@ AboutGuiToggle() {
         appLogo := aboutGui.Add("Pic",  "y" . aboutGui.MarginY . " w" . rightColumnWidth . " h-1 ", "Images\PNG\SCG-Banner-Logo.png")
 
         
-
-
-        
         aboutText := aboutGui.Add(
             "Text",
             "w" . rightColumnWidth . " r25 ",

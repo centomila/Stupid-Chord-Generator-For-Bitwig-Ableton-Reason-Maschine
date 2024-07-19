@@ -56,6 +56,10 @@ LoadSettings() {
 
 ; Main function to convert note intervals to shortcut commands
 GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
+    OutputDebug("`nGenerateChord - notesInterval: " . notesInterval . " chordTypeName: " . chordTypeName . " thisHotkey: " . thisHotkey . " thisLabel: " . thisLabel)
+    try {
+        WinActivate(currentDawExeClass) 
+    }
     If !WinActive(currentDawExeClass) {
         ; exit function
         ToggleEnable()

@@ -12,43 +12,49 @@ ToggleOSDGui() {
 }
 
 BuildDeleteOSDGui() {
-        ; Create the GUI without button in the taskbar
-        topGuiOSD := Gui("+AlwaysOnTop -Caption +ToolWindow +DPIScale ")
-        ; Calculate the screen width and height
-        
+    ; Create the GUI without button in the taskbar
+    global topGuiOSD := GuiExt("+AlwaysOnTop -Caption +ToolWindow +DPIScale ")
 
-        OutputDebug("DPI:" . A_ScreenDPI)
-        ; Number of columns and rows
-        columns := 12
-        rows := 4
+    topGuiOSD.SetDarkTitle()
+    topGuiOSD.SetDarkMenu()
+    topGuiOSD.BackColor := 0x202020
+    topGuiOSD.SetWindowColor(, topGuiOSD.BackColor, topGuiOSD.BackColor)
 
-        guiWidth := Ceil(SCREEN_WIDTH)
-        if (DPI = 192) {
-            guiWidth := Ceil(SCREEN_WIDTH) / 2
-        }
-        guiHeight := 280
+    /* Set Mica (Alt) background. (Supported starting with Windows 11 Build 22000.) */
+    ; if (VerCompare(A_OSVersion, "10.0.22600") >= 0)
+    ;     topGuiOSD.SetWindowAttribute(38, 4)
+
+    ; topGuiOSD.SetBorderless(6, (g, x, y) => (y <= g['Titlebar'].GetWindowRect().bottom), 500, 500, 500, 500)
 
 
-        ; Calculate the width of each column
-        columnWidth := guiWidth / columns
-        rowHeight := guiHeight / rows
+    OutputDebug("DPI:" . A_ScreenDPI)
+    ; Number of columns and rows
+    columns := 12
+    rows := 4
+
+    guiWidth := Ceil(SCREEN_WIDTH)
+    if (DPI = 192) {
+        guiWidth := Ceil(SCREEN_WIDTH) / 2
+    }
+    guiHeight := 320
 
 
-        topGuiOSD.BackColor := "0x111111"
+    ; Calculate the width of each column
+    columnWidth := guiWidth / columns
+    rowHeight := guiHeight / rows
 
-        ; Add the GUI elements
-        AddGUIElements(topGuiOSD, columns, rows, columnWidth, rowHeight)
+    ; Add the GUI elements
+    AddGUIElements(topGuiOSD, columns, rows, columnWidth, rowHeight)
 
-        ; Set the transparency
-        WinSetTransparent(230, topGuiOSD.Hwnd)
-        topGuiOSD.Title := currentChordsIniSet
-        topGuiOSD.OnEvent('Close', (*) => topGuiOSD.Hide())
-        ; Show the GUI
-        topGuiOSD.SetDarkTitle()
-        topGuiOSD.SetDarkMenu()
+    ; Set the transparency
+    WinSetTransparent(250, topGuiOSD.Hwnd)
 
-        topGuiOSD.Show("NA AutoSize " . "W" . guiWidth . " xCenter Y0")
-        return topGuiOSD
+    topGuiOSD.SetFont("cWhite s16", "Segoe UI")
+
+    topGuiOSD.Title := currentChordsIniSet
+    topGuiOSD.OnEvent('Close', (*) => topGuiOSD.Hide())
+    topGuiOSD.Show("NA AutoSize " . "W" . guiWidth . " xCenter Y0")
+    return topGuiOSD
 }
 
 
@@ -58,19 +64,27 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         chordInterval := chords[2]
         shortcutKey := chords[3]
 
-        textForLabel := ChordName . "`n" . chordInterval . "`n" . shortcutKey
+        textForLabel := chordName . "`n" . chordInterval . "`n" . shortcutKey
         textForLabel := ReplaceShortCutSymbols(textForLabel)
 
         if A_Index <= 12 {
-            OSDLabel := OSDGui.AddText("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y20 W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 1)), textForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . rowHeight + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 13)), textForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight * 2 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . rowHeight * 2 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 25)), textForLabel)
         } else if A_Index > 36 {
-            OSDLabel := OSDGui.AddText("Center Y" . rowHeight * 3 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . rowHeight * 3 + 20 . " W" . columnWidth . " H" . rowHeight . " X" . (columnWidth * (A_Index - 37)), textForLabel)
         }
-        OSDLabel.SetFont("s10 q5 w800 c0xFFFFFF")
+        OSDButton.SetRounded()
+        OSDButton.SetTheme("DarkMode_Explorer")
+        OSDButton.BackColor := 0x202020
+        OSDButton.Color := 0xFFFFFF
+        OSDButton.SetFont("s10 c0xFFFFFF q5", "Segoe UI")
+
+
+        ; Create a closure to capture the current values
+        OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy))(chordInterval, chordName))
     }
 }
 
