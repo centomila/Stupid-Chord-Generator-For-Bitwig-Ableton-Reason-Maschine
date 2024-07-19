@@ -58,7 +58,7 @@ LoadSettings() {
 GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
     OutputDebug("`nGenerateChord - notesInterval: " . notesInterval . " chordTypeName: " . chordTypeName . " thisHotkey: " . thisHotkey . " thisLabel: " . thisLabel)
     try {
-        WinActivate(currentDawExeClass) 
+        WinActivate(currentDawExeClass)
     }
     If !WinActive(currentDawExeClass) {
         ; exit function
@@ -66,12 +66,26 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
         SendInput "{" . thisHotkey . "}"
         return
     }
+
+    if currentDaw == "Reason" {
+        if ReasonPianoRollFinder() = false
+        {
+            MsgBox("Piano Roll not found. Please open it and try again.", "Error")
+            Exit
+        }
+        SendEvent("^l")
+        SendEvent("+l")
+
+    }
+
     SendEvent("{Shift Up}{Ctrl Up}{Alt Up}") ; Reset all modifiers
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
     chordNotes := StrSplit(notesInterval, " ")
     ; Loop through the array and convert strings into numbers
+
+
     Loop chordNotes.Length ; Skip the root note 0
     {
         semitones := chordNotes.Get(A_Index)
@@ -83,10 +97,10 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
                     SendEvent("^c")
                     SendEvent("!{Left}")
                     if semitones > 0 {
-                        SendEvent("{Up " . semitones . "}")
+                        SendEvent("^{Up " . semitones . "}")
                     } else if semitones < 0 {
                         semitones := semitones * -1 ; Convert negative numbers to positive
-                        SendEvent("{Down " . semitones . "}")
+                        SendEvent("^{Down " . semitones . "}")
                     }
                     SendEvent("^v")
                 }
@@ -95,10 +109,11 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
                 if semitones != 0 {
                     SendEvent("^c")
                     if semitones > 0 {
-                        SendEvent("{Up " . semitones . "}")
+                        SendEvent("!{Up " . semitones . "}")
+                        Sleep(50)
                     } else if semitones < 0 {
                         semitones := semitones * -1 ; Convert negative numbers to positive
-                        SendEvent("{Down " . semitones . "}")
+                        SendEvent("!{Down " . semitones . "}")
                     }
                     SendEvent("^v")
                     SendEvent("!{Left}")
@@ -183,6 +198,25 @@ ToggleEnable() {
             ToggleTraySetIcon()
         }
         SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
+    }
+}
+
+ReasonPianoRollFinder() {
+    WinActivate(currentDawExeClass)
+
+    CoordMode "Pixel"  ; Interprets the coordinates below as relative to the screen rather than the active window's client area.
+    try {
+        if (ImageSearch(&FoundX, &FoundY, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "Images\PNG\ReasonPianoRoll1.png")) or (ImageSearch(&FoundX, &FoundY, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "Images\PNG\ReasonPianoRoll2.png")) {
+
+            ; MsgBox "The icon was found at " FoundX "x" FoundY
+            Send "+{Click " . FoundX - 20 . " " . FoundY . "}"
+            return true
+        }
+        else
+            MsgBox "I can't find the piano roll", "Error", 16
+        return false
+    } catch as exc {
+    MsgBox "Could not conduct the search due to the following error:`n" exc.Message
     }
 }
 
