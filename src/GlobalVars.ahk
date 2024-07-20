@@ -31,7 +31,7 @@ currentChordsIniSetFile := ""
 chordsArray := []
 
 ; Tooltip Duration
-TOOLTIP_DURATION_LIST := [0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
+TOOLTIP_DURATION_LIST := [0, 250, 500, 750, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000]
 currentToolTipDuration := 0
 
 ; DAWs

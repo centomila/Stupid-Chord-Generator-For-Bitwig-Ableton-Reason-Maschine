@@ -92,3 +92,34 @@ closeTopGuiOSD(*) {
     global topGuiOSD := 0
     return
 }
+
+
+ToggleCurrentChordOsdBar() {
+    static osdCapsLockOn := 0
+
+    if (osdCapsLockOn) or !WinActive(currentDawExeClass) or !GetKeyState("CapsLock", "T") {
+        try osdCapsLockOn.Destroy()
+        osdCapsLockOn := 0
+        return
+    }
+    if GetKeyState("CapsLock", "T") {
+    osdCapsLockOn := GuiExt()
+    osdCapsLockOn.Opt("+AlwaysOnTop -Caption +ToolWindow +E0x20")
+    osdCapsLockOn.MarginX := 0
+    osdCapsLockOn.MarginY := 0
+    osdCapsLockOn.SetWindowColor(, osdCapsLockOn.BackColor, osdCapsLockOn.BackColor)
+    osdCapsLockOn.SetDarkTitle()
+    osdCapsLockOn.SetDarkMenu()
+    osdCapsLockOn.BackColor := 0x202020
+    
+    MonitorGetWorkArea(, &left, &top, &right, &bottom)
+    width := right - left
+    height := 32
+
+    textCurrentSet := osdCapsLockOn.AddText("y3 Center r3 w" . width/2 ,"Current Chord Set: " currentChordsIniSet)
+    textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
+    
+    WinSetTransparent(250, osdCapsLockOn.Hwnd)
+    osdCapsLockOn.Show(Format("x{} y{} w{} h{} NoActivate", (left+width/4), top, width/2, height))
+    }
+}

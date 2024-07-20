@@ -195,13 +195,15 @@ ToggleEnable() {
         If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
             global StatusEnabled := true
             DynamicIniMapping(OnOff := "On")
-            ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
+            ; ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
             ToggleTraySetIcon()
+            ToggleCurrentChordOsdBar()
         } else {
             global StatusEnabled := false
             DynamicIniMapping(OnOff := "Off")
-            ToolTip CenterTextInTooltip("O F F"), 9999, 9999
+            ; ToolTip CenterTextInTooltip("O F F"), 9999, 9999
             ToggleOSDGui()
+            ToggleCurrentChordOsdBar()
             ToggleTraySetIcon()
         }
         SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
@@ -223,7 +225,7 @@ ForceReasonSequencerFocus() {
 
     ; Calculate the center coordinates with DPI awareness
     centerX := (width / 2)
-    centerY := (height / 2)+30
+    centerY := (height / 2)
 
 
     ; Move the mouse to the center and click
@@ -232,6 +234,8 @@ ForceReasonSequencerFocus() {
     Click
     Send "{Shift up}"
 }
+
+
 
 ~CapsLock:: ToggleEnable
 

@@ -23,6 +23,7 @@ ToggleTraySetIcon() {
 }
 
 
+
 ; Create the submenu for DAWs
 dawMenu := Menu()
 for DAWs in DAW_LIST_EXE_CLASS_MAP {
@@ -137,6 +138,7 @@ SelectChordsIniSet(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
     LoadSettings()
     GenerateTrayMenu()
+    ToggleCurrentChordOsdBar()
     return
 }
 
