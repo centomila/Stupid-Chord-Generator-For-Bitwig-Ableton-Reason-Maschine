@@ -80,7 +80,7 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
 
         ; Create a closure to capture the current values
-        OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy))(chordInterval, chordName))
+        OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy,,,true))(chordInterval, chordName))
     }
 }
 

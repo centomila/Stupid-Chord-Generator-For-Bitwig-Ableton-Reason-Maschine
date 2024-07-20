@@ -55,7 +55,7 @@ LoadSettings() {
 
 
 ; Main function to convert note intervals to shortcut commands
-GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
+GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "", fromGui := false) {
     OutputDebug("`nGenerateChord - notesInterval: " . notesInterval . " chordTypeName: " . chordTypeName . " thisHotkey: " . thisHotkey . " thisLabel: " . thisLabel)
     try {
         WinActivate(currentDawExeClass)
@@ -67,18 +67,20 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
         return
     }
 
-    if currentDaw == "Reason" {
-        if ReasonPianoRollFinder() = false
-        {
-            MsgBox("Piano Roll not found. Please open it and try again.", "Error")
-            Exit
-        }
-        SendEvent("^l")
-        SendEvent("+l")
-
+    if topGuiOSD != 0 {
+        topGuiOSD.Hide()
     }
 
     SendEvent("{Shift Up}{Ctrl Up}{Alt Up}") ; Reset all modifiers
+
+    if currentDaw == "Reason" and WinActive(currentDawExeClass) {
+        if fromGui == true {
+            ForceReasonSequencerFocus()
+        }
+        SendEvent("^l")
+        SendEvent("+l")
+    }
+
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
@@ -138,6 +140,11 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "") {
         toolTipText := CenterTextInTooltip(thisHotkey . "`t" . chordTypeName . "`t" . notesInterval)
         ToolTip(toolTipText, 9999, 9999) ; Show the tooltip with the chord name
         SetTimer () => ToolTip(), currentToolTipDuration ; Show the tooltip for ToolTipDuration seconds
+    }
+
+    if topGuiOSD != 0 {
+        topGuiOSD.Show()
+        try WinActivate(currentDawExeClass)
     }
     return
 }
@@ -201,29 +208,29 @@ ToggleEnable() {
     }
 }
 
-ReasonPianoRollFinder() {
-    WinActivate(currentDawExeClass)
-
-    CoordMode "Pixel"  ; Interprets the coordinates below as relative to the screen rather than the active window's client area.
-    try {
-        if (ImageSearch(&FoundX, &FoundY, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "Images\PNG\ReasonPianoRoll1.png")) or (ImageSearch(&FoundX, &FoundY, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, "Images\PNG\ReasonPianoRoll2.png")) {
-
-            ; MsgBox "The icon was found at " FoundX "x" FoundY
-            Send "+{Click " . FoundX - 20 . " " . FoundY . "}"
-            return true
-        }
-        else
-            MsgBox "I can't find the piano roll", "Error", 16
-        return false
-    } catch as exc {
-    MsgBox "Could not conduct the search due to the following error:`n" exc.Message
-    }
-}
-
 CenterTextInTooltip(text) {
     centeredText := ""
     centeredText := "`n " . text . " `n "
     return centeredText
+}
+
+ForceReasonSequencerFocus() {
+    ; Get the dimensions and position of the active window
+    CoordMode "Mouse", "Client"
+    WinGetPos(&x, &y, &width, &height, WinActive())
+
+    ; Get screen DPI
+
+    ; Calculate the center coordinates with DPI awareness
+    centerX := (width / 2)
+    centerY := (height / 2)+30
+
+
+    ; Move the mouse to the center and click
+    MouseMove centerX, centerY
+    Send "{Shift down}"
+    Click
+    Send "{Shift up}"
 }
 
 ~CapsLock:: ToggleEnable
