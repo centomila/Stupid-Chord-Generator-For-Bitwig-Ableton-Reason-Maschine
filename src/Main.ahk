@@ -81,6 +81,12 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "", f
         SendEvent("+l")
     }
 
+    if currentDaw == "NI Maschine 2" and WinActive(currentDawExeClass) {
+        if fromGui == true {
+            ForceMaschineSequencerFocus()
+        }
+    }
+
 
     SendEvent("^c")
     ; NotesToAdd is a string fromatted like this 0-4-7". Split the string into an array
@@ -227,6 +233,23 @@ ForceReasonSequencerFocus() {
     centerX := (width / 2)
     centerY := (height / 2)
 
+    ; Move the mouse to the center and click
+    MouseMove centerX, centerY
+    Send "{Shift down}"
+    Click
+    Send "{Shift up}"
+}
+
+ForceMaschineSequencerFocus() {
+    ; Get the dimensions and position of the active window
+    CoordMode "Mouse", "Client"
+    WinGetPos(&x, &y, &width, &height, WinActive())
+
+    ; Get screen DPI
+
+    ; Calculate the center coordinates with DPI awareness
+    centerX := (width / 2)
+    centerY := (height / 1.5)
 
     ; Move the mouse to the center and click
     MouseMove centerX, centerY
