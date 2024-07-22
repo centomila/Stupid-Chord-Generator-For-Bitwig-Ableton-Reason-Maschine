@@ -231,7 +231,7 @@ ForceReasonSequencerFocus() {
 
     ; Calculate the center coordinates with DPI awareness
     centerX := (width / 2)
-    centerY := (height / 2)
+    centerY := (height / 1.5)
 
     ; Move the mouse to the center and click
     MouseMove centerX, centerY

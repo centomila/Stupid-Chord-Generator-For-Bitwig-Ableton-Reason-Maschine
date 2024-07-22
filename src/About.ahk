@@ -1,7 +1,6 @@
 #Requires AutoHotkey v2.0
-
+#Include Strings\ABOUT.ahk
 global aboutGui := 0
-
 
 OpenUrl(url := "https://centomila.com") {
     return (*) => Run(url)
@@ -18,7 +17,7 @@ AboutGuiToggle() {
         aboutGui.SetDarkTitle()
         aboutGui.Title := APP_NAME . " " . APP_VERSION . " - About"
 
-        aboutGui.BackColor := "0x111111"
+        aboutGui.BackColor := "0x202020"
         aboutGui.MarginX := +50
         aboutGui.MarginY := +50
 
@@ -51,34 +50,28 @@ AboutGuiToggle() {
             linkText.SetFont("c0xf4f4f4 s12 underline", "Segoe UI")
         }
 
+        ; Add image Buy Me a Coffee bmc-brand-logo.png
+        buyMeACoffeeHand := aboutGui.Add("Link", 'y+40 h40 w' . leftColumnWidth,  '<a href="https://www.buymeacoffee.com/centomila">🔗🔗🔗🔗🔗🔗</a>')
+        buyMeACoffeeHand.SetFont(" s40 ")
+         buyMeACoffee := aboutGui.Add("Pic", "y+-40 h-1 w" . leftColumnWidth . " c0xf4f4f4 ", "Images\PNG\bmc-brand-logo.png")
+         buyMeACoffee.OnEvent("Click", OpenUrl("https://www.buymeacoffee.com/centomila"))
 
-        ; linkCentomila := aboutGui.Add(
-        ;     "Text",
-        ;     "y+20 h20 w" . leftColumnWidth . " c0xf4f4f4",
-        ;     "centomila.com"
-        ; )
-        ; linkCentomila.SetFont("s14 bold underline")
+
 
 
         ; Right column (existing content)
         xRight := leftColumnWidth + 30
 
-
         ; aboutCentomilaLogo := aboutGui.Add("Pic", "w" . leftColumnWidth . " h-1 ", "Images\PNG\centomila-logo.png")
 
         appLogo := aboutGui.Add("Pic",  "y" . aboutGui.MarginY . " w" . rightColumnWidth . " h-1 ", "Images\PNG\SCG-Banner-Logo.png")
 
-        
-        aboutText := aboutGui.Add(
-            "Text",
+        aboutTextGui := aboutGui.Add(
+            "Link",
             "w" . rightColumnWidth . " r25 ",
-            "Thank you for using " . APP_NAME . ".`n`n" .
-            "I hope you enjoy it!`n`n" .
-            "I don't want money, but if you find it useful, please consider listening, add to your playlists, buying or sharing my music. " .
-            "Your support means a lot to me!`n`n" .
-            "Would you like to visit my website? It's completely free from cookies, ads, newsletters, and popups!"
+            ABOUT_EN
         )
-        aboutText.SetFont("c0xf4f4f4 s16", "Segoe UI")
+        aboutTextGui.SetFont("c0xf4f4f4 s16", "Segoe UI")
 
 
 
