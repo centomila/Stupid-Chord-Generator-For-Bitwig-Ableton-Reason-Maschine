@@ -8,6 +8,4 @@ ABOUT_EN := 'Thank you for using '  . APP_NAME . '!`n`n' .
 
 'If you really like it and you can afford it, consider donating on <a href="https://www.buymeacoffee.com/centomila">buymeacoffee.com/centomila</a>`n`n' .
 
-'If you have any questions, please contact me on <a href="https://centomila.com/contact">centomila.com/contact</a>.`n`n' .
-
 'Thank you! 💗'
