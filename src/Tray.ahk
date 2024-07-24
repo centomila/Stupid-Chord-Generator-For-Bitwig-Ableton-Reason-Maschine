@@ -8,7 +8,9 @@ global labelAbout := "About"
 global labelTitle := APP_NAME . " - Version " . APP_VERSION
 global labelTooltip := "Tooltip Duration (ms)"
 global labelDaw := "DAW"
-
+global labelManual := "Manual"
+global labelOSD := "Top Info OSD`t`Tick( `` ) or Backslash ( \ )"
+global labelInstallPresets := "Install additional Chord Preset"
 
 ToggleTraySetIcon() {
     if WinActive(currentDawExeClass) {
@@ -52,7 +54,7 @@ GenerateTrayMenu() {
     tray.Add() ; ------------------------------
     tray.Add(labelAbout, OpenAbout) ; About  
     tray.Add("License", OpenLicense) ; License
-    tray.Add("Help", NoAction) ; License
+    tray.Add(labelManual, OpenUrl('https://centomila.com/software/stupid-chord-generator/#manual')) ; Help
 
     tray.Add() ; ------------------------------
     tray.Add(labelDaw, dawMenu) ; Add the DAW submenu
@@ -62,15 +64,13 @@ GenerateTrayMenu() {
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
     tray.Add()
 
-    tray.Add("Install additional Chord Preset", InstallAdditionalChordPresets)
+    tray.Add(labelInstallPresets, InstallAdditionalChordPresets)
     tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; ------------------------------
-    tray.Add("Top Info OSD`tKey Left of 1 (`` or \)", OpenOSDGui)  
+    tray.Add(labelOSD, OpenOSDGui)  
     tray.Add() ; ------------------------------
 
-    
-    tray.Add() ; ------------------------------
 
     tray.Add("Reload", ReloadApp)  
     tray.Add("Quit", ExitApp)
@@ -87,8 +87,13 @@ GenerateTrayMenu() {
 AddIconsToTray() {
     tray.SetIcon(labelTitle, "Images\ICO\Icon.ico")
     tray.SetIcon(labelAbout, "Images\ICO\Info.ico")
+    tray.SetIcon(labelManual, "Images\ICO\Manual.ico")
     tray.SetIcon("Open Chords Preset Folder", "Images\ICO\Folder.ico")
+
+    tray.SetIcon(labelInstallPresets, "Images\ICO\InstallChords.ico")
+    tray.SetIcon(labelOSD, "Images\ICO\OSD.ico")
     
+    tray.SetIcon("Reload", "Images\ICO\Reload.ico")
     tray.SetIcon("Quit", "Images\ICO\Close.ico")
 
     switch currentDaw {
