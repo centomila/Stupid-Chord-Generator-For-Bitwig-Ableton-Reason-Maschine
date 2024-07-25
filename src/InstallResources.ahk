@@ -45,6 +45,10 @@ InstallBasicResources() {
         FileInstall("Images\ICO\Maschine2.ico", A_WorkingDir . "\Images\ICO\Maschine2.ico", 1)
         FileInstall("Images\ICO\Reason.ico", A_WorkingDir . "\Images\ICO\Reason.ico", 1)
         FileInstall("Images\ICO\Settings.ico", A_WorkingDir . "\Images\ICO\Settings.ico", 1)
+        FileInstall("Images\ICO\Manual.ico", A_WorkingDir . "\Images\ICO\Manual.ico", 1)
+        FileInstall("Images\ICO\InstallChords.ico", A_WorkingDir . "\Images\ICO\InstallChords.ico", 1)
+        FileInstall("Images\ICO\Reload.ico", A_WorkingDir . "\Images\ICO\Reload.ico", 1)
+        FileInstall("Images\ICO\OSD.ico", A_WorkingDir . "\Images\ICO\OSD.ico", 1)
 
 
         ;Images\PNG\centomila-logo.png
@@ -52,6 +56,8 @@ InstallBasicResources() {
 
         ;Images\PNG\SCG-Banner-Logo.png
         FileInstall("Images\PNG\SCG-Banner-Logo.png", A_WorkingDir . "\Images\PNG\SCG-Banner-Logo.png", 1) 
+        
+        FileInstall("Images\PNG\bmc-brand-logo.png", A_WorkingDir . "\Images\PNG\bmc-brand-logo.png", 1) 
 
         ;Install license
         FileInstall("LICENSE", A_WorkingDir . "\LICENSE", 1)
