@@ -95,31 +95,34 @@ closeTopGuiOSD(*) {
 
 
 ToggleCurrentChordOsdBar() {
-    static osdCapsLockOn := 0
+    static osdCapsLockOnGUI := 0
 
-    if (osdCapsLockOn) or !WinActive(currentDawExeClass) or !GetKeyState("CapsLock", "T") {
-        try osdCapsLockOn.Destroy()
-        osdCapsLockOn := 0
+    if (osdCapsLockOnGUI) or !WinActive(currentDawExeClass) or !GetKeyState("CapsLock", "T") {
+        try osdCapsLockOnGUI.Destroy()
+        osdCapsLockOnGUI := 0
         return
     }
     if GetKeyState("CapsLock", "T") {
-    osdCapsLockOn := GuiExt()
-    osdCapsLockOn.Opt("+AlwaysOnTop -Caption +ToolWindow +E0x20")
-    osdCapsLockOn.MarginX := 0
-    osdCapsLockOn.MarginY := 0
-    osdCapsLockOn.SetWindowColor(, osdCapsLockOn.BackColor, osdCapsLockOn.BackColor)
-    osdCapsLockOn.SetDarkTitle()
-    osdCapsLockOn.SetDarkMenu()
-    osdCapsLockOn.BackColor := 0x202020
+    osdCapsLockOnGUI := GuiExt()
+    osdCapsLockOnGUI.Opt("+AlwaysOnTop -Caption +ToolWindow +E0x20")
+    osdCapsLockOnGUI.MarginX := 0
+    osdCapsLockOnGUI.MarginY := 0
+    osdCapsLockOnGUI.SetWindowColor(, osdCapsLockOnGUI.BackColor, osdCapsLockOnGUI.BackColor)
+    osdCapsLockOnGUI.SetDarkTitle()
+    osdCapsLockOnGUI.SetDarkMenu()
+    osdCapsLockOnGUI.BackColor := 0x202020
     
     MonitorGetWorkArea(, &left, &top, &right, &bottom)
-    width := right - left
+    width := SCREEN_WIDTH - osdCapsLockOnGUI.MarginX
+    if (DPI = 192) {
+        width := SCREEN_WIDTH / 2 - osdCapsLockOnGUI.MarginX
+    }
     height := 32
 
-    textCurrentSet := osdCapsLockOn.AddText("y3 Center r3 w" . width/2 ,"Current Chord Set: " currentChordsIniSet)
+    textCurrentSet := osdCapsLockOnGUI.AddText("y3 Center r3 w" . width/2 ,"Current Chord Set: " currentChordsIniSet)
     textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
     
-    WinSetTransparent(250, osdCapsLockOn.Hwnd)
-    osdCapsLockOn.Show(Format("x{} y{} w{} h{} NoActivate", (left+width/4), top, width/2, height))
+    WinSetTransparent(250, osdCapsLockOnGUI.Hwnd)
+    osdCapsLockOnGUI.Show(Format("x{} y{} w{} h{} NoActivate", (left+width/2), top, width/2, height))
     }
 }
