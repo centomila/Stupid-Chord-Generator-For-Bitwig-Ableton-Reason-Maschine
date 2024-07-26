@@ -25,7 +25,7 @@ InstallBasicResources() {
             DirCreate(ChordsFolder)
         }
         
-        FileInstall("Chords\How to create your chords presets.txt", A_WorkingDir . "\Chords\How to create your chords presets.txt", 1)
+        ; FileInstall("Chords\How to create your chords presets.txt", A_WorkingDir . "\Chords\How to create your chords presets.txt", 1)
 
         FileInstall("Chords\All Chords.ini", A_WorkingDir . "\Chords\All Chords.ini", 1)
         FileInstall("Chords\Common Inversions.ini", A_WorkingDir . "\Chords\Common Inversions.ini", 1)
