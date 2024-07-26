@@ -3,6 +3,7 @@
 global topGuiOSDButtons := 0
 global topGuiOSDBarOnly := true
 
+
 BuildTopOSDGui() {
     global topGuiOSDBarOnly
     ; Create the GUI without button in the taskbar
@@ -40,6 +41,8 @@ BuildTopOSDGui() {
     textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
     textCurrentSet.OnEvent("Click", (*) => ToggleBarTopGuiOSD())
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
+    
+    
 
     ; Add the chord buttons
     if topGuiOSDBarOnly {
@@ -118,4 +121,15 @@ ToggleBarTopGuiOSD(*) {
     }
     BuildTopOSDGui()
     return
+}
+
+ShowToolTipOSD(*)
+{
+    ToolTip("This is a tooltip for the text control")
+}
+
+; Function to remove the tooltip
+RemoveToolTipOSD(*)
+{
+    ToolTip()
 }

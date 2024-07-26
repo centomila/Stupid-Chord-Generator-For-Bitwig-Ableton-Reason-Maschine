@@ -8,7 +8,7 @@ global labelTitle := APP_NAME . " - Version " . APP_VERSION
 global labelTooltip := "Tooltip Duration (ms)"
 global labelDaw := "DAW"
 global labelManual := "Manual"
-global labelOSD := "Top Info OSD`t`Tick( `` ) or Backslash ( \ )"
+global labelOSD := "Top OSD Mode (Info Bar / Buttons) `t`Tick( `` ) or Backslash ( \ )"
 global labelInstallPresets := "Install additional Chord Preset"
 
 ToggleTraySetIcon() {
@@ -177,21 +177,21 @@ OpenLicense(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 
 OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     if WinExist(currentDawExeClass) {
-        if GetKeyState("CapsLock") == 0 {
+        if GetKeyState("CapsLock", "T") == 0 {
             try {
                 OutputDebug("`nCapslock is off. I will activate the app and enable capslock then OSD.")
-                WinActivate(currentDawExeClass)
                 SendEvent("{CapsLock}")
-                ToggleEnable()
             }
         } else {
-            try {
-                OutputDebug("`nCapslock is off. I will activate the app and OSD.")
-                WinActivate(currentDawExeClass)
-                ToggleEnable()
-            }
+            OutputDebug("`nCapslock is off. I will activate the app and OSD.")
         }
+        try {
+            WinActivate(currentDawExeClass)
+        }
+        ToggleEnable()
+        ToggleBarTopGuiOSD()
     } else {
+        CloseTopGuiOSD()
         MsgBox("Error: " . currentDaw . " is not running.`n`n " .
         "The OSD is shown only when the selected DAW is the active window.", "Error", 16)
     }
