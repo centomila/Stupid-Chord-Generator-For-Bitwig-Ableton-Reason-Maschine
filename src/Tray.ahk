@@ -143,7 +143,6 @@ SelectChordsIniSet(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
 
     LoadSettings()
     GenerateTrayMenu()
-    ToggleCurrentChordOsdBar()
     return
 }
 
@@ -197,7 +196,6 @@ OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
                 ToggleEnable()
             }
         }
-        ToggleOSDGui()
     } else {
         MsgBox("Error: " . currentDaw . " is not running.`n`n " .
         "The OSD is shown only when the selected DAW is the active window.", "Error", 16)

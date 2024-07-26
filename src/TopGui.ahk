@@ -1,21 +1,12 @@
 #Requires AutoHotkey v2.0
 
 global topGuiOSDButtons := 0
-global topGUIOsdStatusBar := 0
+global topGuiOSDBarOnly := true
 
-
-ToggleOSDGui() {
-    global topGuiOSDButtons
-    if (topGuiOSDButtons == 0 && WinExist(currentDawExeClass) && GetKeyState("CapsLock", "T")) {
-        topGuiOSDButtons := BuildDeleteOSDGui()
-    } else {
-        closeTopGuiOSD()
-    }
-    ToggleCurrentChordOsdBar()
-}
-
-BuildDeleteOSDGui() {
+BuildTopOSDGui() {
+    global topGuiOSDBarOnly
     ; Create the GUI without button in the taskbar
+    CloseTopGuiOSD()
     global topGuiOSDButtons := GuiExt("+AlwaysOnTop -Caption +ToolWindow +DPIScale ")
 
     topGuiOSDButtons.SetDarkTitle()
@@ -23,8 +14,7 @@ BuildDeleteOSDGui() {
     topGuiOSDButtons.BackColor := 0x202020
     topGuiOSDButtons.SetWindowColor(, topGuiOSDButtons.BackColor, topGuiOSDButtons.BackColor)
     topGuiOSDButtons.MarginX := 15
-    topGuiOSDButtons.MarginY := 15
-
+  
 
     OutputDebug("DPI:" . A_ScreenDPI)
     ; Number of columns and rows
@@ -35,31 +25,39 @@ BuildDeleteOSDGui() {
     if (DPI = 192) {
         guiWidth := SCREEN_WIDTH / 2 - topGuiOSDButtons.MarginX
     }
-    guiHeight := 400
-
+    guiHeight := 420
 
     ; Calculate the width of each column
     columnWidth := guiWidth / columns
     rowHeight := guiHeight / rows
 
-    ; Add the GUI elements
-    AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
-
-
-    textCurrentSet := topGuiOSDButtons.AddText("X0 Y+7 Center W" . guiWidth . " H" . 18, "Current Chord Set: " currentChordsIniSet)
+    textCurrentSet := topGuiOSDButtons.AddText(" r2 Center W" . guiWidth . " y1" , "Current Chord Set: " currentChordsIniSet)
     textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
-    textCurrentSet.OnEvent("Click", (*) => ToggleOSDGui())
+    textCurrentSet.OnEvent("Click", (*) => ToggleBarTopGuiOSD())
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
 
+    ; Add the chord buttons
+    if !topGuiOSDBarOnly {
+        AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
+    }
+
     ; Set the transparency
-    WinSetTransparent(250, topGuiOSDButtons.Hwnd)
+    ; WinSetTransparent(200, topGuiOSDButtons.Hwnd)
 
     topGuiOSDButtons.Title := currentChordsIniSet
     topGuiOSDButtons.OnEvent('Close', (*) => topGuiOSDButtons.Hide())
-    topGuiOSDButtons.Show("NA AutoSize " . "W" . guiWidth . " xCenter Y0")
+    
+    if topGuiOSDBarOnly {
+        topGuiOSDButtons.MarginY := 2
+        topGuiOSDButtons.Show("NA AutoSize " . "W" . guiWidth/4 . " xCenter Y0")
+    } else
+    {
+        topGuiOSDButtons.MarginY := 15
+        topGuiOSDButtons.Show("NA AutoSize " . "W" . guiWidth . " xCenter Y0")
+    }
+
     return topGuiOSDButtons
 }
-
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
     for chords in chordsArray {
@@ -71,13 +69,13 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         textForLabel := ReplaceShortCutSymbols(textForLabel)
 
         if A_Index <= 12 {
-            OSDButton := OSDGui.AddButton("Center Y" . topGuiOSDButtons.MarginY  .   " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 1) + topGuiOSDButtons.MarginX), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . topGuiOSDButtons.MarginY*5  .   " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 1) + topGuiOSDButtons.MarginX), textForLabel)
         } else if A_Index > 12 and A_Index <= 24 {
-            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)+topGuiOSDButtons.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 13)+ topGuiOSDButtons.MarginX), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)+topGuiOSDButtons.MarginY*5 . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 13)+ topGuiOSDButtons.MarginX), textForLabel)
         } else if A_Index > 24 and A_Index <= 36 {
-            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*2+topGuiOSDButtons.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 25)+ topGuiOSDButtons.MarginX), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*2+topGuiOSDButtons.MarginY*5 . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 25)+ topGuiOSDButtons.MarginX), textForLabel)
         } else if A_Index > 36 {
-            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*3+topGuiOSDButtons.MarginY . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 37)+ topGuiOSDButtons.MarginX), textForLabel)
+            OSDButton := OSDGui.AddButton("Center Y" . (rowHeight)*3+topGuiOSDButtons.MarginY*5 . " W" . columnWidth-5 . " H" . rowHeight-10 . " X" . (columnWidth * (A_Index - 37)+ topGuiOSDButtons.MarginX), textForLabel)
         }
         OSDButton.SetRounded()
         OSDButton.SetTheme("DarkMode_Explorer")
@@ -89,8 +87,7 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
     
 }
 
-
-closeTopGuiOSD(*) {
+CloseTopGuiOSD(*) {
     try {
         topGuiOSDButtons.Destroy()
     }
@@ -98,40 +95,20 @@ closeTopGuiOSD(*) {
     return
 }
 
-
-ToggleCurrentChordOsdBar() {
-    global topGUIOsdStatusBar
-
-    if (topGUIOsdStatusBar) or !WinExist(currentDawExeClass) or !GetKeyState("CapsLock", "T") {
-        try topGUIOsdStatusBar.Destroy()
-        topGUIOsdStatusBar := 0
-        return
+RedrawTopGuiOSD(*) {
+    try {
+        topGuiOSDButtons.Redraw()
     }
-    if GetKeyState("CapsLock", "T") {
-    topGUIOsdStatusBar := GuiExt()
-    topGUIOsdStatusBar.Opt("+AlwaysOnTop -Caption +ToolWindow")
-    topGUIOsdStatusBar.MarginX := 0
-    topGUIOsdStatusBar.MarginY := 0
-    topGUIOsdStatusBar.SetWindowColor(, topGUIOsdStatusBar.BackColor, topGUIOsdStatusBar.BackColor)
-    topGUIOsdStatusBar.SetDarkTitle()
-    topGUIOsdStatusBar.SetDarkMenu()
-    topGUIOsdStatusBar.BackColor := 0x202020
-    
-    MonitorGetWorkArea(, &left, &top, &right, &bottom)
-    width := SCREEN_WIDTH - topGUIOsdStatusBar.MarginX
-    if (DPI = 192) {
-        width := SCREEN_WIDTH / 2 - topGUIOsdStatusBar.MarginX
-    }
-    height := 32
+    return
+}
 
-    textCurrentSet := topGUIOsdStatusBar.AddText("Y3 Center h20 w" . width/2 ,"Current Chord Set: " currentChordsIniSet)
-    textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
-    textCurrentSet.OnEvent("Click", (*) => ToggleOSDGui())
-    textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
-
-    btnOpenCurrentSet := topGUIOsdStatusBar.AddButton("Y3 Right h20 w" . width/2 ,"Open")
-    
-    WinSetTransparent(250, topGUIOsdStatusBar.Hwnd)
-    topGUIOsdStatusBar.Show(Format("x{} y{} w{} h{} NoActivate", (left+width/2), top, width/2, height))
+ToggleBarTopGuiOSD(*) {
+    global topGuiOSDBarOnly
+    if (topGuiOSDBarOnly == 0) {
+        topGuiOSDBarOnly := 1
+    } else {
+        topGuiOSDBarOnly := 0
     }
+    BuildTopOSDGui()
+    return
 }

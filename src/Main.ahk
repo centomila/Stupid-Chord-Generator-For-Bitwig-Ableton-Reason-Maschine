@@ -196,24 +196,17 @@ ToggleEnable() {
         TraySetIcon("Images\ICO\Icon.ico")
         ToolTip CenterTextInTooltip(currentDaw . " seems to be close"), 9999, 9999
         SetTimer () => ToolTip(), -3000 ; Clear the tooltip after 1.5 seconds
+        CloseTopGuiOSD()
     } else {
-
         If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
             global StatusEnabled := true
             DynamicIniMapping(OnOff := "On")
-            ; ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
+            BuildTopOSDGui()
             ToggleTraySetIcon()
-            if topGuiOSDButtons = 0 {
-                ToggleCurrentChordOsdBar()
-            }
         } else {
             global StatusEnabled := false
             DynamicIniMapping(OnOff := "Off")
-            ; ToolTip CenterTextInTooltip("O F F"), 9999, 9999
-            ToggleOSDGui()
-            if topGuiOSDButtons != 0 {
-                ToggleCurrentChordOsdBar()
-            }
+            CloseTopGuiOSD()
             ToggleTraySetIcon()
         }
         SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
@@ -283,7 +276,7 @@ ForceMaschineSequencerFocus() {
 ; }
 
 SC029:: { ; Scan code for backtick or \
-    ToggleOSDGui()
+    ToggleBarTopGuiOSD()
 }
 
 ^SC029:: {
