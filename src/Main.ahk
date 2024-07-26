@@ -67,8 +67,8 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "", f
         return
     }
 
-    if topGuiOSD != 0 {
-        topGuiOSD.Hide()
+    if topGuiOSDButtons != 0 {
+        topGuiOSDButtons.Hide()
     }
 
     SendEvent("{Shift Up}{Ctrl Up}{Alt Up}") ; Reset all modifiers
@@ -148,8 +148,8 @@ GenerateChord(notesInterval, chordTypeName, thisHotkey := "", thisLabel := "", f
         SetTimer () => ToolTip(), currentToolTipDuration ; Show the tooltip for ToolTipDuration seconds
     }
 
-    if topGuiOSD != 0 {
-        topGuiOSD.Show()
+    if topGuiOSDButtons != 0 {
+        topGuiOSDButtons.Show()
         try WinActivate(currentDawExeClass)
     }
     return
@@ -203,13 +203,17 @@ ToggleEnable() {
             DynamicIniMapping(OnOff := "On")
             ; ToolTip CenterTextInTooltip(currentChordsIniSet), 9999, 9999
             ToggleTraySetIcon()
-            ToggleCurrentChordOsdBar()
+            if topGuiOSDButtons = 0 {
+                ToggleCurrentChordOsdBar()
+            }
         } else {
             global StatusEnabled := false
             DynamicIniMapping(OnOff := "Off")
             ; ToolTip CenterTextInTooltip("O F F"), 9999, 9999
             ToggleOSDGui()
-            ToggleCurrentChordOsdBar()
+            if topGuiOSDButtons != 0 {
+                ToggleCurrentChordOsdBar()
+            }
             ToggleTraySetIcon()
         }
         SetTimer () => ToolTip(), -1500 ; Clear the tooltip after 1.5 seconds
@@ -263,19 +267,20 @@ ForceMaschineSequencerFocus() {
 ~CapsLock:: ToggleEnable
 
 
-#HotIf WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")
+; #HotIf WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")
+#HotIf GetKeyState("CapsLock", "T")
 ; Octave change
 ; Page Down Select all and move an octave DOWN
-PgDn:: {
-    SendEvent("^a")
-    SendEvent("+{Down}")
-}
+; PgDn:: {
+;     SendEvent("^a")
+;     SendEvent("+{Down}")
+; }
 
-; Page Up Select all and move an octave UP
-PgUp:: {
-    SendEvent("^a")
-    SendEvent("+{Up}")
-}
+; ; Page Up Select all and move an octave UP
+; PgUp:: {
+;     SendEvent("^a")
+;     SendEvent("+{Up}")
+; }
 
 SC029:: { ; Scan code for backtick or \
     ToggleOSDGui()

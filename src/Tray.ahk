@@ -252,10 +252,10 @@ ResetCheckboxes() {
 ChordsMenu() {
     ; show the "Chord Preset" menu on the cursor location
     chordsIniListMenu.Show()
-    if topGuiOSD != 0 {
-        ToggleOSDGui()
-        ToggleOSDGui()
-    }
+    ; if topGuiOSD != 0 {
+    ;     ToggleOSDGui()
+    ;     ToggleOSDGui()
+    ; }
 }
 
 try {
