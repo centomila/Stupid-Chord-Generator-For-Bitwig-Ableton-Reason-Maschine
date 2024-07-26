@@ -1,6 +1,5 @@
 #Requires AutoHotkey v2.0
 
-
 global tray := A_TrayMenu
 global trayGui := 0
 
@@ -13,7 +12,7 @@ global labelOSD := "Top Info OSD`t`Tick( `` ) or Backslash ( \ )"
 global labelInstallPresets := "Install additional Chord Preset"
 
 ToggleTraySetIcon() {
-    if WinActive(currentDawExeClass) {
+    if WinActive(currentDawExeClass) or WinActive(APP_NAME_OSD) {
         if StatusEnabled {
             TraySetIcon("Images\ICO\Icon-On.ico")
         } else {
@@ -23,8 +22,6 @@ ToggleTraySetIcon() {
         TraySetIcon("Images\ICO\Icon.ico")
     }
 }
-
-
 
 ; Create the submenu for DAWs
 dawMenu := Menu()
@@ -43,7 +40,6 @@ for chordsIniFiles in CHORDS_INI_LIST {
 }
 
 GenerateTrayMenu() {
-
     global labelDaw := "DAW - " . currentDaw
     global labelTooltip := "Tooltip Duration - " . currentToolTipDuration . " ms"
 
@@ -70,7 +66,6 @@ GenerateTrayMenu() {
     tray.Add() ; ------------------------------
     tray.Add(labelOSD, OpenOSDGui)  
     tray.Add() ; ------------------------------
-
 
     tray.Add("Reload", ReloadApp)  
     tray.Add("Quit", ExitApp)
@@ -250,10 +245,9 @@ ResetCheckboxes() {
 ChordsMenu() {
     ; show the "Chord Preset" menu on the cursor location
     chordsIniListMenu.Show()
-    ; if topGuiOSD != 0 {
-    ;     ToggleOSDGui()
-    ;     ToggleOSDGui()
-    ; }
+    BuildTopOSDGui() 
+    WinActivate(currentDawExeClass)
+    ToggleTraySetIcon()
 }
 
 try {

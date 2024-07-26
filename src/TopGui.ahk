@@ -30,8 +30,15 @@ BuildTopOSDGui() {
     ; Calculate the width of each column
     columnWidth := guiWidth / columns
     rowHeight := guiHeight / rows
+    
+    if topGuiOSDBarOnly {
+        topGuiOSDBarWidth := guiWidth / 3
+    } else {
+        topGuiOSDBarWidth := guiWidth
+    }
 
-    textCurrentSet := topGuiOSDButtons.AddText(" r2 Center W" . guiWidth . " y1" , "Current Chord Set: " currentChordsIniSet)
+
+    textCurrentSet := topGuiOSDButtons.AddText(" r2 Center W" . topGuiOSDBarWidth . " y1" , "Current Chord Set: " currentChordsIniSet)
     textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
     textCurrentSet.OnEvent("Click", (*) => ToggleBarTopGuiOSD())
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
@@ -44,7 +51,7 @@ BuildTopOSDGui() {
     ; Set the transparency
     ; WinSetTransparent(200, topGuiOSDButtons.Hwnd)
 
-    topGuiOSDButtons.Title := currentChordsIniSet
+    topGuiOSDButtons.Title := APP_NAME_OSD
     topGuiOSDButtons.OnEvent('Close', (*) => topGuiOSDButtons.Hide())
     
     if topGuiOSDBarOnly {

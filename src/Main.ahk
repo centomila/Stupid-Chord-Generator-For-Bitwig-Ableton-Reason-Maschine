@@ -198,7 +198,7 @@ ToggleEnable() {
         SetTimer () => ToolTip(), -3000 ; Clear the tooltip after 1.5 seconds
         CloseTopGuiOSD()
     } else {
-        If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) {
+        If (WinActive(currentDawExeClass) and GetKeyState("CapsLock", "T")) or (WinActive(APP_NAME_OSD) and GetKeyState("CapsLock", "T")) {
             global StatusEnabled := true
             DynamicIniMapping(OnOff := "On")
             BuildTopOSDGui()

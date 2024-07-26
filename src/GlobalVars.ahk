@@ -3,6 +3,8 @@
 APP_NAME := "Stupid Chord Generator"
 APP_VERSION := "1.0.0"
 
+APP_NAME_OSD := "Stupid Chord Generator OSD"
+
 SCREEN_WIDTH := A_ScreenWidth
 SCREEN_HEIGHT := A_ScreenHeight
 DPI := A_ScreenDPI
@@ -43,6 +45,7 @@ DAW_LIST_EXE_CLASS_MAP := Map(
     "NI Maschine 2", "ahk_exe Maschine 2.exe")
 currentDaw := ""
 currentDawExeClass := "" ; Empty until the script has loaded the correct DAW
+
 
 
 global tray := A_TrayMenu
