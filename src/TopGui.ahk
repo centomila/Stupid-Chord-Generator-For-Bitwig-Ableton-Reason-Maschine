@@ -22,15 +22,15 @@ BuildTopOSDGui() {
 
     columns := 12
     rows := 4
-    
-       ; Get the monitor info based on DISPLAY_OSD
+
+    ; Get the monitor info based on DISPLAY_OSD
     monitorInfo := GetMonitorInfo(DISPLAY_OSD)
 
-        guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
+    guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
 
     ; Calculate the width of each column
     columnWidth := ((SCREEN_WIDTH) / columns) - (topGuiOSDButtons.MarginX)
-    rowHeight := (guiHeight + topGuiOSDButtons.MarginY * rows) / rows
+    rowHeight := 180
 
     if topGuiOSDBarOnly {
         topGuiOSDBarWidth := SCREEN_WIDTH / 3
@@ -45,11 +45,9 @@ BuildTopOSDGui() {
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
 
 
- 
-
     if topGuiOSDBarOnly {
         topGuiOSDButtons.MarginY := 2
-        topGuiOSDButtons.Show("NoActivate AutoSize x" . monitorInfo.workCenterWidth-textCurrentSet.w/2 . " y" . monitorInfo.workTop)
+        topGuiOSDButtons.Show("NoActivate AutoSize x" . monitorInfo.workCenterWidth - textCurrentSet.w / 2 . " y" . monitorInfo.workTop)
     } else {
         AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
         topGuiOSDButtons.MarginY := 15
@@ -82,19 +80,19 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
         if (colIndex == 0) {
             if (rowIndex == 0) {
-                xOption := "XM" . topGuiOSDButtons.MarginX*3-1
-                yOption := "YP+" . topGuiOSDButtons.MarginY*6
+                xOption := "XM" . topGuiOSDButtons.MarginX * 3 - 1
+                yOption := "YP+" . topGuiOSDButtons.MarginY * 6
             } else {
-                xOption := "XM" . topGuiOSDButtons.MarginX*3-1
-                yOption := "YP+" . buttonHeight+topGuiOSDButtons.MarginY
+                xOption := "XM" . topGuiOSDButtons.MarginX * 3 - 1
+                yOption := "YP+" . buttonHeight + topGuiOSDButtons.MarginY
             }
         } else {
-            xOption := "X+" . topGuiOSDButtons.MarginX-1
+            xOption := "X+" . topGuiOSDButtons.MarginX - 1
             yOption := "YP"  ; Same Y as the previous control in the row
         }
 
         options := Format("{} {} w{} h{}", xOption, yOption, buttonWidth, buttonHeight)
-        
+
         OSDButton := OSDGui.AddButton(options, textForLabel)
 
         OSDButton.SetRounded()
@@ -102,7 +100,7 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         OSDButton.SetFont("s10 c0xFFFFFF q5", "Segoe UI")
 
         ; Create a closure to capture the current values
-        OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy,,,true))(chordInterval, chordName))
+        OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy, , , true))(chordInterval, chordName))
     }
 }
 
