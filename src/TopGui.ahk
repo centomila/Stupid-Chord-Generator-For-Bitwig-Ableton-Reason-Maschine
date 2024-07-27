@@ -17,7 +17,7 @@ BuildTopOSDGui() {
     topGuiOSDButtons.SetDarkMenu()
     topGuiOSDButtons.BackColor := 0x202020
     topGuiOSDButtons.SetWindowColor(, topGuiOSDButtons.BackColor, topGuiOSDButtons.BackColor)
-    topGuiOSDButtons.MarginX := 16
+    topGuiOSDButtons.MarginX := 10
     topGuiOSDButtons.MarginY := 10
 
     columns := 12
@@ -26,17 +26,16 @@ BuildTopOSDGui() {
        ; Get the monitor info based on DISPLAY_OSD
     monitorInfo := GetMonitorInfo(DISPLAY_OSD)
 
-    guiWidth := SCREEN_WIDTH
-    guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
+        guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
 
     ; Calculate the width of each column
-    columnWidth := ((guiWidth - topGuiOSDButtons.MarginX) / columns)
+    columnWidth := ((SCREEN_WIDTH) / columns) - (topGuiOSDButtons.MarginX)
     rowHeight := (guiHeight + topGuiOSDButtons.MarginY * rows) / rows
 
     if topGuiOSDBarOnly {
-        topGuiOSDBarWidth := guiWidth / 3
+        topGuiOSDBarWidth := SCREEN_WIDTH / 3
     } else {
-        topGuiOSDBarWidth := guiWidth
+        topGuiOSDBarWidth := SCREEN_WIDTH
     }
 
 
@@ -54,7 +53,7 @@ BuildTopOSDGui() {
     } else {
         AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
         topGuiOSDButtons.MarginY := 15
-        topGuiOSDButtons.Show("NoActivate AutoSize x" . monitorInfo.workLeft . " y" . monitorInfo.workTop)
+        topGuiOSDButtons.Show("NoActivate x" . monitorInfo.workLeft . " y" . monitorInfo.workTop . " w" . topGuiOSDBarWidth)
     }
 
     ; Set the transparency
@@ -67,8 +66,8 @@ BuildTopOSDGui() {
 }
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
-    buttonWidth := columnWidth - 25
-    buttonHeight := rowHeight - 20
+    buttonWidth := columnWidth - 5
+    buttonHeight := rowHeight - 10
 
     for i, chords in chordsArray {
         chordName := StrReplace(chords[1], "(", "`n(")
@@ -83,11 +82,11 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
         if (colIndex == 0) {
             if (rowIndex == 0) {
-                xOption := "XM"
+                xOption := "XM" . topGuiOSDButtons.MarginX*3
                 yOption := "YP+" . topGuiOSDButtons.MarginY*6
             } else {
-                xOption := "XM"
-                yOption := "YP" . (rowHeight + topGuiOSDButtons.MarginY)
+                xOption := "XM" . topGuiOSDButtons.MarginX*3
+                yOption := "YP+" . buttonHeight+topGuiOSDButtons.MarginY
             }
         } else {
             xOption := "X+" . topGuiOSDButtons.MarginX
