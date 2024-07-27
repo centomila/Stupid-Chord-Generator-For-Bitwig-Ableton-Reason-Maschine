@@ -82,14 +82,14 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
         if (colIndex == 0) {
             if (rowIndex == 0) {
-                xOption := "XM" . topGuiOSDButtons.MarginX*3
+                xOption := "XM" . topGuiOSDButtons.MarginX*3-1
                 yOption := "YP+" . topGuiOSDButtons.MarginY*6
             } else {
-                xOption := "XM" . topGuiOSDButtons.MarginX*3
+                xOption := "XM" . topGuiOSDButtons.MarginX*3-1
                 yOption := "YP+" . buttonHeight+topGuiOSDButtons.MarginY
             }
         } else {
-            xOption := "X+" . topGuiOSDButtons.MarginX
+            xOption := "X+" . topGuiOSDButtons.MarginX-1
             yOption := "YP"  ; Same Y as the previous control in the row
         }
 
