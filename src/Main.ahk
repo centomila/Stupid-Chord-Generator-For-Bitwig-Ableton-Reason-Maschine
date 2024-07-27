@@ -11,6 +11,7 @@ InstallBasicResources()
 ; Includes
 #Include GuiEnhancerKit.ahk
 #Include GlobalVars.ahk
+#Include MonitorSelector.ahk
 #Include Tray.ahk
 #Include TopGui.ahk
 #Include About.ahk

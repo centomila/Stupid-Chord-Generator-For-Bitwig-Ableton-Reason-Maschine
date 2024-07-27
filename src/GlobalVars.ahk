@@ -8,6 +8,7 @@ APP_NAME_OSD := "Stupid Chord Generator OSD"
 SCREEN_WIDTH := A_ScreenWidth
 SCREEN_HEIGHT := A_ScreenHeight
 DPI := A_ScreenDPI
+DISPLAY_OSD := 0
 
 StatusEnabled := false
 

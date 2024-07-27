@@ -6,10 +6,12 @@ global topGuiOSDBarOnly := true
 
 BuildTopOSDGui() {
     global topGuiOSDBarOnly
-    ; Create the GUI without button in the taskbar
-    CloseTopGuiOSD() ; Force the redraw of the GUI
-    global topGuiOSDButtons := GuiExt("+AlwaysOnTop -Caption +ToolWindow -DPIScale ")
+    global DISPLAY_OSD
+    global topGuiOSDButtons
 
+    CloseTopGuiOSD() ; Force the redraw of the GUI
+    
+    topGuiOSDButtons := GuiExt("+AlwaysOnTop -Caption +ToolWindow -DPIScale ")
     topGuiOSDButtons.Title := APP_NAME_OSD
     topGuiOSDButtons.SetDarkTitle()
     topGuiOSDButtons.SetDarkMenu()
@@ -96,6 +98,8 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy,,,true))(chordInterval, chordName))
     }
 }
+
+
 
 CloseTopGuiOSD(*) {
     try {
