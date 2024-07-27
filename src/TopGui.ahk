@@ -22,6 +22,9 @@ BuildTopOSDGui() {
 
     columns := 12
     rows := 4
+    
+       ; Get the monitor info based on DISPLAY_OSD
+    monitorInfo := GetMonitorInfo(DISPLAY_OSD)
 
     guiWidth := SCREEN_WIDTH
     guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
@@ -43,16 +46,15 @@ BuildTopOSDGui() {
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
 
 
-    ; Get the monitor info based on DISPLAY_OSD
-    monitorInfo := GetMonitorInfo(DISPLAY_OSD)
+ 
 
     if topGuiOSDBarOnly {
         topGuiOSDButtons.MarginY := 2
-        topGuiOSDButtons.Show("NoActivate x" . FindHorizontalCenter(topGuiOSDBarWidth) . " y" . monitorInfo.workTop)
+        topGuiOSDButtons.Show("NoActivate AutoSize x" . monitorInfo.workCenterWidth-textCurrentSet.w/2 . " y" . monitorInfo.workTop)
     } else {
         AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
         topGuiOSDButtons.MarginY := 15
-        topGuiOSDButtons.Show("NoActivate x" . FindHorizontalCenter(topGuiOSDBarWidth) . " y" . monitorInfo.workTop)
+        topGuiOSDButtons.Show("NoActivate AutoSize x" . monitorInfo.workLeft . " y" . monitorInfo.workTop)
     }
 
     ; Set the transparency
@@ -81,10 +83,10 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
 
         if (colIndex == 0) {
             if (rowIndex == 0) {
-                xOption := "XM+" . topGuiOSDButtons.MarginX
+                xOption := "XM"
                 yOption := "YP+" . topGuiOSDButtons.MarginY*6
             } else {
-                xOption := "XM+" . topGuiOSDButtons.MarginX
+                xOption := "XM"
                 yOption := "YP" . (rowHeight + topGuiOSDButtons.MarginY)
             }
         } else {

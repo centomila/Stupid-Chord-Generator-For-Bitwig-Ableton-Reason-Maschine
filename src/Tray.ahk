@@ -29,6 +29,13 @@ for DAWs in DAW_LIST_EXE_CLASS_MAP {
     dawMenu.Add(DAWs, SelectDaw, "Radio")
 }
 
+displayMenu := Menu()
+loop MonitorGetCount() {
+    monitorIndex := A_Index
+    monitorName := monitorIndex - 1
+    displayMenu.Add(monitorName, SelectDisplay, "Radio")
+}
+
 tooltipMenu := Menu()
 for tooltipValues in TOOLTIP_DURATION_LIST {
     tooltipMenu.Add(tooltipValues, SelectToolTipDuration, "Radio")
@@ -54,6 +61,8 @@ GenerateTrayMenu() {
 
     tray.Add() ; ------------------------------
     tray.Add(labelDaw, dawMenu) ; Add the DAW submenu
+    tray.Add("Display", displayMenu) ; Add the DAW submenu
+
     
     tray.Add(labelTooltip, tooltipMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; ------------------------------
@@ -165,6 +174,18 @@ SelectDaw(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     Reload
 }
 
+SelectDisplay(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
+    ; Uncheck all items
+    loop MonitorGetCount() {
+        displayMenu.Uncheck(A_Index - 1)
+    }
+
+    IniWrite(A_ThisMenuItem, "Settings.ini", "Settings", "Display")
+    displayMenu.Check(IniRead("Settings.ini", "Settings", "Display"))
+    LoadSettings()
+    return
+}
+
 OpenAbout(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 {
     aboutGui := AboutGuiToggle()
@@ -240,6 +261,7 @@ ResetCheckboxes() {
     dawMenu.Check(currentDaw)
     tooltipMenu.Check(currentToolTipDuration)
     chordsIniListMenu.Check(currentChordsIniSet)
+    displayMenu.Check(DISPLAY_OSD)
 }
 
 ChordsMenu() {

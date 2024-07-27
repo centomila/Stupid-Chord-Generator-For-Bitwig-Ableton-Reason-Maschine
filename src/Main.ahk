@@ -26,15 +26,18 @@ LoadSettings() {
     global currentChordsIniSet
     global currentDawExeClass
     global currentChordsIniSetFile
+    global DISPLAY_OSD
     try {
         currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
         currentChordsIniSet := IniRead("Settings.ini", "Settings", "ChordIniSet")
+        DISPLAY_OSD := IniRead("Settings.ini", "Settings", "Display")
     } catch {
         ; If the file or the values don't exist, create them
         IniWrite(DEFAULT_DAW, "Settings.ini", "Settings", "DAW")
         IniWrite(1500, "Settings.ini", "Settings", "ToolTipDuration")
         IniWrite("All Chords", "Settings.ini", "Settings", "ChordIniSet")
+        IniWrite(0, "Settings.ini", "Settings", "Display")
         ; set global variables values from the ini file
         currentDaw := IniRead("Settings.ini", "Settings", "DAW")
         currentToolTipDuration := IniRead("Settings.ini", "Settings", "ToolTipDuration")
@@ -46,9 +49,11 @@ LoadSettings() {
     ; Access the appropriate global variable value from the map
     currentDawExeClass := DAW_LIST_EXE_CLASS_MAP.Get(currentDaw)
     currentChordsIniSetFile := CHORDS_INI_LIST.Get(currentChordsIniSet)
+    GetMonitorInfo(DISPLAY_OSD)
 
     debugTextAllOptions := "Daw: " . currentDaw . " - " . currentDawExeClass . "`nChord Preset: " . currentChordsIniSet . " - " . currentChordsIniSetFile . "`nToolTipDuration: " . currentToolTipDuration . "`n"
     OutputDebug(debugTextAllOptions)
+    OutputDebugMonitorInfo()
     NewGetChordsIni(currentChordsIniSetFile)
     GenerateTrayMenu()
     ToggleEnable()

@@ -5,6 +5,7 @@ SCREEN_HEIGHT := A_ScreenHeight
 DPI := A_ScreenDPI
 DISPLAY_OSD := 0
 
+
 GetMonitorInfo(displayIndex) {
     global DISPLAY_OSD, SCREEN_WIDTH, SCREEN_HEIGHT
 
@@ -20,9 +21,10 @@ GetMonitorInfo(displayIndex) {
     ; Get the work area (excludes taskbar)
     MonitorGetWorkArea(displayIndex + 1, &WL, &WT, &WR, &WB)
 
-    SCREEN_WIDTH := R - L
-    SCREEN_HEIGHT := B - T
+    SCREEN_WIDTH := WR - WL
+    SCREEN_HEIGHT := WB - WT
 
+    
     return {
         name: MonitorGetName(displayIndex + 1),
         left: L,
@@ -36,8 +38,11 @@ GetMonitorInfo(displayIndex) {
         workRight: WR,
         workBottom: WB,
         workWidth: WR - WL,
-        workHeight: WB - WT
+        workHeight: WB - WT,
+        workCenterWidth: (WR - WL) / 2 + WL,
+        workCenterHeight: (WB - WT) / 2 + WT
     }
+
 }
 monitorInfo := GetMonitorInfo(DISPLAY_OSD)
 
@@ -45,15 +50,18 @@ FindHorizontalCenter(objectWidth := monitorInfo.width) {
     return monitorInfo.left + (monitorInfo.width / 2) - (objectWidth / 2)
 }
 
-OutputDebug("`n`nMonitor Info for display " . DISPLAY_OSD . ":`n"
+OutputDebugMonitorInfo() {
+    
+    OutputDebug("`n`nMonitor Info for display " . DISPLAY_OSD . ":`n"
     . "Name: " . monitorInfo.name . "`n"
     . "Left: " . monitorInfo.left . " (Work: " . monitorInfo.workLeft . ")`n"
     . "Top: " . monitorInfo.top . " (Work: " . monitorInfo.workTop . ")`n"
     . "Width: " . monitorInfo.width . " (Work: " . monitorInfo.workWidth . ")`n"
     . "Height: " . monitorInfo.height . " (Work: " . monitorInfo.workHeight . ")`n`n")
-
+    
     OutputDebug("GLOBAL VARS DISPLAY:`n" 
     . "`nDISPLAY_OSD: " . DISPLAY_OSD 
     . "`nSCREEN_WIDTH: " . SCREEN_WIDTH 
     . "`nSCREEN_HEIGHT: " . SCREEN_HEIGHT 
     . "`nDPI: " . DPI . "`n`n")
+}
