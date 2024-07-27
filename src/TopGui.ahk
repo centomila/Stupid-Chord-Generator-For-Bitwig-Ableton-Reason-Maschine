@@ -10,7 +10,7 @@ BuildTopOSDGui() {
     global topGuiOSDButtons
 
     CloseTopGuiOSD() ; Force the redraw of the GUI
-    
+
     topGuiOSDButtons := GuiExt("+AlwaysOnTop -Caption +ToolWindow -DPIScale ")
     topGuiOSDButtons.Title := APP_NAME_OSD
     topGuiOSDButtons.SetDarkTitle()
@@ -22,16 +22,14 @@ BuildTopOSDGui() {
 
     columns := 12
     rows := 4
-    
+
     guiWidth := SCREEN_WIDTH
-    guiHeight := SCREEN_HEIGHT/3 + topGuiOSDButtons.MarginY*4
-    
-        OutputDebug("DPI:" . A_ScreenDPI . "`nGUI Width:" . guiWidth . "`nGUI Height:" . guiHeight)
+    guiHeight := SCREEN_HEIGHT / 3 + topGuiOSDButtons.MarginY * 4
 
     ; Calculate the width of each column
-    columnWidth := ((guiWidth-topGuiOSDButtons.MarginX) / columns)
-    rowHeight := (guiHeight+topGuiOSDButtons.MarginY*rows) / rows
-    
+    columnWidth := ((guiWidth - topGuiOSDButtons.MarginX) / columns)
+    rowHeight := (guiHeight + topGuiOSDButtons.MarginY * rows) / rows
+
     if topGuiOSDBarOnly {
         topGuiOSDBarWidth := guiWidth / 3
     } else {
@@ -39,42 +37,38 @@ BuildTopOSDGui() {
     }
 
 
-    textCurrentSet := topGuiOSDButtons.AddText(" r2 Center W" . topGuiOSDBarWidth . " " , "Current Chord Set: " currentChordsIniSet)
+    textCurrentSet := topGuiOSDButtons.AddText(" r2 Center W" . topGuiOSDBarWidth . " ", "Current Chord Set: " currentChordsIniSet)
     textCurrentSet.SetFont("s12 c49BCC5  w800", "Segoe UI")
     textCurrentSet.OnEvent("Click", (*) => ToggleBarTopGuiOSD())
     textCurrentSet.OnEvent("ContextMenu", (*) => ChordsMenu())
-    
-    
 
-    ; Add the chord buttons
+
+    ; Get the monitor info based on DISPLAY_OSD
+    monitorInfo := GetMonitorInfo(DISPLAY_OSD)
+
     if topGuiOSDBarOnly {
         topGuiOSDButtons.MarginY := 2
-        topGuiOSDButtons.Show("NoActivate " . " xCenter Y0")
+        topGuiOSDButtons.Show("NoActivate x" . FindHorizontalCenter(topGuiOSDBarWidth) . " y" . monitorInfo.workTop)
     } else {
         AddGUIElements(topGuiOSDButtons, columns, rows, columnWidth, rowHeight)
         topGuiOSDButtons.MarginY := 15
-        topGuiOSDButtons.Show("NoActivate " . "  Y0")
+        topGuiOSDButtons.Show("NoActivate x" . FindHorizontalCenter(topGuiOSDBarWidth) . " y" . monitorInfo.workTop)
     }
 
     ; Set the transparency
     ; WinSetTransparent(200, topGuiOSDButtons.Hwnd)
 
-    
+
     topGuiOSDButtons.OnEvent('Close', (*) => topGuiOSDButtons.Hide())
 
     return topGuiOSDButtons
 }
 
 AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
-    ; Calculate total width of buttons in a row
     buttonWidth := columnWidth - 25
-    totalButtonsWidth := buttonWidth * columns
-    
-    ; Calculate left margin to center buttons
-    ; leftMargin := (SCREEN_WIDTH - totalButtonsWidth) / 2
-    leftMargin := (topGuiOSDButtons.MarginX)*1.5
+    buttonHeight := rowHeight - 20
 
-    for chords in chordsArray {
+    for i, chords in chordsArray {
         chordName := StrReplace(chords[1], "(", "`n(")
         chordInterval := chords[2]
         shortcutKey := chords[3]
@@ -82,23 +76,34 @@ AddGUIElements(OSDGui, columns, rows, columnWidth, rowHeight) {
         textForLabel := chordName . "`n" . chordInterval . "`n" . shortcutKey
         textForLabel := ReplaceShortCutSymbols(textForLabel)
 
-        rowIndex := Ceil(A_Index / columns) - 1
-        colIndex := Mod(A_Index - 1, columns)
+        rowIndex := Ceil(i / columns) - 1
+        colIndex := Mod(i - 1, columns)
 
-        x := leftMargin + (colIndex * columnWidth)
-        y := (rowIndex * rowHeight) + topGuiOSDButtons.MarginY * 7
+        if (colIndex == 0) {
+            if (rowIndex == 0) {
+                xOption := "XM+" . topGuiOSDButtons.MarginX
+                yOption := "YP+" . topGuiOSDButtons.MarginY*6
+            } else {
+                xOption := "XM+" . topGuiOSDButtons.MarginX
+                yOption := "YP" . (rowHeight + topGuiOSDButtons.MarginY)
+            }
+        } else {
+            xOption := "X+" . topGuiOSDButtons.MarginX
+            yOption := "YP"  ; Same Y as the previous control in the row
+        }
 
-        OSDButton := OSDGui.AddButton(Format("x{} y{} w{} h{}", x, y, buttonWidth, rowHeight-20), textForLabel)
+        options := Format("{} {} w{} h{}", xOption, yOption, buttonWidth, buttonHeight)
+        
+        OSDButton := OSDGui.AddButton(options, textForLabel)
 
         OSDButton.SetRounded()
         OSDButton.SetTheme("DarkMode_Explorer")
-        OSDButton.SetFont("s12 c0xFFFFFF q5", "Segoe UI")
+        OSDButton.SetFont("s10 c0xFFFFFF q5", "Segoe UI")
 
         ; Create a closure to capture the current values
         OSDButton.OnEvent("Click", ((intervalCopy, nameCopy) => (*) => GenerateChord(intervalCopy, nameCopy,,,true))(chordInterval, chordName))
     }
 }
-
 
 
 CloseTopGuiOSD(*) {
