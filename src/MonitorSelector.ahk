@@ -4,6 +4,7 @@ SCREEN_WIDTH := A_ScreenWidth
 SCREEN_HEIGHT := A_ScreenHeight
 DPI := A_ScreenDPI
 DISPLAY_OSD := 0
+MONITOR_COUNT := MonitorGetCount()
 try {
     DISPLAY_OSD := IniRead("Settings.ini", "Settings", "Display")
 }
@@ -13,11 +14,9 @@ monitorInfoScaling := GetMonitorScaling(DISPLAY_OSD)  ; 0 for primary monitor, 1
 scalingPercentage := monitorInfoScaling.scaleFactor
 
 GetMonitorInfo(displayIndex) {
-    global DISPLAY_OSD, SCREEN_WIDTH, SCREEN_HEIGHT
+    global DISPLAY_OSD, SCREEN_WIDTH, SCREEN_HEIGHT, MONITOR_COUNT
 
-    monitorCount := MonitorGetCount()
-
-    if (displayIndex < 0 || displayIndex >= monitorCount) {
+    if (displayIndex < 0 || displayIndex >= MONITOR_COUNT) {
         displayIndex := 0  ; Default to primary monitor if invalid index
     }
 

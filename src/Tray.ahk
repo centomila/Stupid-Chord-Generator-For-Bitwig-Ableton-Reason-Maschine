@@ -55,7 +55,7 @@ GenerateTrayMenu() {
     tray.Delete() ; empty the menu
     tray.Add(labelTitle, OpenAbout)  ; Title
     tray.Add() ; ------------------------------
-    tray.Add(labelAbout, OpenAbout) ; About  
+    tray.Add(labelAbout, OpenAbout) ; About
     tray.Add("License", OpenLicense) ; License
     tray.Add(labelManual, OpenUrl('https://centomila.com/software/stupid-chord-generator/#manual')) ; Help
 
@@ -63,7 +63,7 @@ GenerateTrayMenu() {
     tray.Add(labelDaw, dawMenu) ; Add the DAW submenu
     tray.Add("Display", displayMenu) ; Add the DAW submenu
 
-    
+
     tray.Add(labelTooltip, tooltipMenu) ; Add the ToolTipDuration submenu
     tray.Add() ; ------------------------------
     tray.Add("Chord Presets", chordsIniListMenu) ; Add the ToolTipDuration submenu
@@ -73,15 +73,15 @@ GenerateTrayMenu() {
     tray.Add("Open Chords Preset Folder", OpenChordsFolder)
 
     tray.Add() ; ------------------------------
-    tray.Add(labelOSD, OpenOSDGui)  
+    tray.Add(labelOSD, OpenOSDGui)
     tray.Add() ; ------------------------------
 
-    tray.Add("Reload", ReloadApp)  
+    tray.Add("Reload", ReloadApp)
     tray.Add("Quit", ExitApp)
 
     tray.ClickCount := 1
     tray.Default := labelAbout
-    A_IconTip :=  APP_NAME . " - v" . APP_VERSION . " - " . currentDaw
+    A_IconTip := APP_NAME . " - v" . APP_VERSION . " - " . currentDaw
 
     AddChordsToTray()
     AddIconsToTray()
@@ -96,7 +96,7 @@ AddIconsToTray() {
 
     tray.SetIcon(labelInstallPresets, "Images\ICO\InstallChords.ico")
     tray.SetIcon(labelOSD, "Images\ICO\OSD.ico")
-    
+
     tray.SetIcon("Reload", "Images\ICO\Reload.ico")
     tray.SetIcon("Quit", "Images\ICO\Close.ico")
 
@@ -214,7 +214,7 @@ OpenOSDGui(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu) {
     } else {
         CloseTopGuiOSD()
         MsgBox("Error: " . currentDaw . " is not running.`n`n " .
-        "The OSD is shown only when the selected DAW is the active window.", "Error", 16)
+            "The OSD is shown only when the selected DAW is the active window.", "Error", 16)
     }
 }
 
@@ -241,7 +241,7 @@ AddChordsToTray() {
 
         if (Mod(index - 1, chordGroupSize) == 0) {
             if (index > 1) {
-                tray.Insert("Chord Presets","Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . (currentGroup * chordGroupSize), groupMenu, "")
+                tray.Insert("Chord Presets", "Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . (currentGroup * chordGroupSize), groupMenu, "")
                 currentGroup++
             }
             groupMenu := Menu()
@@ -250,28 +250,39 @@ AddChordsToTray() {
         groupMenu.Add(textForLabel, NoAction)
 
         if (index == chordsArray.Length) {
-            tray.Insert("Chord Presets","Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . index, groupMenu, "")
+            tray.Insert("Chord Presets", "Chords`t" . ((currentGroup - 1) * chordGroupSize + 1) . "-" . index, groupMenu, "")
         }
     }
 }
 
+
+ForcePrimaryDisplay() {
+    global DISPLAY_OSD
+    if (DISPLAY_OSD > (MONITOR_COUNT-1)) {
+        IniWrite(0, "Settings.ini", "Settings", "Display")
+        DISPLAY_OSD := 0
+    }
+}
 
 ResetCheckboxes() {
     ; checkboxes for the tray menu items
     dawMenu.Check(currentDaw)
     tooltipMenu.Check(currentToolTipDuration)
     chordsIniListMenu.Check(currentChordsIniSet)
+    
+    ForcePrimaryDisplay()
     displayMenu.Check(DISPLAY_OSD)
 }
 
-ChordsMenu() {
-    ; show the "Chord Preset" menu on the cursor location
-    chordsIniListMenu.Show()
-    BuildTopOSDGui() 
-    WinActivate(currentDawExeClass)
-    ToggleTraySetIcon()
-}
 
-try {
-    ResetCheckboxes()
-}
+    ChordsMenu() {
+        ; show the "Chord Preset" menu on the cursor location
+        chordsIniListMenu.Show()
+        BuildTopOSDGui()
+        WinActivate(currentDawExeClass)
+        ToggleTraySetIcon()
+    }
+
+    try {
+        ResetCheckboxes()
+    }
