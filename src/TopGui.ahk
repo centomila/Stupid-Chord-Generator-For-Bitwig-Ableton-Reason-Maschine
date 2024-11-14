@@ -16,7 +16,10 @@ BuildTopOSDGui() {
     topGuiOSDButtons.SetDarkTitle()
     topGuiOSDButtons.SetDarkMenu()
     topGuiOSDButtons.BackColor := 0x202020
-    topGuiOSDButtons.SetWindowColor(, topGuiOSDButtons.BackColor, topGuiOSDButtons.BackColor)
+    if (VerCompare(A_OSVersion, "10.0.22600") >= 0) {
+        topGuiOSDButtons.SetWindowColor(, topGuiOSDButtons.BackColor, topGuiOSDButtons.BackColor)
+    }
+
     topGuiOSDButtons.MarginX := 10
     topGuiOSDButtons.MarginY := 10
 

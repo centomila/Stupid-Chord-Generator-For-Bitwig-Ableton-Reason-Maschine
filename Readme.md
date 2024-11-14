@@ -51,3 +51,9 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 If you find this tool useful, consider [buying me a coffee](https://centomila.com/software/stupid-chord-generator/).
 
 For more information and updates, visit [https://centomila.com/software/stupid-chord-generator/](https://centomila.com/software/stupid-chord-generator/).
+
+## Change Log
+
+* **1.0.1** - Fixed a bug that was causing an error "_This is supported starting with Windows 11 Build 22000_" on Windows 10 and earlier Windows 11 versions. - Thanks to the Reddit user _Complete-Log6610_ on _/r/Bitwig_ for reporting the issue.
+
+* 1.0.0 - Initial release

@@ -1,7 +1,7 @@
 #Requires AutoHotkey v2.0
 
 APP_NAME := "Stupid Chord Generator"
-APP_VERSION := "1.0.0"
+APP_VERSION := "1.0.1"
 
 APP_NAME_OSD := "Stupid Chord Generator OSD"
 
